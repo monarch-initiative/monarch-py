@@ -26,3 +26,12 @@ def get_entity_association_counts(entity_id):
     categories = collections.Counter(object_categories) + collections.Counter(subject_categories)
     return categories
 
+def get_node_hierarchy(entity_id):
+    superClasses = f''# some solr query
+
+    # equivalentClasses = requests.get(f'{solr_url}/entity/select?q=*:*&facet.field=predicate&fq=biolink\:same_as:\"{entity_id}\"').json() # some solr query
+    equivalentClasses = requests.get(f'{solr_url}/entity/get?id={entity_id}&fq=predicate:biolink\:same_as').json() # some solr query
+    # equivalentClasses = get_filtered_facet(entity_id, 'predicate', 'biolink\:same_as')
+
+    subClasses = ''# some solr query 
+    return {'superClasses': superClasses, 'equivalentClasses': equivalentClasses, 'subClasses':subClasses}
