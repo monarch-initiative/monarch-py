@@ -12,7 +12,17 @@ def get_associations(
     entity: str = None, # return nodes where entity is subject or object
     between: str = None # strip by comma and check associations in both directions. example: "MONDO:000747,MONDO:000420"
     ):
-    query = build_association_query(locals())
+    query = build_association_query(
+        q=q,
+        offset=offset,
+        limit=limit,
+        category=category,
+        predicate=predicate,
+        subject=subject,
+        object=object,
+        entity=entity,
+        between=between
+    )
     association_url = f"{solr_url}/association/query"
     url = association_url+query
     r = requests.get(url)

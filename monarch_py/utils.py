@@ -1,8 +1,9 @@
 import requests, collections
+from monarch_py.query import *
 
 solr_url = "http://localhost:8983/solr"
 association_url = "http://localhost:8983/solr/association"
-
+entity_url = "http://localhost:8983/solr/entity"
 
 def strip_json(doc: dict, *fields_to_remove: str):
     for field in fields_to_remove:
@@ -27,11 +28,28 @@ def get_entity_association_counts(entity_id):
     return categories
 
 def get_node_hierarchy(entity_id):
-    superClasses = f''# some solr query
+    superClasses = f''
+    
+    # query_params = {
+    #     q: str = "*:*",
+    #     offset: int = 0,
+    #     limit: int = 20,
+    #     category: str = None,
+    #     predicate: str = None,
+    #     subject: str = None,
+    #     object: str = None,
+    #     entity: str = None, # return nodes where entity is subject or object
+    #     between: str = None
+    # }
 
-    # equivalentClasses = requests.get(f'{solr_url}/entity/select?q=*:*&facet.field=predicate&fq=biolink\:same_as:\"{entity_id}\"').json() # some solr query
-    equivalentClasses = requests.get(f'{solr_url}/entity/get?id={entity_id}&fq=predicate:biolink\:same_as').json() # some solr query
-    # equivalentClasses = get_filtered_facet(entity_id, 'predicate', 'biolink\:same_as')
+    query = build_association_query(
+        {
+            #'q':'*:*',
+            'entity':f'"{entity_id}"',
+            'predicate':'biolink:same_as'
+        }
+    )
+    equivalentClasses = requests.get(f'{solr_url}/association/select{query}').json()
 
-    subClasses = ''# some solr query 
+    subClasses = ''
     return {'superClasses': superClasses, 'equivalentClasses': equivalentClasses, 'subClasses':subClasses}
