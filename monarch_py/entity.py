@@ -1,6 +1,6 @@
 import requests
 
-from monarch_py.utils import *
+from monarch_py.utilities.utils import *
 
 
 def get_entity(id, get_association_counts: bool = False, get_hierarchy: bool = True):

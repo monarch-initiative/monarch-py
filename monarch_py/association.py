@@ -1,4 +1,4 @@
-from monarch_py.utils import *
+from monarch_py.utilities.utils import *
 from monarch_py.query import *
 
 
