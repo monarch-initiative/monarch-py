@@ -1,3 +1,4 @@
+import json
 from pydantic import BaseModel
 import requests
 
@@ -16,24 +17,17 @@ class SolrService(BaseModel):
         entity = r.json()["doc"]
         self._strip_json(entity, "_version_")
 
-    def query(self, q: SolrQuery): #-> SolrQueryResponse:
+    def query(self, q: SolrQuery) -> SolrQueryResult:
         url = f"{self.base_url}/{self.core.value}/select?{q.query_string()}"
-        r = requests.get(url)
-
-        # return self._parse_response(r.json())
-        return url
-
-    def _parse_response(self, raw_response) -> SolrQueryResult:
-
-        SolrQueryResponse(numFound=raw_response["response"]["numFound"],
-                          start=raw_response["response"]["start"],
-                          docs=raw_response["response"]["docs"])
+        response = requests.get(url)
+        data = json.loads(response.text)
+        return SolrQueryResult.parse_obj(data)
 
     def _strip_json(self, doc: dict, *fields_to_remove: str):
         for field in fields_to_remove:
             try:
                 del doc[field]
-            except:
+            except KeyError:
                 pass
         return doc
 
