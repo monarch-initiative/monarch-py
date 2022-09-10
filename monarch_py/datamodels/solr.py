@@ -57,5 +57,5 @@ class SolrFacetCounts(BaseModel):
 class SolrQueryResult(BaseModel):
     responseHeader: SolrQueryResponseHeader
     response: SolrQueryResponse
-    facet_counts: SolrFacetCounts
+    facet_counts: Optional[SolrFacetCounts]
 

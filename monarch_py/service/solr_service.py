@@ -16,6 +16,7 @@ class SolrService(BaseModel):
         r = requests.get(url)
         entity = r.json()["doc"]
         self._strip_json(entity, "_version_")
+        return entity
 
     def query(self, q: SolrQuery) -> SolrQueryResult:
         url = f"{self.base_url}/{self.core.value}/select?{q.query_string()}"
