@@ -1,13 +1,11 @@
-from monarch_py.utils import *
+from monarch_py.utilities.utils import *
 from urllib.parse import urljoin, urlencode
 
 from dataclasses import dataclass
-from typing import Union, Literal
-from monarch_py.utils import * 
-from monarch_py.entity import *
+
 
 @dataclass
-class SolrQuery():
+class SolrQuery:
     q: str = "*:*"
     offset: int = 0
     limit: int = 20
@@ -15,67 +13,72 @@ class SolrQuery():
     predicate: str = None
     subject: str = None
     object: str = None
-    
+
     def get_args(self) -> dict:
-        args = {k:v for (k, v) in self.__dict__.items() if v is not None}
+        args = {k: v for (k, v) in self.__dict__.items() if v is not None}
         return args
 
-    def build_query(self):#, core=Union[Literal['entity'], Literal['association']]):
-        pass # query = f'?q={self.q}&offset={offset}'
+    def build_query(self):  # , core=Union[Literal['entity'], Literal['association']]):
+        pass  # query = f'?q={self.q}&offset={offset}'
+
 
 @dataclass
 class SolrEntityQuery(SolrQuery):
     pass
 
+
 @dataclass
 class SolrAssociationQuery(SolrQuery):
-    entity: str = None # return nodes where entity is subject or object
-    between: str = None # strip by comma and check associations in both directions. example: "MONDO:000747,MONDO:000420"
+    entity: str = None  # return nodes where entity is subject or object
+    between: str = None  # strip by comma and check associations in both directions. example: "MONDO:000747,MONDO:000420"
+
 
 def build_query(args: dict):
     base_url = f"{solr_url}/association/query"
     query = "?" + urlencode(args)
     return urljoin(base_url, query)
 
+
 def get_query_url(
-        q: str = "*:*",
-        offset: int = 0,
-        limit: int = 20,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        object: str = None,
-        entity: str = None, # return nodes where entity is subject or object
-        between: str = None # strip by comma and check associations in both directions. example: "MONDO:000747,MONDO:000420"
-    ) -> str:
-    args = {k:v for (k, v) in locals().items() if v is not None}
-    # Add logic to split q= and fq= 
-    # Add logic to deal with entity and between 
+    q: str = "*:*",
+    offset: int = 0,
+    limit: int = 20,
+    category: str = None,
+    predicate: str = None,
+    subject: str = None,
+    object: str = None,
+    entity: str = None,  # return nodes where entity is subject or object
+    between: str = None,  # strip by comma and check associations in both directions. example: "MONDO:000747,MONDO:000420"
+) -> str:
+    args = {k: v for (k, v) in locals().items() if v is not None}
+    # Add logic to split q= and fq=
+    # Add logic to deal with entity and between
     query = build_query(args)
     print(query)
-    
+
     # if between:
     #     b = between.split(",")
     #     query += f'(subject:"{b[0]}" AND object:"{b[1]}") OR (subject:"{b[1]}" AND object:"{b[0]}")&'
     # if entity:
     #     query += f'subject:"{i}" OR object:"{i}"&'
 
+
 def build_association_query(
-        q: str = "*:*",
-        offset: int = 0,
-        limit: int = 20,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        object: str = None,
-        entity: str = None, # return nodes where entity is subject or object
-        between: str = None # strip by comma and check associations in both directions. example: "MONDO:000747,MONDO:000420"
-    ) -> str:
+    q: str = "*:*",
+    offset: int = 0,
+    limit: int = 20,
+    category: str = None,
+    predicate: str = None,
+    subject: str = None,
+    object: str = None,
+    entity: str = None,  # return nodes where entity is subject or object
+    between: str = None,  # strip by comma and check associations in both directions. example: "MONDO:000747,MONDO:000420"
+) -> str:
     query = "?"
-    query_params = [f'q={q}', f'offset={offset}', f'limit={limit}']
-    
+    query_params = [f"q={q}", f"offset={offset}", f"limit={limit}"]
+
     for i in query_params:
-        query += f'{i}&'
+        query += f"{i}&"
 
     query += "fq="
     if category:
@@ -91,6 +94,5 @@ def build_association_query(
         query += f'(subject:"{b[0]}" AND object:"{b[1]}") OR (subject:"{b[1]}" AND object:"{b[0]}")&'
     if entity:
         query += f'subject:"{i}" OR object:"{i}"&'
-    
-    return query
 
+    return query
