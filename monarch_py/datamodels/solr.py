@@ -15,6 +15,7 @@ class SolrQuery(BaseModel):
     rows: int = 20
     start: int = 1
     facet: bool = False
+    facet_min_count = 1
     facet_fields: List[str] = None
     filter_queries: List[str] = None
 

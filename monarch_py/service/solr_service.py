@@ -1,10 +1,15 @@
 import json
+import logging
+
 from pydantic import BaseModel
 import requests
+from monarch_py.utilities.utils import escape
+from typing import List, Dict
 
 from monarch_py.datamodels.solr import SolrQuery, \
     SolrQueryResult, SolrQueryResponse, SolrQueryResponseHeader, SolrFacetCounts, core
 
+logger = logging.getLogger(__name__)
 
 class SolrService(BaseModel):
     base_url: str
@@ -21,8 +26,14 @@ class SolrService(BaseModel):
     def query(self, q: SolrQuery) -> SolrQueryResult:
         url = f"{self.base_url}/{self.core.value}/select?{q.query_string()}"
         response = requests.get(url)
+
         data = json.loads(response.text)
-        return SolrQueryResult.parse_obj(data)
+        if 'error' in data:
+            logger.error("Solr error message: " + data["error"]["msg"])
+        response.raise_for_status()
+        solr_query_result = SolrQueryResult.parse_obj(data)
+
+        return solr_query_result
 
     def _strip_json(self, doc: dict, *fields_to_remove: str):
         for field in fields_to_remove:
@@ -32,4 +43,21 @@ class SolrService(BaseModel):
                 pass
         return doc
 
+    # Solr returns facet values and counts as a list, they make much more
+    # sense as a dictionary
+    def _facets_to_dict(self, facet_list: List[str]) -> Dict:
+        return dict(zip(facet_list[::2], facet_list[1::2]))
+
+    def get_filtered_facet(self, id, filter_field, facet_field):
+
+        query = SolrQuery(rows=0,
+                          facet=True,
+                          facet_fields=[facet_field],
+                          filter_queries=[f"{filter_field}:{escape(id)}"])
+
+        result = self.query(query)
+
+        facet_fields = result.facet_counts.facet_fields[facet_field]
+
+        return self._facets_to_dict(facet_fields)
 
