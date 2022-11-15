@@ -5,9 +5,10 @@ import requests
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.search_interface import SearchInterface
-from monarch_py.utilities.utils import strip_json
-from monarch_py.datamodels.solr import core, SolrQuery
+from monarch_py.datamodels.solr import core, SolrQuery, SolrQueryResponse
 from monarch_py.service.solr_service import SolrService
+from monarch_py.utilities.utils import escape
+
 
 @dataclass
 class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface):
@@ -57,6 +58,43 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Implements: AssociationInterface
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    def get_associations(
+        self,
+        category: str = None,
+        predicate: str = None,
+        subject: str = None,
+        object: str = None,
+        entity: str = None,  # return nodes where entity is subject or object
+        between: str = None,
+        page: int = 1,
+        limit: int = 20,
+    ) -> SolrQueryResponse :
+        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
+        start = ((page-1) * limit) + 1
+        query = SolrQuery(start=start, limit=limit)
+
+        if category:
+            query.add_field_filter_query('category', category)
+        if predicate:
+            query.add_field_filter_query('predicate', predicate)
+        if subject:
+            query.add_field_filter_query('subject', subject)
+        if object:
+            query.add_field_filter_query('object', object)
+        if between:
+            # todo: handle error reporting / parsing, think about another way to pass this?
+            b = between.split(",")
+            e1 = escape(b[0])
+            e2 = escape(b[1])
+            query.add_filter_query(f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")')
+        if entity:
+            query.add_filter_query(f'subject:"{escape(entity)}" OR object:"{escape(entity)}"')
+
+        result = solr.query(query)
+
+        return result
+
 
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Implements: SearchInterface

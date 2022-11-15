@@ -11,6 +11,7 @@ from monarch_py.datamodels.solr import SolrQuery, \
 
 logger = logging.getLogger(__name__)
 
+
 class SolrService(BaseModel):
     base_url: str
     core: core

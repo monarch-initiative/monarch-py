@@ -3,6 +3,7 @@ import urllib
 from pydantic import BaseModel, Field
 from typing import List, Any, Optional, Dict
 from enum import Enum
+from monarch_py.utilities.utils import escape
 
 
 class core(Enum):
@@ -16,8 +17,20 @@ class SolrQuery(BaseModel):
     start: int = 1
     facet: bool = False
     facet_min_count = 1
-    facet_fields: List[str] = None
-    filter_queries: List[str] = None
+    facet_fields: List[str] = Field(default_factory=list)
+    filter_queries: List[str] = Field(default_factory=list)
+
+    def add_field_filter_query(self, field, value):
+        if field is not None and value is not None:
+            self.filter_queries.append(f"{field}:{escape(value)}")
+        else:
+            raise ValueError("Can't add a field filter query without a field and value")
+
+    def add_filter_query(self, filter_query):
+        if filter_query is not None:
+            self.filter_queries.append(filter_query)
+        else:
+            raise ValueError("Can't append an empty filter query")
 
     def query_string(self):
         return urllib.parse.urlencode({self._solrize(k): self._solrize(v)
