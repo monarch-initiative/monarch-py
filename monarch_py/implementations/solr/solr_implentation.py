@@ -15,7 +15,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     Wraps the Monarch Solr endpoint
     """
 
-    default_url: str = "http://localhost:8983/solr"
+    base_url: str = "http://localhost:8983/solr"
 
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Implements: EntityInterface
@@ -25,7 +25,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         self, id: str, get_association_counts: bool = False, get_hierarchy: bool = False
     ):
 
-        solr = SolrService(base_url=self.default_url, core=core.ENTITY)
+        solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         entity = solr.get(id)
 
         if get_association_counts:
@@ -39,7 +39,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def get_entity_association_counts(self, id: str):
 
-        solr = SolrService(base_url=self.default_url, core=core.ASSOCIATION)
+        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
 
         object_categories = solr.get_filtered_facet(
             id, filter_field="subject", facet_field="object_category"
