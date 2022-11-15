@@ -33,9 +33,14 @@ class SolrQuery(BaseModel):
             raise ValueError("Can't append an empty filter query")
 
     def query_string(self):
-        return urllib.parse.urlencode({self._solrize(k): self._solrize(v)
-                                       for k, v in self.dict().items()
-                                       if v is not None}, doseq=True)
+        return urllib.parse.urlencode(
+            {
+                self._solrize(k): self._solrize(v)
+                for k, v in self.dict().items()
+                if v is not None
+            },
+            doseq=True,
+        )
 
     def _solrize(self, value):
         """
@@ -72,4 +77,3 @@ class SolrQueryResult(BaseModel):
     responseHeader: SolrQueryResponseHeader
     response: SolrQueryResponse
     facet_counts: Optional[SolrFacetCounts]
-

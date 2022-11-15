@@ -6,9 +6,6 @@ def strip_json(doc: dict, *fields_to_remove: str):
             pass
     return doc
 
+
 def escape(value: str) -> str:
     return value.replace(":", "\:")
-
-
-
-

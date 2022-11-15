@@ -32,11 +32,10 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         if get_association_counts:
             entity["association_counts"] = self.get_entity_association_counts(id)
 
-#        if get_hierarchy:
-#            entity["node_hierarchy"] = self.get_node_hierarchy(id)
+        #        if get_hierarchy:
+        #            entity["node_hierarchy"] = self.get_node_hierarchy(id)
 
         return entity
-
 
     def get_entity_association_counts(self, id: str):
 
@@ -53,8 +52,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         )
         return categories
 
-
-
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Implements: AssociationInterface
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -69,32 +66,35 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         between: str = None,
         page: int = 1,
         limit: int = 20,
-    ) -> SolrQueryResponse :
+    ) -> SolrQueryResponse:
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
-        start = ((page-1) * limit) + 1
+        start = ((page - 1) * limit) + 1
         query = SolrQuery(start=start, limit=limit)
 
         if category:
-            query.add_field_filter_query('category', category)
+            query.add_field_filter_query("category", category)
         if predicate:
-            query.add_field_filter_query('predicate', predicate)
+            query.add_field_filter_query("predicate", predicate)
         if subject:
-            query.add_field_filter_query('subject', subject)
+            query.add_field_filter_query("subject", subject)
         if object:
-            query.add_field_filter_query('object', object)
+            query.add_field_filter_query("object", object)
         if between:
             # todo: handle error reporting / parsing, think about another way to pass this?
             b = between.split(",")
             e1 = escape(b[0])
             e2 = escape(b[1])
-            query.add_filter_query(f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")')
+            query.add_filter_query(
+                f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")'
+            )
         if entity:
-            query.add_filter_query(f'subject:"{escape(entity)}" OR object:"{escape(entity)}"')
+            query.add_filter_query(
+                f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+            )
 
         result = solr.query(query)
 
         return result
-
 
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Implements: SearchInterface
