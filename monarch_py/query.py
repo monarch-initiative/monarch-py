@@ -1,7 +1,7 @@
-from monarch_py.utilities.utils import *
-from urllib.parse import urljoin, urlencode
-
 from dataclasses import dataclass
+from urllib.parse import urlencode, urljoin
+
+from monarch_py.utilities.utils import *
 
 
 @dataclass

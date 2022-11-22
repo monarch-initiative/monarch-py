@@ -1,19 +1,12 @@
 import json
 import logging
+from typing import Dict, List
 
-from pydantic import BaseModel
 import requests
-from monarch_py.utilities.utils import escape
-from typing import List, Dict
+from pydantic import BaseModel
 
-from monarch_py.datamodels.solr import (
-    SolrQuery,
-    SolrQueryResult,
-    SolrQueryResponse,
-    SolrQueryResponseHeader,
-    SolrFacetCounts,
-    core,
-)
+from monarch_py.datamodels.solr import SolrQuery, SolrQueryResult, core
+from monarch_py.utilities.utils import escape
 
 logger = logging.getLogger(__name__)
 

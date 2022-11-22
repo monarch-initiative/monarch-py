@@ -1,5 +1,6 @@
-from monarch_py.datamodels.solr import SolrQuery
 import pytest
+
+from monarch_py.datamodels.solr import SolrQuery
 
 
 @pytest.mark.parametrize(

@@ -4,13 +4,13 @@ from dataclasses import dataclass
 
 from pydantic import ValidationError
 
-from monarch_py.interfaces.entity_interface import EntityInterface
+from monarch_py.datamodels.model import Association, AssociationResults, Entity
+from monarch_py.datamodels.solr import SolrQuery, core
 from monarch_py.interfaces.association_interface import AssociationInterface
+from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
-from monarch_py.datamodels.solr import core, SolrQuery, SolrQueryResponse
 from monarch_py.service.solr_service import SolrService
 from monarch_py.utilities.utils import escape
-from monarch_py.datamodels.model import Entity, Association, AssociationResults
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity = Entity(**solr_document)
 
         # todo: make an endpoint for getting facet counts?
-        #if get_association_counts:
+        # if get_association_counts:
         #    entity["association_counts"] = self.get_entity_association_counts(id)
 
         #        if get_hierarchy:
@@ -110,7 +110,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 logger.error(f"Validation error for {doc}")
                 raise
 
-        results = AssociationResults(limit=limit, offset=offset, total=total, associations=associations)
+        results = AssociationResults(
+            limit=limit, offset=offset, total=total, associations=associations
+        )
 
         return results
 

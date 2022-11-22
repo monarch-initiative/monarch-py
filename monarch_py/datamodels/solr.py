@@ -1,8 +1,9 @@
 import urllib
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
-from typing import List, Any, Optional, Dict
-from enum import Enum
+
 from monarch_py.utilities.utils import escape
 
 

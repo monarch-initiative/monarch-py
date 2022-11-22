@@ -1,4 +1,5 @@
 from abc import ABC
+
 from monarch_py.datamodels.model import AssociationResults
 
 
