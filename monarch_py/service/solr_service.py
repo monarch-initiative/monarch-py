@@ -39,7 +39,8 @@ class SolrService(BaseModel):
             logger.error("Solr error message: " + data["error"]["msg"])
         response.raise_for_status()
         solr_query_result = SolrQueryResult.parse_obj(data)
-
+        for doc in solr_query_result.response.docs:
+            self._strip_json(doc, "_version_")
         return solr_query_result
 
     def _strip_json(self, doc: dict, *fields_to_remove: str):

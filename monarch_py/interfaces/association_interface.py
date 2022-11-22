@@ -1,4 +1,5 @@
 from abc import ABC
+from monarch_py.datamodels.model import AssociationResults
 
 
 class AssociationInterface(ABC):
@@ -12,7 +13,7 @@ class AssociationInterface(ABC):
         between: str = None,
         page: int = 0,
         limit: int = 20,
-    ):
+    ) -> AssociationResults:
         """
 
         Retrieve paginated association records, with filter options

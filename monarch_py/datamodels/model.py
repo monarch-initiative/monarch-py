@@ -19,10 +19,54 @@ class ConfiguredBaseModel(WeakRefShimBaseModel,
     pass                    
 
 
-class Association(ConfiguredBaseModel):
+class Results(ConfiguredBaseModel):
+    
+    limit: Optional[int] = Field(None)
+    offset: Optional[int] = Field(None)
+    total: Optional[int] = Field(None)
+    
+
+
+class AssociationResults(Results):
+    
+    associations: Optional[List[Association]] = Field(default_factory=list)
+    limit: Optional[int] = Field(None)
+    offset: Optional[int] = Field(None)
+    total: Optional[int] = Field(None)
+    
+
+
+class EntityResults(Results):
+    
+    entities: Optional[List[Entity]] = Field(default_factory=list)
+    limit: Optional[int] = Field(None)
+    offset: Optional[int] = Field(None)
+    total: Optional[int] = Field(None)
+    
+
+
+class Entity(ConfiguredBaseModel):
     
     id: Optional[str] = Field(None)
+    category: Optional[List[str]] = Field(default_factory=list)
+    name: Optional[str] = Field(None)
+    description: Optional[str] = Field(None)
+    xref: Optional[List[str]] = Field(default_factory=list)
+    provided_by: Optional[str] = Field(None)
+    in_taxon: Optional[str] = Field(None)
+    source: Optional[str] = Field(None)
+    symbol: Optional[str] = Field(None)
+    type: Optional[str] = Field(None)
+    synonym: Optional[List[str]] = Field(default_factory=list)
+    
+
+
+class Association(ConfiguredBaseModel):
+    
+    aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)
+    id: Optional[str] = Field(None)
     subject: Optional[str] = Field(None)
+    original_subject: Optional[str] = Field(None)
     subject_namespace: Optional[str] = Field(None)
     subject_category: Optional[List[str]] = Field(default_factory=list)
     subject_closure: Optional[List[str]] = Field(default_factory=list)
@@ -30,11 +74,14 @@ class Association(ConfiguredBaseModel):
     subject_closure_label: Optional[List[str]] = Field(default_factory=list)
     predicate: Optional[str] = Field(None)
     object: Optional[str] = Field(None)
+    original_object: Optional[str] = Field(None)
     object_namespace: Optional[str] = Field(None)
     object_category: Optional[List[str]] = Field(default_factory=list)
     object_closure: Optional[List[str]] = Field(default_factory=list)
     object_label: Optional[str] = Field(None)
     object_closure_label: Optional[List[str]] = Field(default_factory=list)
+    knowledge_source: Optional[List[str]] = Field(default_factory=list)
+    primary_knowledge_source: Optional[List[str]] = Field(default_factory=list)
     category: Optional[List[str]] = Field(default_factory=list)
     negated: Optional[bool] = Field(None)
     provided_by: Optional[str] = Field(None)
@@ -54,5 +101,9 @@ class Association(ConfiguredBaseModel):
 
 # Update forward refs
 # see https://pydantic-docs.helpmanual.io/usage/postponed_annotations/
+Results.update_forward_refs()
+AssociationResults.update_forward_refs()
+EntityResults.update_forward_refs()
+Entity.update_forward_refs()
 Association.update_forward_refs()
 
