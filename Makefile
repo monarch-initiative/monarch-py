@@ -22,9 +22,9 @@ clean:
 
 .PHONY: lint
 lint:
-	poetry run flake8 --exit-zero --max-line-length 120 monarch_ingest/ tests/
-	poetry run black --check --diff monarch_ingest tests
-	poetry run isort --check-only --diff monarch_ingest tests
+	poetry run flake8 --exit-zero --max-line-length 120 monarch_py/ tests/
+	poetry run black --check --diff monarch_py tests
+	poetry run isort --check-only --diff monarch_py tests
 
 .PHONY: format
 format:
@@ -33,6 +33,6 @@ format:
 		--remove-all-unused-imports \
 		--remove-unused-variables \
 		--ignore-init-module-imports \
-		--in-place monarch_ingest tests
-	poetry run isort monarch_ingest tests
-	poetry run black monarch_ingest tests
+		--in-place monarch_py tests
+	poetry run isort monarch_py tests
+	poetry run black monarch_py tests
