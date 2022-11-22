@@ -1,15 +1,15 @@
 import json
 import logging
+from typing import Dict, List
 
-from pydantic import BaseModel
 import requests
-from monarch_py.utilities.utils import escape
-from typing import List, Dict
+from pydantic import BaseModel
 
-from monarch_py.datamodels.solr import SolrQuery, \
-    SolrQueryResult, SolrQueryResponse, SolrQueryResponseHeader, SolrFacetCounts, core
+from monarch_py.datamodels.solr import SolrQuery, SolrQueryResult, core
+from monarch_py.utilities.utils import escape
 
 logger = logging.getLogger(__name__)
+
 
 class SolrService(BaseModel):
     base_url: str
@@ -28,11 +28,12 @@ class SolrService(BaseModel):
         response = requests.get(url)
 
         data = json.loads(response.text)
-        if 'error' in data:
+        if "error" in data:
             logger.error("Solr error message: " + data["error"]["msg"])
         response.raise_for_status()
         solr_query_result = SolrQueryResult.parse_obj(data)
-
+        for doc in solr_query_result.response.docs:
+            self._strip_json(doc, "_version_")
         return solr_query_result
 
     def _strip_json(self, doc: dict, *fields_to_remove: str):
@@ -50,14 +51,15 @@ class SolrService(BaseModel):
 
     def get_filtered_facet(self, id, filter_field, facet_field):
 
-        query = SolrQuery(rows=0,
-                          facet=True,
-                          facet_fields=[facet_field],
-                          filter_queries=[f"{filter_field}:{escape(id)}"])
+        query = SolrQuery(
+            rows=0,
+            facet=True,
+            facet_fields=[facet_field],
+            filter_queries=[f"{filter_field}:{escape(id)}"],
+        )
 
         result = self.query(query)
 
         facet_fields = result.facet_counts.facet_fields[facet_field]
 
         return self._facets_to_dict(facet_fields)
-

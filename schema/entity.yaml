@@ -1,0 +1,47 @@
+id: https://w3id.org/monarch/monarch-py
+name: EntityIndex
+description: Data model for Monarch Solr
+imports:
+- linkml:types
+prefixes:
+  linkml: https://w3id.org/linkml/
+classes:
+  entity:
+    slots:
+      - id
+      - category
+      - name
+      - description
+      - xref
+      - provided_by
+      - in_taxon
+      - source
+      - symbol
+      - type
+      - synonym
+slots:
+  id:
+    range: string
+    identifier: true
+  category:
+    multivalued: true
+  name:
+    range: string
+  description:
+    range: string
+  xref:
+    range: string
+    multivalued: true
+  provided_by:
+    range: string
+  in_taxon:
+    range: string
+  source:
+    range: string
+  symbol:
+    range: string
+  type:
+    range: string
+  synonym:
+    multivalued: true
+

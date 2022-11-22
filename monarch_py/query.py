@@ -1,7 +1,7 @@
-from monarch_py.utilities.utils import *
-from urllib.parse import urljoin, urlencode
-
 from dataclasses import dataclass
+from urllib.parse import urlencode, urljoin
+
+from monarch_py.utilities.utils import *
 
 
 @dataclass
@@ -81,18 +81,5 @@ def build_association_query(
         query += f"{i}&"
 
     query += "fq="
-    if category:
-        query += f'category:"{category}"&'
-    if predicate:
-        predicate += f'predicate:"{predicate}"&'
-    if subject:
-        query += f'subject:"{subject}"&'
-    if object:
-        query += f'object:"{object}"&'
-    if between:
-        b = between.split(",")
-        query += f'(subject:"{b[0]}" AND object:"{b[1]}") OR (subject:"{b[1]}" AND object:"{b[0]}")&'
-    if entity:
-        query += f'subject:"{i}" OR object:"{i}"&'
 
     return query
