@@ -1,54 +1,52 @@
 from __future__ import annotations
-
-from typing import List, Optional
-
-from pydantic import BaseModel as BaseModel
-from pydantic import Field
+from datetime import datetime, date
+from enum import Enum
+from typing import List, Dict, Optional, Any
+from pydantic import BaseModel as BaseModel, Field
 
 metamodel_version = "None"
 version = "None"
 
-
 class WeakRefShimBaseModel(BaseModel):
-    __slots__ = "__weakref__"
-
-
-class ConfiguredBaseModel(
-    WeakRefShimBaseModel,
-    validate_assignment=True,
-    validate_all=True,
-    underscore_attrs_are_private=True,
-    extra="forbid",
-    arbitrary_types_allowed=True,
-):
-    pass
+   __slots__ = '__weakref__'
+    
+class ConfiguredBaseModel(WeakRefShimBaseModel,
+                validate_assignment = True, 
+                validate_all = True, 
+                underscore_attrs_are_private = True, 
+                extra = 'forbid', 
+                arbitrary_types_allowed = True):
+    pass                    
 
 
 class Results(ConfiguredBaseModel):
-
+    
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
+    
 
 
 class AssociationResults(Results):
-
+    
     associations: Optional[List[Association]] = Field(default_factory=list)
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
+    
 
 
 class EntityResults(Results):
-
+    
     entities: Optional[List[Entity]] = Field(default_factory=list)
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
+    
 
 
 class Entity(ConfiguredBaseModel):
-
+    
     id: Optional[str] = Field(None)
     category: Optional[List[str]] = Field(default_factory=list)
     name: Optional[str] = Field(None)
@@ -60,10 +58,11 @@ class Entity(ConfiguredBaseModel):
     symbol: Optional[str] = Field(None)
     type: Optional[str] = Field(None)
     synonym: Optional[List[str]] = Field(default_factory=list)
+    
 
 
 class Association(ConfiguredBaseModel):
-
+    
     aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)
     id: Optional[str] = Field(None)
     subject: Optional[str] = Field(None)
@@ -96,6 +95,8 @@ class Association(ConfiguredBaseModel):
     stage_qualifier: Optional[str] = Field(None)
     pathway: Optional[str] = Field(None)
     relation: Optional[str] = Field(None)
+    
+
 
 
 # Update forward refs
@@ -105,3 +106,4 @@ AssociationResults.update_forward_refs()
 EntityResults.update_forward_refs()
 Entity.update_forward_refs()
 Association.update_forward_refs()
+

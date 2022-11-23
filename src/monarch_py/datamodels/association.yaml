@@ -1,6 +1,6 @@
 id: https://w3id.org/monarch/monarch-py
 name: AssociationIndex
-description: Data model for Monarch Solr
+description: Data datamodels for Monarch Solr
 imports:
 - linkml:types
 prefixes:

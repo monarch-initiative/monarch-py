@@ -1,6 +1,6 @@
 id: https://w3id.org/monarch/monarch-py
 name: monarch-py
-description: Data model for the Monarch Initiative data access library
+description: Data datamodels for the Monarch Initiative data access library
 imports:
 - linkml:types
 - association
