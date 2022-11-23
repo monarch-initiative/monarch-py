@@ -1,12 +1,12 @@
 id: https://w3id.org/monarch/monarch-py
 name: EntityIndex
 description: Data datamodels for Monarch Solr
-imports:
-- linkml:types
 prefixes:
   linkml: https://w3id.org/linkml/
+imports:
+  - linkml:types
 classes:
-  entity:
+  Entity:
     slots:
       - id
       - category

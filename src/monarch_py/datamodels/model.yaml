@@ -1,30 +1,30 @@
 id: https://w3id.org/monarch/monarch-py
 name: monarch-py
 description: Data datamodels for the Monarch Initiative data access library
+prefixes:
+  linkml: https://w3id.org/linkml/
 imports:
 - linkml:types
 - association
 - entity
-prefixes:
-  linkml: https://w3id.org/linkml/
 classes:
-  results:
+  Results:
     abstract: true
     slots:
       - limit
       - offset
       - total
-  association_results:
+  AssociationResults:
     is_a: results
     slots:
       - associations
-  entity_results:
+  EntityResults:
     is_a: results
     slots:
       - entities
 slots:
   - entities:
-      range: entity
+      range: Entity
       multivalued: true
       inlined: true
       inlined_as_list: true
@@ -33,7 +33,7 @@ slots:
   - offset:
       range: integer
   - associations:
-      range: association
+      range: Association
       multivalued: true
       inlined: true
       inlined_as_list: true
