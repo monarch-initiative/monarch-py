@@ -33,6 +33,6 @@ format:
 		--remove-all-unused-imports \
 		--remove-unused-variables \
 		--ignore-init-module-imports \
-		--in-place monarch_py tests
+		--in-place src tests
 	poetry run isort src tests
 	poetry run black src tests
