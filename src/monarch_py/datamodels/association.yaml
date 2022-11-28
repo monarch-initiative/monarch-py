@@ -1,12 +1,12 @@
 id: https://w3id.org/monarch/monarch-py
 name: AssociationIndex
-description: Data model for Monarch Solr
-imports:
-- linkml:types
+description: Data datamodels for Monarch Solr
 prefixes:
   linkml: https://w3id.org/linkml/
+imports:
+  - linkml:types
 classes:
-  association:
+  Association:
     slots:
       -  aggregator_knowledge_source
       -  id

@@ -1,6 +1,6 @@
 from abc import ABC
 
-from monarch_py.datamodels.model import AssociationResults
+from src.monarch_py.datamodels.model import AssociationResults
 
 
 class AssociationInterface(ABC):

@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
-from monarch_py.utilities.utils import escape
+from src.monarch_py.utilities.utils import escape
 
 
 class core(Enum):

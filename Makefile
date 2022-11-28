@@ -1,4 +1,4 @@
-monarch_py/datamodels/model.py: schema/monarch-py.yaml
+src/monarch_py/datamodels/model.py: src/monarch_py/datamodels
 	poetry run gen-pydantic $< > $@
 
 .PHONY: install
@@ -11,7 +11,7 @@ test: install
 
 .PHONY: clobber
 clobber:
-	rm monarch_py/datamodels/model.py
+	rm src/monarch_py/datamodels/model.py
 
 .PHONY: clean
 clean:
@@ -22,9 +22,9 @@ clean:
 
 .PHONY: lint
 lint:
-	poetry run flake8 --exit-zero --max-line-length 120 monarch_py/ tests/
-	poetry run black --check --diff monarch_py tests
-	poetry run isort --check-only --diff monarch_py tests
+	poetry run flake8 --exit-zero --max-line-length 120 src tests/
+	poetry run black --check --diff src tests
+	poetry run isort --check-only --diff src tests
 
 .PHONY: format
 format:
@@ -33,6 +33,6 @@ format:
 		--remove-all-unused-imports \
 		--remove-unused-variables \
 		--ignore-init-module-imports \
-		--in-place monarch_py tests
-	poetry run isort monarch_py tests
-	poetry run black monarch_py tests
+		--in-place src tests
+	poetry run isort src tests
+	poetry run black src tests
