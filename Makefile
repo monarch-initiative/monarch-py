@@ -1,4 +1,4 @@
-src/monarch_py/datamodels/model.py: src/monarch_py/datamodels
+src/monarch_py/datamodels/model.py: src/monarch_py/datamodels/model.yaml
 	poetry run gen-pydantic $< > $@
 
 .PHONY: install

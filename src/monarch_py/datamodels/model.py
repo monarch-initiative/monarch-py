@@ -24,44 +24,6 @@ class ConfiguredBaseModel(
     pass
 
 
-class Results(ConfiguredBaseModel):
-
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
-
-
-class AssociationResults(Results):
-
-    associations: Optional[List[Association]] = Field(default_factory=list)
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
-
-
-class EntityResults(Results):
-
-    entities: Optional[List[Entity]] = Field(default_factory=list)
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
-
-
-class Entity(ConfiguredBaseModel):
-
-    id: Optional[str] = Field(None)
-    category: Optional[List[str]] = Field(default_factory=list)
-    name: Optional[str] = Field(None)
-    description: Optional[str] = Field(None)
-    xref: Optional[List[str]] = Field(default_factory=list)
-    provided_by: Optional[str] = Field(None)
-    in_taxon: Optional[str] = Field(None)
-    source: Optional[str] = Field(None)
-    symbol: Optional[str] = Field(None)
-    type: Optional[str] = Field(None)
-    synonym: Optional[List[str]] = Field(default_factory=list)
-
-
 class Association(ConfiguredBaseModel):
 
     aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)
@@ -98,10 +60,48 @@ class Association(ConfiguredBaseModel):
     relation: Optional[str] = Field(None)
 
 
+class Entity(ConfiguredBaseModel):
+
+    id: Optional[str] = Field(None)
+    category: Optional[List[str]] = Field(default_factory=list)
+    name: Optional[str] = Field(None)
+    description: Optional[str] = Field(None)
+    xref: Optional[List[str]] = Field(default_factory=list)
+    provided_by: Optional[str] = Field(None)
+    in_taxon: Optional[str] = Field(None)
+    source: Optional[str] = Field(None)
+    symbol: Optional[str] = Field(None)
+    type: Optional[str] = Field(None)
+    synonym: Optional[List[str]] = Field(default_factory=list)
+
+
+class Results(ConfiguredBaseModel):
+
+    limit: Optional[int] = Field(None)
+    offset: Optional[int] = Field(None)
+    total: Optional[int] = Field(None)
+
+
+class AssociationResults(Results):
+
+    associations: Optional[List[Association]] = Field(default_factory=list)
+    limit: Optional[int] = Field(None)
+    offset: Optional[int] = Field(None)
+    total: Optional[int] = Field(None)
+
+
+class EntityResults(Results):
+
+    entities: Optional[List[Entity]] = Field(default_factory=list)
+    limit: Optional[int] = Field(None)
+    offset: Optional[int] = Field(None)
+    total: Optional[int] = Field(None)
+
+
 # Update forward refs
 # see https://pydantic-docs.helpmanual.io/usage/postponed_annotations/
+Association.update_forward_refs()
+Entity.update_forward_refs()
 Results.update_forward_refs()
 AssociationResults.update_forward_refs()
 EntityResults.update_forward_refs()
-Entity.update_forward_refs()
-Association.update_forward_refs()

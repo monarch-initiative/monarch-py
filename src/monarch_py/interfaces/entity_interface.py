@@ -1,6 +1,6 @@
 from abc import ABC
 
-from src.monarch_py.datamodels.model import Entity
+from monarch_py.datamodels.model import Entity
 
 
 class EntityInterface(ABC):

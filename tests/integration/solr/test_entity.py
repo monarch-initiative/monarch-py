@@ -1,4 +1,4 @@
-from src.monarch_py.implementations.solr.solr_implentation import SolrImplementation
+from monarch_py.implementations.solr.solr_implentation import SolrImplementation
 
 
 def test_entity():
