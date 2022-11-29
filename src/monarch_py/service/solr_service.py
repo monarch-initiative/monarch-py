@@ -5,8 +5,8 @@ from typing import Dict, List
 import requests
 from pydantic import BaseModel
 
-from src.monarch_py.datamodels.solr import SolrQuery, SolrQueryResult, core
-from src.monarch_py.utilities.utils import escape
+from monarch_py.datamodels.solr import SolrQuery, SolrQueryResult, core
+from monarch_py.utilities.utils import escape
 
 logger = logging.getLogger(__name__)
 
