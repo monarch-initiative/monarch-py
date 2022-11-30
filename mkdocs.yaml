@@ -1,0 +1,71 @@
+site_name: 'Welcome to monarch-py'
+
+repo_name: 'monarch-py'
+repo_url: 'https://github.com/monarch-initiative/monarch-py/'
+
+theme:
+    name: 'material'
+    docs_dir: docs/
+    logo: 'images/monarch-initiative.png'
+    favicon:
+        'images/favicon.ico'
+    features:
+        # - navigation.expand
+        # - navigation.instant
+        # - navigation.tracking
+        - navigation.tabs
+        - navigation.tabs.sticky
+    palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-2
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+    font:
+        text: 'Source Sans Pro'
+        code: 'Source Sans Pro Mono'
+
+
+# nav:
+#   - Home:
+#     - Welcome: 'index.md'
+#     - API Reference: 'API-Reference/index.md'
+
+
+# plugins:
+#   - search
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_toc_entry: False
+
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.keys
+  - attr_list
+  - pymdownx.betterem:
+      smart_enable: all
+
+
+extra:
+  social:
+    - icon: 'fontawesome/solid/house'
+      link: 'https://monarchinitiative.org'
+    - icon: 'fontawesome/brands/github-alt'
+      link: 'https://github.com/monarch-initiative/'
+
+# copyright: 'Copyright &copy; 2020 - 2022 [Glass](glass-ships.com)'

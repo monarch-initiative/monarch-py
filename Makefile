@@ -1,5 +1,7 @@
+RUN = poetry run
+
 src/monarch_py/datamodels/model.py: src/monarch_py/datamodels/model.yaml
-	poetry run gen-pydantic $< > $@
+	$(RUN) gen-pydantic $< > $@
 
 .PHONY: install
 install:
@@ -7,7 +9,12 @@ install:
 
 .PHONY: test
 test: install
-	poetry run python -m pytest --ignore=ingest_template
+	$(RUN) python -m pytest --ignore=ingest_template
+
+
+.PHONY: generate-docs
+generate-docs: install
+	$(RUN) gen-doc -d docs/Data_Model/ src/monarch_py/datamodels/model.yaml
 
 .PHONY: clobber
 clobber:
@@ -22,17 +29,17 @@ clean:
 
 .PHONY: lint
 lint:
-	poetry run flake8 --exit-zero --max-line-length 120 src tests/
-	poetry run black --check --diff src tests
-	poetry run isort --check-only --diff src tests
+	$(RUN) flake8 --exit-zero --max-line-length 120 src tests/
+	$(RUN) black --check --diff src tests
+	$(RUN) isort --check-only --diff src tests
 
 .PHONY: format
 format:
-	poetry run autoflake \
+	$(RUN) autoflake \
 		--recursive \
 		--remove-all-unused-imports \
 		--remove-unused-variables \
 		--ignore-init-module-imports \
 		--in-place src tests
-	poetry run isort src tests
-	poetry run black src tests
+	$(RUN) run isort src tests
+	$(RUN) run black src tests
