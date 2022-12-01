@@ -4,7 +4,7 @@ from monarch_py.datamodels.model import Entity
 
 
 class EntityInterface(ABC):
-    """Interface for entities in the Monarch KG"""
+    """Abstract interface for entities in the Monarch KG"""
 
     @abstractmethod
     def get_entity(
@@ -13,7 +13,7 @@ class EntityInterface(ABC):
         """Retrieve a specific entity by exact ID match, with optional extras
 
         Args:
-            id (str): 
+            id (str): id of the entity to search for.
             get_association_counts (bool, optional): Whether to get a count of associations for the entity. Defaults to False.
             get_hierarchy (bool, optional): Whether to get the entity's heirarchy in the data model. Defaults to False.
 

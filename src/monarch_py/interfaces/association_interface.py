@@ -4,7 +4,7 @@ from monarch_py.datamodels.model import AssociationResults
 
 
 class AssociationInterface(ABC):
-    """Interface for associations in the Monarch KG"""
+    """Abstract interface for associations in the Monarch KG"""
 
 
     @abstractmethod

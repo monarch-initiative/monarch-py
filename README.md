@@ -1,4 +1,4 @@
 # monarch-py
 Monarch Python API
 
-<img src='docs/docs-coming-soon.jpg'>
+<img src='docs/images/docs-coming-soon.jpg'>

@@ -17,19 +17,27 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface):
-    """
-    Wraps the Monarch Solr endpoint
-    """
+    """Implementation of Monarch Interfaces for Solr endpoint"""
 
     base_url: str = "http://localhost:8983/solr"
 
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    # Implements: EntityInterface
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ###############################
+    # Implements: EntityInterface #
+    ###############################
 
     def get_entity(
         self, id: str, get_association_counts: bool = False, get_hierarchy: bool = False
     ) -> Entity:
+        """Retrieve a specific entity by exact ID match, with optional extras
+
+        Args:
+            id (str): id of the entity to search for.
+            get_association_counts (bool, optional): Whether to get association counts. Defaults to False.
+            get_hierarchy (bool, optional): Whether to get the entity hierarchy. Defaults to False.
+
+        Returns:
+            Entity: Dataclass representing results of an entity search.
+        """
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
@@ -45,6 +53,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         return entity
 
     def get_entity_association_counts(self, id: str):
+        """Returns a list and count of associations for an entity"""
 
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
 
@@ -59,9 +68,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         )
         return categories
 
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    # Implements: AssociationInterface
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ####################################
+    # Implements: AssociationInterface #
+    ####################################
 
     def get_associations(
         self,
@@ -69,11 +78,27 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         predicate: str = None,
         subject: str = None,
         object: str = None,
-        entity: str = None,  # return nodes where entity is subject or object
+        entity: str = None, 
         between: str = None,
         offset: int = 1,
         limit: int = 20,
     ) -> AssociationResults:
+        """Retrieve paginated association records, with filter options
+
+        Args:
+            category (str, optional): Filter to only associations matching the specified category. Defaults to None.
+            predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
+            subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
+            object (str, optional): Filter to only associations matching the specified object. Defaults to None.
+            entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
+            between (Tuple[str, str], optional): Filter to bi-directional associations between two entities. 
+            offset (int, optional): Result offset, for pagination. Defaults to 0.
+            limit (int, optional): Limit results to specified number. Defaults to 20.
+
+        Returns:
+            AssociationResults: Dataclass representing results of an association search.
+        """
+        
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query = SolrQuery(start=offset, rows=limit)
 
