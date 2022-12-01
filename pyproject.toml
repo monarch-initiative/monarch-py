@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "monarch-py"
-version = "0.2.3"
+version = "0.2.4"
 description = "Monarch Initiative data access library"
 authors = [
     "Kevin Schaper <kevin@tislab.org>",
