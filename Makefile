@@ -14,7 +14,7 @@ test: install
 
 .PHONY: generate-docs
 generate-docs: install
-	$(RUN) gen-doc -d docs/Data_Model/ src/monarch_py/datamodels/model.yaml
+	$(RUN) gen-doc -d docs/Data-Model/ src/monarch_py/datamodels/model.yaml
 
 .PHONY: clobber
 clobber:
