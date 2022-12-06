@@ -1,5 +1,6 @@
 import importlib
 import pathlib
+
 import typer
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
@@ -68,7 +69,7 @@ def associations(
         object=object,
         entity=entity,
         limit=limit,
-        offset=offset
+        offset=offset,
     )
 
     print(response.json(indent=4))
