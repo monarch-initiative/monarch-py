@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "monarch-py"
-version = "0.2.4"
+version = "0.2.5"
 description = "Monarch Initiative data access library"
 authors = [
     "Kevin Schaper <kevin@tislab.org>",
@@ -20,6 +20,7 @@ typer = "^0.7.0"
 mkdocs = "^1.4.2"
 mkdocs-material = "^8.5.10"
 mkdocstrings = {extras = ["python"], version = "^0.19.0"}
+rich = "^12.6.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"

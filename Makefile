@@ -41,5 +41,5 @@ format:
 		--remove-unused-variables \
 		--ignore-init-module-imports \
 		--in-place src tests
-	$(RUN) run isort src tests
-	$(RUN) run black src tests
+	$(RUN) isort src tests
+	$(RUN) black src tests

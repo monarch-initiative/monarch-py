@@ -8,7 +8,6 @@ from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.datamodels.solr import SolrQuery, core
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
-from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
 from monarch_py.utilities.utils import escape
 
@@ -16,7 +15,9 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class SolrImplementation(EntityInterface, AssociationInterface):  # todo: support SearchInterface
+class SolrImplementation(
+    EntityInterface, AssociationInterface
+):  # todo: support SearchInterface
     """Implementation of Monarch Interfaces for Solr endpoint"""
 
     base_url: str = "http://localhost:8983/solr"
@@ -78,7 +79,7 @@ class SolrImplementation(EntityInterface, AssociationInterface):  # todo: suppor
         predicate: str = None,
         subject: str = None,
         object: str = None,
-        entity: str = None, 
+        entity: str = None,
         between: str = None,
         offset: int = 1,
         limit: int = 20,
@@ -91,14 +92,14 @@ class SolrImplementation(EntityInterface, AssociationInterface):  # todo: suppor
             subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
             object (str, optional): Filter to only associations matching the specified object. Defaults to None.
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
-            between (Tuple[str, str], optional): Filter to bi-directional associations between two entities. 
+            between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
             offset (int, optional): Result offset, for pagination. Defaults to 0.
             limit (int, optional): Limit results to specified number. Defaults to 20.
 
         Returns:
             AssociationResults: Dataclass representing results of an association search.
         """
-        
+
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query = SolrQuery(start=offset, rows=limit)
 
