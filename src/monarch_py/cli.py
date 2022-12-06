@@ -3,7 +3,7 @@ import pathlib
 
 import typer
 
-from monarch_py.implementations.solr.solr_implentation import SolrImplementation
+from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
 app = typer.Typer()
 

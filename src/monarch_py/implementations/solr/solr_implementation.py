@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface):
+class SolrImplementation(EntityInterface, AssociationInterface):  # todo: support SearchInterface
     """Implementation of Monarch Interfaces for Solr endpoint"""
 
     base_url: str = "http://localhost:8983/solr"
