@@ -81,7 +81,7 @@ class SolrImplementation(
         object: str = None,
         entity: str = None,
         between: str = None,
-        offset: int = 1,
+        offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
         """Retrieve paginated association records, with filter options
