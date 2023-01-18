@@ -8,18 +8,14 @@ from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 
-from monarch_py.service.solr_service import SolrService
-from monarch_py.datamodels.solr import SolrQuery, core
-
 from monarch_py.utilities.utils import escape
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class SolrImplementation(
-    EntityInterface, AssociationInterface
-):  # todo: support SearchInterface
+class SQLImplementation(EntityInterface, AssociationInterface):
+    # todo: support SearchInterface
     """Implementation of Monarch Interfaces for Solr endpoint"""
 
     base_url: str = "http://localhost:8983/solr"
@@ -42,9 +38,10 @@ class SolrImplementation(
             Entity: Dataclass representing results of an entity search.
         """
 
-        solr = SolrService(base_url=self.base_url, core=core.ENTITY)
-        solr_document = solr.get(id)
-        entity = Entity(**solr_document)
+        pass
+        # solr = SolrService(base_url=self.base_url, core=core.ENTITY)
+        # solr_document = solr.get(id)
+        # entity = Entity(**solr_document)
 
         # todo: make an endpoint for getting facet counts?
         # if get_association_counts:
@@ -53,23 +50,23 @@ class SolrImplementation(
         #        if get_hierarchy:
         #            entity["node_hierarchy"] = self.get_node_hierarchy(id)
 
-        return entity
+        # return entity
 
     def get_entity_association_counts(self, id: str):
         """Returns a list and count of associations for an entity"""
+        pass
+        # solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
 
-        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
-
-        object_categories = solr.get_filtered_facet(
-            id, filter_field="subject", facet_field="object_category"
-        )
-        subject_categories = solr.get_filtered_facet(
-            id, filter_field="object", facet_field="subject_category"
-        )
-        categories = collections.Counter(object_categories) + collections.Counter(
-            subject_categories
-        )
-        return categories
+        # object_categories = solr.get_filtered_facet(
+        #     id, filter_field="subject", facet_field="object_category"
+        # )
+        # subject_categories = solr.get_filtered_facet(
+        #     id, filter_field="object", facet_field="subject_category"
+        # )
+        # categories = collections.Counter(object_categories) + collections.Counter(
+        #     subject_categories
+        # )
+        # return categories
 
     ####################################
     # Implements: AssociationInterface #
@@ -101,48 +98,48 @@ class SolrImplementation(
         Returns:
             AssociationResults: Dataclass representing results of an association search.
         """
+        pass
+        # solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
+        # query = SolrQuery(start=offset, rows=limit)
 
-        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
-        query = SolrQuery(start=offset, rows=limit)
+        # if category:
+        #     query.add_field_filter_query("category", category)
+        # if predicate:
+        #     query.add_field_filter_query("predicate", predicate)
+        # if subject:
+        #     query.add_field_filter_query("subject", subject)
+        # if object:
+        #     query.add_field_filter_query("object", object)
+        # if between:
+        #     # todo: handle error reporting / parsing, think about another way to pass this?
+        #     b = between.split(",")
+        #     e1 = escape(b[0])
+        #     e2 = escape(b[1])
+        #     query.add_filter_query(
+        #         f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")'
+        #     )
+        # if entity:
+        #     query.add_filter_query(
+        #         f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+        #     )
 
-        if category:
-            query.add_field_filter_query("category", category)
-        if predicate:
-            query.add_field_filter_query("predicate", predicate)
-        if subject:
-            query.add_field_filter_query("subject", subject)
-        if object:
-            query.add_field_filter_query("object", object)
-        if between:
-            # todo: handle error reporting / parsing, think about another way to pass this?
-            b = between.split(",")
-            e1 = escape(b[0])
-            e2 = escape(b[1])
-            query.add_filter_query(
-                f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")'
-            )
-        if entity:
-            query.add_filter_query(
-                f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
-            )
+        # query_result = solr.query(query)
+        # total = query_result.response.num_found
 
-        query_result = solr.query(query)
-        total = query_result.response.num_found
+        # associations = []
+        # for doc in query_result.response.docs:
+        #     try:
+        #         association = Association(**doc)
+        #         associations.append(association)
+        #     except ValidationError:
+        #         logger.error(f"Validation error for {doc}")
+        #         raise
 
-        associations = []
-        for doc in query_result.response.docs:
-            try:
-                association = Association(**doc)
-                associations.append(association)
-            except ValidationError:
-                logger.error(f"Validation error for {doc}")
-                raise
+        # results = AssociationResults(
+        #     limit=limit, offset=offset, total=total, associations=associations
+        # )
 
-        results = AssociationResults(
-            limit=limit, offset=offset, total=total, associations=associations
-        )
-
-        return results
+        # return results
 
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Implements: SearchInterface

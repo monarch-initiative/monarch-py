@@ -1,18 +1,48 @@
 import importlib
-import pathlib
-import sys
+from pathlib import Path
+from typing import Optional, Literal
 
-import sh
 import typer
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
+from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
-SOLR_DATA = pathlib.Path(__file__).parent / "solr-data"
+from monarch_py.solr_cli  import solr_app
+from monarch_py.sql_cli import sql_app
+
+from monarch_py.utilities.utils import check_for_data, check_for_solr
 
 app = typer.Typer()
-solr_app = typer.Typer()
 app.add_typer(solr_app, name="solr")
+app.add_typer(sql_app, name='sql')
+    
+state = {"data-source": None}
 
+
+def get_implementation(data_source: Optional[Literal['sql', 'solr']]):
+    """Returns implementation of the specified data source"""
+
+    # Check for data
+    if not check_for_data(data_source):
+        cont = typer.confirm(f"{data_source} data not found locally. Would you like to download?")
+        if not cont:
+            print("Please download the Monarch KG before proceeding.")
+            typer.Abort()
+
+    if data_source == "sql":
+        return SQLImplementation()
+    
+    if data_source == 'solr':
+        if not check_for_solr():
+            pass
+        pass
+
+
+@app.command()
+def test():
+    """Temp function to test snippits of code before implementing"""
+    print(check_for_solr())
+    
 
 @app.command()
 def schema():
@@ -20,16 +50,16 @@ def schema():
     Print the linkml schema for the data model
     """
     schema_name = "model"
-    schema_dir = pathlib.Path(
+    schema_dir = Path(
         importlib.util.find_spec(f"monarch_py.datamodels.{schema_name}").origin
     ).parent
-    schema_path = schema_dir / pathlib.Path(schema_name + ".yaml")
+    schema_path = schema_dir / Path(schema_name + ".yaml")
     with open(schema_path, "r") as schema_file:
         print(schema_file.read())
 
 
 @app.command()
-def entity(id: str):
+def entity(data, id: str):
     """
     Retrieve an entity by ID
 
@@ -37,9 +67,9 @@ def entity(id: str):
         id: The identifier of the entity to be retrieved
 
     """
-    si = SolrImplementation()
+    data = get_implementation(data)
 
-    entity = si.get_entity(id)
+    entity = data.get_entity(id)
     print(entity.json(indent=4))
 
 
@@ -77,30 +107,8 @@ def associations(
         limit=limit,
         offset=offset,
     )
-
     print(response.json(indent=4))
 
-# _out_bufsize=100
-@solr_app.command("download")
-def get_solr():
-    sh.wget("https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz", "-O", "/tmp/solr.tar.gz", _out=sys.stdout, _err=sys.stderr)
-    sh.mkdir("-p", SOLR_DATA)
-    sh.tar("-zxf", "/tmp/solr.tar.gz", "-C", f"{SOLR_DATA}", _out=sys.stdout, _err=sys.stderr)
-    sh.rm("/tmp/solr.tar.gz")
-
-@solr_app.command("start")
-def start_solr():
-    data = pathlib.Path(f"{SOLR_DATA}/data")
-    sh.docker.run("-p", "8983:8983", "-v", f"{data}:/opt", "-e", "SOLR_HOME=/opt/data", "--name", "monarch_solr","solr:8", _out=sys.stdout, _err=sys.stderr)
-
-@solr_app.command("stop")
-def stop_solr():
-    sh.docker.stop("monarch_solr", _out=sys.stdout, _err=sys.stderr)
-    sh.docker.rm("monarch_solr")
-
-@solr_app.command("remove")
-def delete_solr():
-    sh.rm("-rf", SOLR_DATA)
 
 
 if __name__ == "__main__":
