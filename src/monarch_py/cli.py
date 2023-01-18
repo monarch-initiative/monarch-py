@@ -80,6 +80,31 @@ def associations(
 
     print(response.json(indent=4))
 
+@app.command("search")
+def search(
+    q: str = typer.Option(None, "--query", "-q"),
+    category: str = typer.Option(None, "--category", "-c"),
+    taxon: str = typer.Option(None, "--taxon", "-t"),
+    limit: int = typer.Option(20, "--limit", "-l"),
+    offset: int = typer.Option(0, "--offset"),
+):
+    """
+    Search for entities
+
+    Args:
+        q: The query string to search for
+        category: The category of the entity
+        taxon: The taxon of the entity
+        limit: The number of entities to return
+        offset: The offset of the first entity to be retrieved
+    """
+    si = SolrImplementation()
+
+    response = si.search(
+        q=q, category=category, taxon=taxon, limit=limit, offset=offset
+    )
+    print(response.json(indent=4))
+
 # _out_bufsize=100
 @solr_app.command("download")
 def get_solr():
