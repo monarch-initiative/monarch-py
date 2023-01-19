@@ -59,7 +59,10 @@ def schema():
 
 
 @app.command()
-def entity(source: str = 'solr', id: str = None):
+def entity(
+    source: str = typer.Option('solr', "--source"), 
+    id: str = typer.Option(None, "--id")
+    ):
     """
     Retrieve an entity by ID
 
@@ -78,6 +81,7 @@ def entity(source: str = 'solr', id: str = None):
 
 @app.command()
 def associations(
+    source: str = typer.Option('solr', "--source"),
     category: str = typer.Option(None, "--category", "-c"),
     subject: str = typer.Option(None, "--subject", "-s"),
     predicate: str = typer.Option(None, "--predicate", "-p"),
@@ -86,7 +90,7 @@ def associations(
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
-):
+    ):
     """
     Paginate through associations
 
@@ -99,9 +103,9 @@ def associations(
         limit: The number of associations to return
         offset: The offset of the first association to be retrieved
     """
-    si = SolrImplementation()
+    data = get_implementation(source)
 
-    response = si.get_associations(
+    response = data.get_associations(
         category=category,
         predicate=predicate,
         subject=subject,
@@ -112,6 +116,31 @@ def associations(
     )
     print(response.json(indent=4))
 
+@app.command("search")
+def search(
+    source: str = typer.Option('solr', "--source"),
+    q: str = typer.Option(None, "--query", "-q"),
+    category: str = typer.Option(None, "--category", "-c"),
+    taxon: str = typer.Option(None, "--taxon", "-t"),
+    limit: int = typer.Option(20, "--limit", "-l"),
+    offset: int = typer.Option(0, "--offset"),
+):
+    """
+    Search for entities
+
+    Args:
+        q: The query string to search for
+        category: The category of the entity
+        taxon: The taxon of the entity
+        limit: The number of entities to return
+        offset: The offset of the first entity to be retrieved
+    """
+    data = get_implementation(source)
+
+    response = data.search(
+        q=q, category=category, taxon=taxon, limit=limit, offset=offset
+    )
+    print(response.json(indent=4))
 
 
 if __name__ == "__main__":
