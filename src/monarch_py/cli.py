@@ -1,15 +1,14 @@
 import importlib
 from pathlib import Path
-from typing import Optional, Literal
+from typing import Literal
 
 import typer
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
-from monarch_py.solr_cli import solr_app
-from monarch_py.solr_cli import start_solr
-from monarch_py.sql_cli import sql_app
+from monarch_py.solr_cli import solr_app, start_solr, download_solr
+from monarch_py.sql_cli import sql_app, download_sql
 
 from monarch_py.utilities.utils import check_for_data, check_for_solr
 
@@ -18,14 +17,15 @@ app.add_typer(solr_app, name="solr")
 app.add_typer(sql_app, name='sql')
     
 
-def get_implementation(data_source: Optional[Literal['sql', 'solr']]):
+def get_implementation(data_source: Literal['sql', 'solr']):
     """Returns implementation of the specified data source"""
 
     if not check_for_data(data_source):
-        cont = typer.confirm(f"{data_source} data not found locally. Would you like to download?")
+        cont = typer.confirm(f"\n{data_source} data not found locally. Would you like to download?\n")
         if not cont:
             print("Please download the Monarch KG before proceeding.")
             typer.Abort()
+        download_sql() if data_source == 'sql' else download_solr()
 
     if data_source == "sql":
         return SQLImplementation()

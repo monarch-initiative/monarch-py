@@ -11,7 +11,7 @@ solr_app = typer.Typer()
 SOLR_DATA = Path(__file__).parent / "data" / "solr"
 
 @solr_app.command("download")
-def get_solr():
+def download_solr():
     sh.wget("https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz", "-O", "solr.tar.gz", _out=sys.stdout, _err=sys.stderr)
     sh.mkdir("-p", SOLR_DATA)
     sh.tar("-zxf", "solr.tar.gz", "-C", f"{SOLR_DATA}", _out=sys.stdout, _err=sys.stderr)
@@ -44,7 +44,7 @@ def start_solr():
         except Exception as e:
             print(f"Error instantiating monarch solr container: {e}")
     else:
-        print(f"{c.name} {c.status}")
+        # print(f"{c.name} {c.status}")
         try:
             c.start()
         except Exception as e:
