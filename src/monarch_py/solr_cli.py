@@ -1,9 +1,10 @@
 from pathlib import Path
 import sys
 
-import docker
 import sh
 import typer
+
+from monarch_py.utilities.utils import check_for_solr
 
 solr_app = typer.Typer()
 
@@ -21,12 +22,14 @@ def get_solr():
 def start_solr():
     # TODO: smarter check if any solr image is running, not just monarch solr? 
 
+    import docker
+    
     data = Path(SOLR_DATA) / 'data'
-
+    
     dc = docker.from_env()
-    existing_containers = dc.containers.list(all=True, filters={"name":"monarch_solr"})
 
-    if len(existing_containers) == 0:
+    c = check_for_solr()
+    if not c:
         try:
             c = dc.containers.run(
                     "solr:8",
@@ -37,12 +40,11 @@ def start_solr():
                     command="",
                     detach=True,
                 )
-            print(c.status)
+            print(f"{c.name} {c.status}")
         except Exception as e:
             print(f"Error instantiating monarch solr container: {e}")
     else:
-        c = existing_containers[0]
-        print(c.status)
+        print(f"{c.name} {c.status}")
         try:
             c.start()
         except Exception as e:
@@ -62,9 +64,8 @@ def delete_solr():
 
 @solr_app.command("status")
 def check_solr_status():
-    dc = docker.from_env()
-    existing_containers = dc.containers.list(all=True, filters={"name":"monarch_solr"})
-    if len(existing_containers) == 0:
+    c = check_for_solr()
+    if not c:
         print("""
 No monarch_solr container found. 
 
@@ -73,7 +74,6 @@ Download the Monarch Solr KG and start a local solr instance:
     monarch solr start
 """)
     else:
-        c = existing_containers[0]
         print(f"""
 Found monarch_solr container: {c.id}
 Container status: {c.status}
@@ -81,5 +81,5 @@ Container status: {c.status}
         if c.status == 'exited':
             print("Start the container using:\n\tmonarch solr start\n")
         if c.status == 'running':
-            print("Create a new container with\n\tmonarch solr stop\n\tmonarch solr start\n")
+            print("You can create a new container with\n\tmonarch solr stop\n\tmonarch solr start\n")
 

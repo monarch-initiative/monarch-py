@@ -7,7 +7,8 @@ import typer
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
-from monarch_py.solr_cli  import solr_app
+from monarch_py.solr_cli import solr_app
+from monarch_py.solr_cli import start_solr
 from monarch_py.sql_cli import sql_app
 
 from monarch_py.utilities.utils import check_for_data, check_for_solr
@@ -16,13 +17,10 @@ app = typer.Typer()
 app.add_typer(solr_app, name="solr")
 app.add_typer(sql_app, name='sql')
     
-state = {"data-source": None}
-
 
 def get_implementation(data_source: Optional[Literal['sql', 'solr']]):
     """Returns implementation of the specified data source"""
 
-    # Check for data
     if not check_for_data(data_source):
         cont = typer.confirm(f"{data_source} data not found locally. Would you like to download?")
         if not cont:
@@ -34,8 +32,12 @@ def get_implementation(data_source: Optional[Literal['sql', 'solr']]):
     
     if data_source == 'solr':
         if not check_for_solr():
-            pass
-        pass
+            cont = typer.confirm("No monarch_solr container found. Would you like to create and run one?")
+            if not cont:
+                print("\nPlease run a local Monarch Solr instance before proceeding:\n\tmonarch solr start\n")
+                typer.Abort()
+        start_solr()
+        return SolrImplementation()
 
 
 @app.command()
@@ -59,16 +61,16 @@ def schema():
 
 
 @app.command()
-def entity(data, id: str):
+def entity(source: str = 'solr', id: str = None):
     """
     Retrieve an entity by ID
 
     Args:
+        source: Which KG to use - solr or sql
         id: The identifier of the entity to be retrieved
 
     """
-    data = get_implementation(data)
-
+    data = get_implementation(source)
     entity = data.get_entity(id)
     print(entity.json(indent=4))
 

@@ -24,8 +24,7 @@ def check_for_data(data: Literal['solr', 'sql']):
 
 
 def check_for_solr():
-    # is_solr = sh.docker.images('-q', 'solr:8', _out=sys.stdout, _err=os.devnull)
-    check = sh.docker.ps('-a', '--filter', 'name=monarch_solr')
-    return check
-    # return False if is_solr == "" else True
+    dc = docker.from_env()
+    c = dc.containers.list(all=True, filters={"name":"monarch_solr"})
+    return None if not c else c[0]
 
