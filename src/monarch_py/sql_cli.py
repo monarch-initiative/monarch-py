@@ -10,10 +10,10 @@ SQL_DATA = Path(__file__).parent / "data" / "sql"
 
 @sql_app.command("download")
 def download_sql():
-    sh.wget("https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz", _out=sys.stdout, _err=sys.stderr)
+    sh.wget("https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz", "-O", "monarch-kg.db.gz", _out=sys.stdout, _err=sys.stderr)
     sh.mkdir("-p", SQL_DATA)
-    sh.tar("-zxf", "monarch-kg.db.gz", "-C", f"{SQL_DATA}", _out=sys.stdout, _err=sys.stderr)
-    sh.rm("monarch-kg.db.gz")
+    sh.gzip("-df", "monarch-kg.db.gz")
+    sh.mv("monarch-kg.db", SQL_DATA)
 
 
 @sql_app.command("remove")

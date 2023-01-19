@@ -1,13 +1,14 @@
 import collections
-import logging
 from dataclasses import dataclass
+import logging
+from pathlib import Path
+import sqlite3
 
-from pydantic import ValidationError
+# from pydantic import ValidationError
 
 from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
-
 from monarch_py.utilities.utils import escape
 
 logger = logging.getLogger(__name__)
@@ -18,11 +19,15 @@ class SQLImplementation(EntityInterface, AssociationInterface):
     # todo: support SearchInterface
     """Implementation of Monarch Interfaces for Solr endpoint"""
 
-    base_url: str = "http://localhost:8983/solr"
-
+    database = Path(__file__).parent.parent.parent / "data" / "sql" / "monarch-kg.db"
+    
     ###############################
     # Implements: EntityInterface #
     ###############################
+
+    def get_cursor(self):
+        con = sqlite3.connect(self.database)
+        return con.cursor()
 
     def get_entity(
         self, id: str, get_association_counts: bool = False, get_hierarchy: bool = False
@@ -37,20 +42,10 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         Returns:
             Entity: Dataclass representing results of an entity search.
         """
-
-        pass
-        # solr = SolrService(base_url=self.base_url, core=core.ENTITY)
-        # solr_document = solr.get(id)
-        # entity = Entity(**solr_document)
-
-        # todo: make an endpoint for getting facet counts?
-        # if get_association_counts:
-        #    entity["association_counts"] = self.get_entity_association_counts(id)
-
-        #        if get_hierarchy:
-        #            entity["node_hierarchy"] = self.get_node_hierarchy(id)
-
-        # return entity
+        # TODO: Implement association counts and heirarchy
+        cur = self.get_cursor()
+        result = cur.execute(f"SELECT * FROM nodes WHERE id = '{id}'")
+        return result.fetchone()
 
     def get_entity_association_counts(self, id: str):
         """Returns a list and count of associations for an entity"""
@@ -99,6 +94,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             AssociationResults: Dataclass representing results of an association search.
         """
         pass
+
         # solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         # query = SolrQuery(start=offset, rows=limit)
 

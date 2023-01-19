@@ -6,10 +6,8 @@ import typer
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
-
 from monarch_py.solr_cli import solr_app, start_solr, download_solr
 from monarch_py.sql_cli import sql_app, download_sql
-
 from monarch_py.utilities.utils import check_for_data, check_for_solr
 
 app = typer.Typer()
@@ -40,10 +38,10 @@ def get_implementation(data_source: Literal['sql', 'solr']):
         return SolrImplementation()
 
 
-@app.command()
-def test():
-    """Temp function to test snippits of code before implementing"""
-    print(check_for_solr())
+# @app.command()
+# def test():
+#     """Temp function to test snippits of code before implementing"""
+#     pass
     
 
 @app.command()
@@ -72,7 +70,10 @@ def entity(source: str = 'solr', id: str = None):
     """
     data = get_implementation(source)
     entity = data.get_entity(id)
-    print(entity.json(indent=4))
+    if source == 'solr':
+        print(entity.json(indent=4))
+    else:
+        print(entity)
 
 
 @app.command()
