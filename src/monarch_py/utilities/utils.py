@@ -1,9 +1,8 @@
-import os, sys
 from pathlib import Path
 from typing import Literal
 
 import docker
-import sh
+
 
 def strip_json(doc: dict, *fields_to_remove: str):
     for field in fields_to_remove:

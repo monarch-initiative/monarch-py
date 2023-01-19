@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import time
 
 import sh
 import typer
@@ -40,13 +41,14 @@ def start_solr():
                     command="",
                     detach=True,
                 )
+            time.sleep(10)
             print(f"{c.name} {c.status}")
         except Exception as e:
             print(f"Error instantiating monarch solr container: {e}")
     else:
-        # print(f"{c.name} {c.status}")
         try:
             c.start()
+            # print(f"{c.name} {c.status}")
         except Exception as e:
             print(f"Error running existing container {c.name} ({c.status}) - {e}")
             

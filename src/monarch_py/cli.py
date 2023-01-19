@@ -1,5 +1,6 @@
 import importlib
 from pathlib import Path
+import time
 from typing import Literal
 
 import typer
@@ -34,9 +35,9 @@ def get_implementation(data_source: Literal['sql', 'solr']):
             if not cont:
                 print("\nPlease run a local Monarch Solr instance before proceeding:\n\tmonarch solr start\n")
                 typer.Abort()
-        start_solr()
+            print("Starting local Monarch Solr instance...")
+            start_solr()
         return SolrImplementation()
-
 
 # @app.command()
 # def test():
