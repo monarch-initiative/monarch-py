@@ -1081,7 +1081,7 @@
   </span>
 
 </h3>
-<div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">taxon</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">taxon</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1128,6 +1128,26 @@
               <em>required</em>
           </td>
         </tr>
+        <tr>
+          <td><code>offset</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+          </td>
+          <td><p>Offset of the first result to return, defaults to 0</p></td>
+          <td>
+                <code>0</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>limit</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+          </td>
+          <td><p>Limit the number of results to return, defaults to 20</p></td>
+          <td>
+                <code>20</code>
+          </td>
+        </tr>
     </tbody>
   </table>
 
@@ -1159,9 +1179,10 @@
     </thead>
     <tbody>
         <tr>
-<td><code>SearchResults</code></td>          <td>
+<td><code>EntityResults</code></td>          <td>
+                <code><span title="monarch_py.datamodels.model.EntityResults">EntityResults</span></code>
           </td>
-          <td><p>Dataclass representing results of a generic search.</p></td>
+          <td><p>Dataclass representing results of a generic entity search.</p></td>
         </tr>
     </tbody>
   </table>

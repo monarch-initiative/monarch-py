@@ -464,6 +464,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.search" class="md-nav__link">
+    search()
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -525,7 +532,7 @@
 
   <div class="doc doc-contents ">
       <p class="doc doc-class-bases">
-        Bases: <code><span title="monarch_py.interfaces.entity_interface.EntityInterface">EntityInterface</span></code>, <code><span title="monarch_py.interfaces.association_interface.AssociationInterface">AssociationInterface</span></code></p>
+        Bases: <code><span title="monarch_py.interfaces.entity_interface.EntityInterface">EntityInterface</span></code>, <code><span title="monarch_py.interfaces.association_interface.AssociationInterface">AssociationInterface</span></code>, <code><span title="monarch_py.interfaces.search_interface.SearchInterface">SearchInterface</span></code></p>
 
   
       <p>Implementation of Monarch Interfaces for Solr endpoint</p>
@@ -784,6 +791,26 @@
   <div class="doc doc-contents ">
   
       <p>Returns a list and count of associations for an entity</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.search" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">search</span>
+
+
+</h3>
+<div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Search for entities by label, with optional filters</p>
 
   </div>
 
