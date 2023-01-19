@@ -16,10 +16,12 @@ class SolrQuery(BaseModel):
     q: str = "*:*"
     rows: int = 20
     start: int = 1
-    facet: bool = False
+    facet: bool = True
     facet_min_count = 1
     facet_fields: List[str] = Field(default_factory=list)
     filter_queries: List[str] = Field(default_factory=list)
+    query_fields: str = None
+    def_type: str = "edismax"
 
     def add_field_filter_query(self, field, value):
         if field is not None and value is not None:
@@ -51,6 +53,10 @@ class SolrQuery(BaseModel):
             return "facet.field"
         elif value == "filter_queries":
             return "fq"
+        elif value == "query_fields":
+            return "qf"
+        elif value == "def_type":
+            return "defType"
         elif value is True:
             return "true"
         elif value is False:

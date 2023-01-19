@@ -4,10 +4,11 @@ from dataclasses import dataclass
 
 from pydantic import ValidationError
 
-from monarch_py.datamodels.model import Association, AssociationResults, Entity
+from monarch_py.datamodels.model import Association, AssociationResults, Entity, EntityResults
 from monarch_py.datamodels.solr import SolrQuery, core
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
+from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
 from monarch_py.utilities.utils import escape
 
@@ -16,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SolrImplementation(
-    EntityInterface, AssociationInterface
-):  # todo: support SearchInterface
+    EntityInterface, AssociationInterface, SearchInterface
+):
     """Implementation of Monarch Interfaces for Solr endpoint"""
 
     base_url: str = "http://localhost:8983/solr"
@@ -145,6 +146,47 @@ class SolrImplementation(
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     # Implements: SearchInterface
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    def search(
+            self,
+            q: str,
+            category: str = None,
+            taxon: str = None,
+            offset: int = 0,
+            limit: int = 20
+    ) -> EntityResults:
+        """Search for entities by label, with optional filters """
+
+        solr = SolrService(base_url=self.base_url, core=core.ENTITY)
+        query = SolrQuery(start=offset, rows=limit)
+
+        query.q = q if q else "*:*"
+
+        query.query_fields = "id^100 name^10 synonym"
+        query.def_type = "edismax"
+
+        if category:
+            query.add_field_filter_query("category", category)
+        if taxon:
+            query.add_field_filter_query("in_taxon", taxon)
+
+        query_result = solr.query(query)
+        total = query_result.response.num_found
+
+        entities = []
+        for doc in query_result.response.docs:
+            try:
+                entity = Entity(**doc)
+                entities.append(entity)
+            except ValidationError:
+                logger.error(f"Validation error for {doc}")
+                raise
+
+        results = EntityResults(
+            limit=limit, offset=offset, total=total, entities=entities
+        )
+
+        return results
 
 
 # def get_node_hierarchy(entity_id):
