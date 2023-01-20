@@ -16,20 +16,20 @@ app.add_typer(solr_app, name="solr")
 app.add_typer(sql_app, name='sql')
     
 
-def get_implementation(data_source: Literal['sql', 'solr']):
-    """Returns implementation of the specified data source"""
+def get_implementation(input: Literal['sql', 'solr']):
+    """Returns implementation of the specified data input"""
 
-    if not check_for_data(data_source):
-        cont = typer.confirm(f"\n{data_source} data not found locally. Would you like to download?\n")
+    if not check_for_data(input):
+        cont = typer.confirm(f"\n{input} data not found locally. Would you like to download?\n")
         if not cont:
             print("Please download the Monarch KG before proceeding.")
             typer.Abort()
-        download_sql() if data_source == 'sql' else download_solr()
+        download_sql() if input == 'sql' else download_solr()
 
-    if data_source == "sql":
+    if input == "sql":
         return SQLImplementation()
     
-    if data_source == 'solr':
+    if input == 'solr':
         if not check_for_solr():
             cont = typer.confirm("No monarch_solr container found. Would you like to create and run one?")
             if not cont:
@@ -61,20 +61,20 @@ def schema():
 
 @app.command()
 def entity(
-    source: str = typer.Option('solr', "--source"), 
+    input: str = typer.Option('solr', "--input", "-i"), 
     id: str = typer.Option(None, "--id")
     ):
     """
     Retrieve an entity by ID
 
     Args:
-        source: Which KG to use - solr or sql
+        input: Which KG to use - solr or sql
         id: The identifier of the entity to be retrieved
 
     """
-    data = get_implementation(source)
+    data = get_implementation(input)
     entity = data.get_entity(id)
-    if source == 'solr':
+    if input == 'solr':
         print(entity.json(indent=4))
     else:
         print(entity)
@@ -82,7 +82,7 @@ def entity(
 
 @app.command()
 def associations(
-    source: str = typer.Option('solr', "--source"),
+    input: str = typer.Option('solr', "--input", "-i"),
     category: str = typer.Option(None, "--category", "-c"),
     subject: str = typer.Option(None, "--subject", "-s"),
     predicate: str = typer.Option(None, "--predicate", "-p"),
@@ -104,7 +104,7 @@ def associations(
         limit: The number of associations to return
         offset: The offset of the first association to be retrieved
     """
-    data = get_implementation(source)
+    data = get_implementation(input)
 
     response = data.get_associations(
         category=category,
@@ -119,7 +119,7 @@ def associations(
 
 @app.command("search")
 def search(
-    source: str = typer.Option('solr', "--source"),
+    input: str = typer.Option('solr', "--input", "-i"),
     q: str = typer.Option(None, "--query", "-q"),
     category: str = typer.Option(None, "--category", "-c"),
     taxon: str = typer.Option(None, "--taxon", "-t"),
@@ -136,7 +136,7 @@ def search(
         limit: The number of entities to return
         offset: The offset of the first entity to be retrieved
     """
-    data = get_implementation(source)
+    data = get_implementation(input)
 
     response = data.search(
         q=q, category=category, taxon=taxon, limit=limit, offset=offset
