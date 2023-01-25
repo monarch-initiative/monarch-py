@@ -22,6 +22,7 @@ class SolrQuery(BaseModel):
     filter_queries: List[str] = Field(default_factory=list)
     query_fields: str = None
     def_type: str = "edismax"
+    mm: str = "100%" # All tokens in the query must be found in the doc, equivalent to q.op="AND"
 
     def add_field_filter_query(self, field, value):
         if field is not None and value is not None:
