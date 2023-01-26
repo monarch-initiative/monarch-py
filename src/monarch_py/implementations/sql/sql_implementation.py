@@ -104,7 +104,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         if category:
             clauses.append(f"category = '{category}'")
         if predicate:
-            clauses.append(f"prediate = '{predicate}'")
+            clauses.append(f"predicate = '{predicate}'")
         if subject:
             clauses.append(f"subject = '{subject}'")
         if object:
@@ -118,13 +118,19 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
             e2 = b[1]
             clauses.append(f"subject = '{e1}' AND object = '{e2}' OR subject = '{e2}' AND object = '{e1}'")
 
-        clauses = " AND ".join(clauses)
-        query = f"SELECT * FROM edges WHERE {clauses}"
+        query = f"SELECT * FROM edges "
+        if clauses:
+            query += "WHERE " + " AND ".join(clauses)
         if limit:
             query += f" LIMIT {limit}"
         results = cur.execute(query).fetchall()
 
-        total = len(results)
+        count_query = f"SELECT COUNT(*) FROM edges "
+        if clauses:
+            count_query += "WHERE " + " AND ".join(clauses)
+        count = cur.execute(count_query).fetchone()
+        total = count[f"COUNT(*)"]
+        
         associations = []
         for row in results:
             params = {
