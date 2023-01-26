@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from pydantic import BaseModel as BaseModel
+from pydantic import BaseModel #as BaseModel
 from pydantic import Field
 
 metamodel_version = "None"
