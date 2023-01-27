@@ -4,35 +4,20 @@ from pathlib import Path
 import sqlite3
 
 from pydantic import ValidationError
+import pystow
 
 from monarch_py.datamodels.model import Association, AssociationResults, Entity, EntityResults
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
-from monarch_py.utilities.utils import escape
+from monarch_py.utilities.utils import dict_factory, escape, SQL_DATA_URL
 
 logger = logging.getLogger(__name__)
 
-
+monarchstow = pystow.module("monarch")
 @dataclass
 class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
     """Implementation of Monarch Interfaces for SQL endpoint"""
-
-    db = Path(__file__).parent.parent.parent / "data" / "sql" / "monarch-kg.db"
-    
-    def get_cursor(self):
-        con = sqlite3.connect(self.db)
-
-        # # provides both index-based and case-insensitive name-based access to columns
-        # con.row_factory = sqlite3.Row 
-
-        def dict_factory(cursor, row):
-            fields = [column[0] for column in cursor.description]
-            return {key: value for key, value in zip(fields, row)}
-        
-        con.row_factory = dict_factory
-
-        return con.cursor()
 
     ###############################
     # Implements: EntityInterface #
@@ -51,21 +36,35 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         """
         # TODO: Implement association counts and heirarchy
 
-        cur = self.get_cursor()
-        result = cur.execute(f"SELECT * FROM nodes WHERE id = '{id}'").fetchone()
-        entity = Entity(
-            id = result['id'],
-            category = result['category'].split("|"),
-            name = result['name'],
-            description = result['description'],
-            xref = result['xref'].split("|"),
-            provided_by = result['provided_by'],
-            in_taxon = result['in_taxon'],
-            source = result['source'],
-            symbol = result['symbol'],
-            type = result['type'],
-            synonym = result['synonym'].split("|")
-        )
+        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL) as db:
+            db.row_factory = dict_factory      
+            cur = db.cursor()
+            result = cur.execute(f"SELECT * FROM nodes WHERE id = '{id}'").fetchone()
+
+        if not result:
+            return None
+        params = {
+                'id': result['id'],
+                'category': result['category'].split("|"),
+                'name': result['name'],
+                'description': result['description'],
+                'xref': result['xref'].split("|"),
+                'provided_by': result['provided_by'],
+                'in_taxon': result['in_taxon'],
+                'source': result['source'],
+                'symbol': result['symbol'],
+                'type': result['type'],
+                'synonym': result['synonym'].split("|")
+            }
+        # Convert empty strings to null value
+        for p in params:
+            params[p] = None if not params[p] else params[p]
+
+        try:
+            entity = Entity(**params)     
+        except ValidationError:
+            logger.error(f"Validation error for {result}")
+            raise
         return entity
     
     ####################################
@@ -97,9 +96,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         Returns:
             AssociationResults: Dataclass representing results of an association search.
         """
-        
-        cur = self.get_cursor()
-        
+                
         clauses = []
         if category:
             clauses.append(f"category = '{category}'")
@@ -123,13 +120,17 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
             query += "WHERE " + " AND ".join(clauses)
         if limit:
             query += f" LIMIT {limit} OFFSET {offset}"
-        results = cur.execute(query).fetchall()
 
         count_query = f"SELECT COUNT(*) FROM edges "
         if clauses:
             count_query += "WHERE " + " AND ".join(clauses)
-        count = cur.execute(count_query).fetchone()
-        total = count[f"COUNT(*)"]
+        
+        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL) as db:
+            db.row_factory = dict_factory      
+            cur = db.cursor()
+            results = cur.execute(query).fetchall()
+            count = cur.execute(count_query).fetchone()
+            total = count[f"COUNT(*)"]
         
         associations = []
         for row in results:

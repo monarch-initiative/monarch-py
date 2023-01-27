@@ -45,9 +45,14 @@ def entity(id: str = typer.Option(None, "--id")):
         id: The identifier of the entity to be retrieved
 
     """
-    data = get_sql()
+    data = SQLImplementation()
     entity = data.get_entity(id)
-    print(entity.json(indent=4))
+    if not entity:
+        print(f"\nEntity '{id}' not found.\n")
+        typer.Abort()
+    else:
+        print(entity.json(indent=4))
+
     
 
 @sql_app.command()
@@ -76,7 +81,7 @@ def associations(
         offset: The offset of the first association to be retrieved
     """
     args = locals()
-    data = get_sql()
+    data = SQLImplementation()
     response = data.get_associations(**args)
     print(response.json(indent=4))
 

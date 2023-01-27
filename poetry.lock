@@ -1651,6 +1651,31 @@ rdflib-shim = "*"
 shexjsg = ">=0.8.1"
 
 [[package]]
+name = "pystow"
+version = "0.4.9"
+description = "Easily pick a place to store data for your python package."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pystow-0.4.9-py3-none-any.whl", hash = "sha256:545eaadb64a61bf4e6de97caf5652a2a7b86532754d53f78fd0ca2b77ee1d790"},
+    {file = "pystow-0.4.9.tar.gz", hash = "sha256:53c4ca1573f97b8b3eb14d18cec98caeffec04c29927e937388d48a34e9e2be9"},
+]
+
+[package.dependencies]
+click = "*"
+requests = "*"
+tqdm = "*"
+
+[package.extras]
+aws = ["boto3"]
+docs = ["sphinx", "sphinx-autodoc-typehints", "sphinx-automodapi", "sphinx-click", "sphinx-rtd-theme"]
+pandas = ["pandas"]
+rdf = ["rdflib"]
+tests = ["coverage", "pytest", "requests-file"]
+xml = ["lxml"]
+
+[[package]]
 name = "pytest"
 version = "7.2.1"
 description = "pytest: simple powerful testing with Python"
@@ -2404,6 +2429,27 @@ docs = ["pygments-github-lexers (>=0.0.5)", "sphinx (>=2.0.0)", "sphinxcontrib-a
 testing = ["flaky (>=3.4.0)", "freezegun (>=0.3.11)", "pathlib2 (>=2.3.3)", "psutil (>=5.6.1)", "pytest (>=4.0.0)", "pytest-cov (>=2.5.1)", "pytest-mock (>=1.10.0)", "pytest-randomly (>=1.0.0)"]
 
 [[package]]
+name = "tqdm"
+version = "4.64.1"
+description = "Fast, Extensible Progress Meter"
+category = "main"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+files = [
+    {file = "tqdm-4.64.1-py2.py3-none-any.whl", hash = "sha256:6fee160d6ffcd1b1c68c65f14c829c22832bc401726335ce92c52d395944a6a1"},
+    {file = "tqdm-4.64.1.tar.gz", hash = "sha256:5f4f682a004951c1b450bc753c710e9280c5746ce6ffedee253ddbcbf54cf1e4"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["py-make (>=0.1.0)", "twine", "wheel"]
+notebook = ["ipywidgets (>=6)"]
+slack = ["slack-sdk"]
+telegram = ["requests"]
+
+[[package]]
 name = "typer"
 version = "0.7.0"
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
@@ -2652,4 +2698,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "15d2f2725d900489cb98fc0643ec9bf98cacdd3c99bee71981283e234aaf1cb6"
+content-hash = "55394293614b67b8404c844ecd9fe060031e1df0565f29a639d3ec309d51974c"
