@@ -122,7 +122,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         if clauses:
             query += "WHERE " + " AND ".join(clauses)
         if limit:
-            query += f" LIMIT {limit}"
+            query += f" LIMIT {limit} OFFSET {offset}"
         results = cur.execute(query).fetchall()
 
         count_query = f"SELECT COUNT(*) FROM edges "
@@ -164,7 +164,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
                 logger.error(f"Validation error for {row}")
                 raise
 
-        results = AssociationResults(limit=limit, total=total, associations=associations)
+        results = AssociationResults(associations=associations, limit=limit, offset=offset, total=total)
         return results
 
     def search(self):

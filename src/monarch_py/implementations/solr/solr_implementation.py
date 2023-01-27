@@ -121,9 +121,7 @@ class SolrImplementation(
                 logger.error(f"Validation error for {doc}")
                 raise
 
-        results = AssociationResults(
-            limit=limit, offset=offset, total=total, associations=associations
-        )
+        results = AssociationResults(associations=associations, limit=limit, offset=offset, total=total)
 
         return results
 
