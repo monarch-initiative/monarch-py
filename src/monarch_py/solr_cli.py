@@ -1,55 +1,36 @@
-from pathlib import Path
-import sys
-import time
+import sys, time
 
-import sh
+import pystow
 import typer
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
-from monarch_py.utilities.utils import check_for_solr, check_for_data
+from monarch_py.utilities.utils import check_for_solr, SOLR_DATA_URL
+
 
 solr_app = typer.Typer()
-
-SOLR_DATA = Path(__file__).parent / "data" / "solr"
+monarchstow = pystow.module("monarch")
 
 
 def get_solr():
-    if not check_for_data('solr'):
-        cont = typer.confirm(f"\nSolr data not found locally. Would you like to download?\n")
-        if not cont:
-            print("Please download the Monarch KG before proceeding.")
-            typer.Abort()
-        download_solr()
-
     if not check_for_solr():
         cont = typer.confirm("No monarch_solr container found. Would you like to create and run one?")
         if not cont:
             print("\nPlease run a local Monarch Solr instance before proceeding:\n\tmonarch solr start\n")
-            typer.Abort()
+            sys.exit(1)
         print("Starting local Monarch Solr instance...")
         start_solr()
     return SolrImplementation()
 
 
-@solr_app.command("download")
-def download_solr():
-    sh.wget("https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz", "-O", "solr.tar.gz", _out=sys.stdout, _err=sys.stderr)
-    sh.mkdir("-p", SOLR_DATA)
-    sh.tar("-zxf", "solr.tar.gz", "-C", f"{SOLR_DATA}", _out=sys.stdout, _err=sys.stderr)
-    sh.rm("solr.tar.gz")
-    sh.chmod('-R','a+rwx', SOLR_DATA)
-
-
 @solr_app.command("start")
-def start_solr():
-    # TODO: smarter check if any solr image is running, not just monarch solr? 
-
+def start_solr(update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG.")):
+    # TODO: Smart-Check if any Solr image is running, not just monarch solr? or on the same port? 
     import docker
-    
-    data = Path(SOLR_DATA) / 'data'
-    
     dc = docker.from_env()
-
+    
+    monarchstow.ensure_untar(url=SOLR_DATA_URL, extract_kwargs={'mode':'rwx'}, force=update)
+    data = monarchstow.join("solr", "data")
+    
     c = check_for_solr()
     if not c:
         try:
@@ -76,13 +57,22 @@ def start_solr():
 
 @solr_app.command("stop")
 def stop_solr():
-    sh.docker.stop("monarch_solr")
-    sh.docker.rm("monarch_solr")
+    import docker
+    dc = docker.from_env()
+    c = check_for_solr()
+    if c:
+        try:
+            print("Stopping Monarch Solr container...")
+            c.stop()
+            c.remove()
+        except Exception as e:
+            print(e)
+            raise typer.Exit(1)
 
 
 @solr_app.command("remove")
 def delete_solr():
-    sh.rm("-rf", SOLR_DATA)
+    ...
 
 
 @solr_app.command("status")
@@ -93,7 +83,6 @@ def check_solr_status():
 No monarch_solr container found. 
 
 Download the Monarch Solr KG and start a local solr instance:
-    monarch solr download
     monarch solr start
 """)
     else:
@@ -108,16 +97,18 @@ Container status: {c.status}
 
 
 @solr_app.command()
-def entity(id: str = typer.Option(None, "--id")):
+def entity(
+    id: str = typer.Option(None, "--id", help="The identifier of the entity to be retrieved"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG")
+    ):
     """
     Retrieve an entity by ID
 
     Args:
-        input: Which KG to use - solr or sql
-        id: The identifier of the entity to be retrieved
-
+        id (str): The identifier of the entity to be retrieved
+        update (bool): = Whether to re-download the Monarch KG. Default False
     """
-    data = get_solr()
+    data = get_solr(update)
     entity = data.get_entity(id)
     print(entity.json(indent=4))
     

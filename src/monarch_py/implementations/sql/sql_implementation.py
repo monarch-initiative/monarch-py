@@ -1,12 +1,10 @@
 from dataclasses import dataclass
 import logging
-from pathlib import Path
-import sqlite3
 
 from pydantic import ValidationError
 import pystow
 
-from monarch_py.datamodels.model import Association, AssociationResults, Entity, EntityResults
+from monarch_py.datamodels.model import Association, AssociationResults, Entity#, EntityResults
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
@@ -15,6 +13,8 @@ from monarch_py.utilities.utils import dict_factory, escape, SQL_DATA_URL
 logger = logging.getLogger(__name__)
 
 monarchstow = pystow.module("monarch")
+
+
 @dataclass
 class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
     """Implementation of Monarch Interfaces for SQL endpoint"""
@@ -23,7 +23,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
     # Implements: EntityInterface #
     ###############################
 
-    def get_entity(self, id: str) -> Entity:
+    def get_entity(self, id: str, update: bool = False) -> Entity:
         """Retrieve a specific entity by exact ID match, writh optional extras
 
         Args:
@@ -36,7 +36,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         """
         # TODO: Implement association counts and heirarchy
 
-        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL) as db:
+        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL, force=update) as db:
             db.row_factory = dict_factory      
             cur = db.cursor()
             result = cur.execute(f"SELECT * FROM nodes WHERE id = '{id}'").fetchone()
@@ -80,6 +80,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         between: str = None,
         offset: int = 0,
         limit: int = 20,
+        update: bool = False,
     ) -> AssociationResults:
         """Retrieve paginated association records, with filter options
 
@@ -125,7 +126,7 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         if clauses:
             count_query += "WHERE " + " AND ".join(clauses)
         
-        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL) as db:
+        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL, force=update) as db:
             db.row_factory = dict_factory      
             cur = db.cursor()
             results = cur.execute(query).fetchall()

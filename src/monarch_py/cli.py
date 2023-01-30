@@ -3,7 +3,7 @@ from pathlib import Path
 
 import typer
 
-from monarch_py.solr_cli import solr_app, get_solr, entity, associations, search
+from monarch_py.solr_cli import solr_app, entity, associations, search
 from monarch_py.sql_cli import sql_app
 
 app = typer.Typer()

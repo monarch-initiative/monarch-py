@@ -1,7 +1,7 @@
-from pathlib import Path
 from typing import Literal
 
 import docker
+import pystow
 
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
@@ -22,7 +22,7 @@ def escape(value: str) -> str:
 
 
 def check_for_data(data: Literal['solr', 'sql']):
-    data_dir = Path(__file__).parent.parent / "data" / data
+    data_dir = pystow.join("monarch", data)
     return (data_dir.is_dir() and any(data_dir.iterdir()))
 
 
