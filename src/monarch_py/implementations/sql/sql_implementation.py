@@ -43,7 +43,6 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
 
         if not result:
             return None
-        print(result)
         params = {
                 'id': result['id'],
                 'category': result['category'].split("|"),
