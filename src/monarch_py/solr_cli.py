@@ -11,14 +11,14 @@ solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
 
 
-def get_solr():
+def get_solr(update):
     if not check_for_solr():
-        cont = typer.confirm("No monarch_solr container found. Would you like to create and run one?")
+        cont = typer.confirm("\nNo monarch_solr container found. Would you like to create and run one?")
         if not cont:
             print("\nPlease run a local Monarch Solr instance before proceeding:\n\tmonarch solr start\n")
             sys.exit(1)
         print("Starting local Monarch Solr instance...")
-        start_solr()
+        start_solr(update)
     return SolrImplementation()
 
 
@@ -28,7 +28,7 @@ def start_solr(update: bool = typer.Option(False, "--update", "-u", help="Whethe
     import docker
     dc = docker.from_env()
     
-    monarchstow.ensure_untar(url=SOLR_DATA_URL, extract_kwargs={'mode':'rwx'}, force=update)
+    monarchstow.ensure_untar(url=SOLR_DATA_URL, force=update)
     data = monarchstow.join("solr", "data")
     
     c = check_for_solr()
@@ -123,6 +123,7 @@ def associations(
     between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG")
     # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
     ):
     """
@@ -139,7 +140,9 @@ def associations(
         offset: The offset of the first association to be retrieved
     """
     args = locals()
-    data = get_solr()
+    args.pop('update', None)
+
+    data = get_solr(update)
     response = data.get_associations(**args)
     print(response.json(indent=4))
 
@@ -151,6 +154,7 @@ def search(
     taxon: str = typer.Option(None, "--taxon", "-t"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG")
 ):
     """
     Search for entities
@@ -162,7 +166,7 @@ def search(
         limit: The number of entities to return
         offset: The offset of the first entity to be retrieved
     """
-    data = get_solr()
+    data = get_solr(update)
 
     response = data.search(
         q=q, category=category, taxon=taxon, limit=limit, offset=offset

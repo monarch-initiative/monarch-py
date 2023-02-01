@@ -3,7 +3,8 @@ from pathlib import Path
 
 import typer
 
-from monarch_py.solr_cli import solr_app, entity, associations, search
+from monarch_py.solr_cli import solr_app
+from monarch_py.solr_cli import entity as solr_entity, associations as solr_associations, search as solr_search
 from monarch_py.sql_cli import sql_app
 
 app = typer.Typer()
@@ -26,7 +27,7 @@ def schema():
 
 
 @app.command("entity")
-def _entity(id: str = typer.Option(None, "--id")):
+def entity(id: str = typer.Option(None, "--id")):
     """
     Retrieve an entity by ID
 
@@ -35,11 +36,11 @@ def _entity(id: str = typer.Option(None, "--id")):
         id: The identifier of the entity to be retrieved
 
     """
-    entity(id)
+    solr_entity(id)
     
 
 @app.command("associations")
-def _associations(
+def associations(
     category: str = typer.Option(None, "--category", "-c"),
     subject: str = typer.Option(None, "--subject", "-s"),
     predicate: str = typer.Option(None, "--predicate", "-p"),
@@ -63,15 +64,15 @@ def _associations(
     """
     # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
 
-    associations(**locals())
+    solr_associations(**locals())
 
 
 @app.command("search")
-def _search(
+def search(
     q: str = typer.Option(None, "--query", "-q"),
-    category: str = typer.Option(None, "--category", "-c"),
-    taxon: str = typer.Option(None, "--taxon", "-t"),
-    limit: int = typer.Option(20, "--limit", "-l"),
+    category: str = typer.Option(None, "--category"),
+    taxon: str = typer.Option(None, "--taxon"),
+    limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
 ):
     """
@@ -84,7 +85,7 @@ def _search(
         limit: The number of entities to return
         offset: The offset of the first entity to be retrieved
     """
-    search(**locals())
+    solr_search(**locals())
 
 
 if __name__ == "__main__":
