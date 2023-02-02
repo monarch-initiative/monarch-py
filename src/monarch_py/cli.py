@@ -1,51 +1,18 @@
 import importlib
 from pathlib import Path
-import time
-from typing import Literal
 
 import typer
 
-from monarch_py.implementations.solr.solr_implementation import SolrImplementation
-from monarch_py.implementations.sql.sql_implementation import SQLImplementation
-from monarch_py.solr_cli import solr_app, start_solr, download_solr
-from monarch_py.sql_cli import sql_app, download_sql
-from monarch_py.utilities.utils import check_for_data, check_for_solr
+from monarch_py.solr_cli import solr_app
+from monarch_py.solr_cli import entity as solr_entity, associations as solr_associations, search as solr_search
+from monarch_py.sql_cli import sql_app
 
 app = typer.Typer()
 app.add_typer(solr_app, name="solr")
 app.add_typer(sql_app, name='sql')
-    
 
-def get_implementation(input: Literal['sql', 'solr']):
-    """Returns implementation of the specified data input"""
 
-    if not check_for_data(input):
-        cont = typer.confirm(f"\n{input} data not found locally. Would you like to download?\n")
-        if not cont:
-            print("Please download the Monarch KG before proceeding.")
-            typer.Abort()
-        download_sql() if input == 'sql' else download_solr()
-
-    if input == "sql":
-        return SQLImplementation()
-    
-    if input == 'solr':
-        if not check_for_solr():
-            cont = typer.confirm("No monarch_solr container found. Would you like to create and run one?")
-            if not cont:
-                print("\nPlease run a local Monarch Solr instance before proceeding:\n\tmonarch solr start\n")
-                typer.Abort()
-            print("Starting local Monarch Solr instance...")
-            start_solr()
-        return SolrImplementation()
-
-# @app.command()
-# def test():
-#     """Temp function to test snippits of code before implementing"""
-#     pass
-    
-
-@app.command()
+@app.command("schema")
 def schema():
     """
     Print the linkml schema for the data model
@@ -59,11 +26,8 @@ def schema():
         print(schema_file.read())
 
 
-@app.command()
-def entity(
-    input: str = typer.Option('solr', "--input", "-i"), 
-    id: str = typer.Option(None, "--id")
-    ):
+@app.command("entity")
+def entity(id: str = typer.Option(None, "--id")):
     """
     Retrieve an entity by ID
 
@@ -72,25 +36,19 @@ def entity(
         id: The identifier of the entity to be retrieved
 
     """
-    data = get_implementation(input)
-    entity = data.get_entity(id)
-    if input == 'solr':
-        print(entity.json(indent=4))
-    else:
-        print(entity)
+    solr_entity(id)
+    
 
-
-@app.command()
+@app.command("associations")
 def associations(
-    input: str = typer.Option('solr', "--input", "-i"),
     category: str = typer.Option(None, "--category", "-c"),
     subject: str = typer.Option(None, "--subject", "-s"),
     predicate: str = typer.Option(None, "--predicate", "-p"),
     object: str = typer.Option(None, "--object", "-o"),
     entity: str = typer.Option(None, "--entity", "-e"),
+    between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
-    # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
     ):
     """
     Paginate through associations
@@ -104,26 +62,17 @@ def associations(
         limit: The number of associations to return
         offset: The offset of the first association to be retrieved
     """
-    data = get_implementation(input)
+    # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
 
-    response = data.get_associations(
-        category=category,
-        predicate=predicate,
-        subject=subject,
-        object=object,
-        entity=entity,
-        limit=limit,
-        offset=offset,
-    )
-    print(response.json(indent=4))
+    solr_associations(**locals())
+
 
 @app.command("search")
 def search(
-    input: str = typer.Option('solr', "--input", "-i"),
     q: str = typer.Option(None, "--query", "-q"),
-    category: str = typer.Option(None, "--category", "-c"),
-    taxon: str = typer.Option(None, "--taxon", "-t"),
-    limit: int = typer.Option(20, "--limit", "-l"),
+    category: str = typer.Option(None, "--category"),
+    taxon: str = typer.Option(None, "--taxon"),
+    limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
 ):
     """
@@ -136,12 +85,7 @@ def search(
         limit: The number of entities to return
         offset: The offset of the first entity to be retrieved
     """
-    data = get_implementation(input)
-
-    response = data.search(
-        q=q, category=category, taxon=taxon, limit=limit, offset=offset
-    )
-    print(response.json(indent=4))
+    solr_search(**locals())
 
 
 if __name__ == "__main__":
