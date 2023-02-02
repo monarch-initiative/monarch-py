@@ -458,13 +458,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_entity_association_counts" class="md-nav__link">
-    get_entity_association_counts()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.search" class="md-nav__link">
     search()
   </a>
@@ -519,7 +512,7 @@
 
 
 
-<h2 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation" class="doc doc-heading">
+<h3 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation" class="doc doc-heading">
         <span class="doc doc-object-name doc-class-name">SolrImplementation</span>
 
   
@@ -527,7 +520,7 @@
       <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
   </span>
 
-</h2>
+</h3>
 
 
   <div class="doc doc-contents ">
@@ -555,11 +548,11 @@
 
 
 
-<h3 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_associations" class="doc doc-heading">
+<h4 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_associations" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">get_associations</span>
 
 
-</h3>
+</h4>
 <div class="highlight"><pre><span></span><code><span class="n">get_associations</span><span class="p">(</span>
     <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -696,14 +689,12 @@
 
 
 
-<h3 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_entity" class="doc doc-heading">
+<h4 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_entity" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">get_entity</span>
 
 
-</h3>
-<div class="highlight"><pre><span></span><code><span class="n">get_entity</span><span class="p">(</span>
-    <span class="nb">id</span><span class="p">,</span> <span class="n">get_association_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">get_hierarchy</span><span class="o">=</span><span class="kc">False</span>
-<span class="p">)</span>
+</h4>
+<div class="highlight"><pre><span></span><code><span class="n">get_entity</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -738,7 +729,7 @@
           </td>
           <td><p>Whether to get association counts. Defaults to False.</p></td>
           <td>
-                <code>False</code>
+              <em>required</em>
           </td>
         </tr>
         <tr>
@@ -748,7 +739,7 @@
           </td>
           <td><p>Whether to get the entity hierarchy. Defaults to False.</p></td>
           <td>
-                <code>False</code>
+              <em>required</em>
           </td>
         </tr>
     </tbody>
@@ -780,32 +771,14 @@
 
 
 
-<h3 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_entity_association_counts" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">get_entity_association_counts</span>
-
-
-</h3>
-<div class="highlight"><pre><span></span><code><span class="n">get_entity_association_counts</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Returns a list and count of associations for an entity</p>
-
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<h3 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.search" class="doc doc-heading">
+<h4 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.search" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">search</span>
 
 
-</h3>
-<div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</h4>
+<div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span>
+    <span class="n">q</span><span class="o">=</span><span class="s2">&quot;*:*&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span>
+<span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">

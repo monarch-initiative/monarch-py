@@ -377,22 +377,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#specifying-a-backend-endpoint" class="md-nav__link">
-    Specifying a backend / endpoint
+  <a href="#cli" class="md-nav__link">
+    CLI
   </a>
+  
+    <nav class="md-nav" aria-label="CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#basic-examples" class="md-nav__link">
-    Basic Examples
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advanced" class="md-nav__link">
-    Advanced
+  <a href="#module" class="md-nav__link">
+    Module
   </a>
   
 </li>
@@ -497,22 +510,35 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#specifying-a-backend-endpoint" class="md-nav__link">
-    Specifying a backend / endpoint
+  <a href="#cli" class="md-nav__link">
+    CLI
   </a>
+  
+    <nav class="md-nav" aria-label="CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#basic-examples" class="md-nav__link">
-    Basic Examples
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#advanced" class="md-nav__link">
-    Advanced
+  <a href="#module" class="md-nav__link">
+    Module
   </a>
   
 </li>
@@ -538,11 +564,159 @@
 
 
 <h1 id="usage">Usage</h1>
-<h3 id="specifying-a-backend-endpoint">Specifying a backend / endpoint</h3>
-<p>TBD</p>
-<h3 id="basic-examples">Basic Examples</h3>
-<p>TBD</p>
-<h3 id="advanced">Advanced</h3>
+<p>monarch-py can be used via command line, or as a Python module.</p>
+<h2 id="cli">CLI</h2>
+<h3 id="overview">Overview</h3>
+<p>monarch-py can be used to query various implementations of the Monarch knowledge graph.<br />
+The default implementation is Solr, and can optionally be omitted from the command,<br />
+or an implementation can be specified as the first argument for <code>monarch</code>.  </p>
+<p>For example:
+<div class="highlight"><pre><span></span><code><span class="c1"># The following two commands are equivalent,</span>
+<span class="c1"># as both query the Solr KG</span>
+$<span class="w"> </span>monarch<span class="w"> </span>entity<span class="w"> </span>--id<span class="w"> </span>MONDO:0012933<span class="w"> </span>
+$<span class="w"> </span>monarch<span class="w"> </span>solr<span class="w"> </span>entity<span class="w"> </span>--id<span class="w"> </span>MONDO:0012933
+
+<span class="c1"># Whereas the following specifies the SQL implementation</span>
+$<span class="w"> </span>monarch<span class="w"> </span>sql<span class="w"> </span>entity<span class="w"> </span>--id<span class="w"> </span>MONDO:0012933
+</code></pre></div></p>
+<h3 id="commands">Commands</h3>
+<p><div class="highlight"><pre><span></span><code>$<span class="w"> </span>monarch<span class="w"> </span>schema
+</code></pre></div>
+╰ Print the linkml schema for the data model  </p>
+<p><div class="highlight"><pre><span></span><code>$<span class="w"> </span>monarch<span class="w"> </span><span class="o">[</span>solr<span class="p">|</span>sql<span class="o">]</span><span class="w"> </span>entity<span class="w"> </span>OPTIONS<span class="w"> </span>ARGS
+</code></pre></div>
+╰ Retrieve an entity by ID  </p>
+<table>
+<thead>
+<tr>
+<th>OPTIONS</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--update/-u</code></td>
+<td>Whether to re-download the Monarch KG</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>ARGUMENTS</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--id</code></td>
+<td>The identifier of the entity to be retrieve</td>
+</tr>
+</tbody>
+</table>
+<p><div class="highlight"><pre><span></span><code>$<span class="w"> </span>monarch<span class="w"> </span><span class="o">[</span>solr<span class="p">|</span>sql<span class="o">]</span><span class="w"> </span>associations<span class="w"> </span>OPTIONS<span class="w"> </span>ARGS
+</code></pre></div>
+╰ Paginate through associations </p>
+<table>
+<thead>
+<tr>
+<th>OPTIONS</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--update/-u</code></td>
+<td>Whether to re-download the Monarch KG</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>ARGUMENTS</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--category</code></td>
+<td>The category of the association</td>
+</tr>
+<tr>
+<td><code>--predicate</code></td>
+<td>The predicate of the association</td>
+</tr>
+<tr>
+<td><code>--subject</code></td>
+<td>The subject of the association</td>
+</tr>
+<tr>
+<td><code>--object</code></td>
+<td>The object of the association</td>
+</tr>
+<tr>
+<td><code>--entity</code></td>
+<td>The subject or object of the association</td>
+</tr>
+<tr>
+<td><code>--limit</code></td>
+<td>The number of associations to return</td>
+</tr>
+<tr>
+<td><code>--offset</code></td>
+<td>The offset of the first association to be retrieved</td>
+</tr>
+</tbody>
+</table>
+<p><div class="highlight"><pre><span></span><code>monarch<span class="w"> </span><span class="o">[</span>solr<span class="o">]</span><span class="w"> </span>search<span class="w"> </span>OPTIONS<span class="w"> </span>ARGS
+</code></pre></div>
+╰ Search for entities (Solr only)  </p>
+<table>
+<thead>
+<tr>
+<th>OPTIONS</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--update/-u</code></td>
+<td>Whether to re-download the Monarch KG</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>ARGUMENTS</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--query/-q</code></td>
+<td>The query string to search for</td>
+</tr>
+<tr>
+<td><code>--category</code></td>
+<td>The category of the entity</td>
+</tr>
+<tr>
+<td><code>--taxon</code></td>
+<td>The taxon of the entity</td>
+</tr>
+<tr>
+<td><code>--limit</code></td>
+<td>The number of entities to return</td>
+</tr>
+<tr>
+<td><code>--offset</code></td>
+<td>The offset of the first entity to be retrieved</td>
+</tr>
+</tbody>
+</table>
+<h2 id="module">Module</h2>
 <p>TBD</p>
 
 

@@ -641,11 +641,11 @@ Developers can code to the interface, mostly ignoring whether the implementation
 
 
 
-<h2 id="src.monarch_py.interfaces.entity_interface.EntityInterface" class="doc doc-heading">
+<h3 id="src.monarch_py.interfaces.entity_interface.EntityInterface" class="doc doc-heading">
         <span class="doc doc-object-name doc-class-name">EntityInterface</span>
 
 
-</h2>
+</h3>
 
 
   <div class="doc doc-contents ">
@@ -673,7 +673,7 @@ Developers can code to the interface, mostly ignoring whether the implementation
 
 
 
-<h3 id="src.monarch_py.interfaces.entity_interface.EntityInterface.get_entity" class="doc doc-heading">
+<h4 id="src.monarch_py.interfaces.entity_interface.EntityInterface.get_entity" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">get_entity</span>
 
   
@@ -681,7 +681,7 @@ Developers can code to the interface, mostly ignoring whether the implementation
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h3>
+</h4>
 <div class="highlight"><pre><span></span><code><span class="n">get_entity</span><span class="p">(</span>
     <span class="nb">id</span><span class="p">,</span> <span class="n">get_association_counts</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">get_hierarchy</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span>
@@ -813,11 +813,11 @@ Developers can code to the interface, mostly ignoring whether the implementation
 
 
 
-<h2 id="src.monarch_py.interfaces.association_interface.AssociationInterface" class="doc doc-heading">
+<h3 id="src.monarch_py.interfaces.association_interface.AssociationInterface" class="doc doc-heading">
         <span class="doc doc-object-name doc-class-name">AssociationInterface</span>
 
 
-</h2>
+</h3>
 
 
   <div class="doc doc-contents ">
@@ -845,7 +845,7 @@ Developers can code to the interface, mostly ignoring whether the implementation
 
 
 
-<h3 id="src.monarch_py.interfaces.association_interface.AssociationInterface.get_associations" class="doc doc-heading">
+<h4 id="src.monarch_py.interfaces.association_interface.AssociationInterface.get_associations" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">get_associations</span>
 
   
@@ -853,7 +853,7 @@ Developers can code to the interface, mostly ignoring whether the implementation
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h3>
+</h4>
 <div class="highlight"><pre><span></span><code><span class="n">get_associations</span><span class="p">(</span>
     <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1042,11 +1042,11 @@ Developers can code to the interface, mostly ignoring whether the implementation
 
 
 
-<h2 id="src.monarch_py.interfaces.search_interface.SearchInterface" class="doc doc-heading">
+<h3 id="src.monarch_py.interfaces.search_interface.SearchInterface" class="doc doc-heading">
         <span class="doc doc-object-name doc-class-name">SearchInterface</span>
 
 
-</h2>
+</h3>
 
 
   <div class="doc doc-contents ">
@@ -1054,7 +1054,7 @@ Developers can code to the interface, mostly ignoring whether the implementation
         Bases: <code><a class="autorefs autorefs-external" title="abc.ABC" href="https://docs.python.org/3/library/abc.html#abc.ABC">ABC</a></code></p>
 
   
-      <p>Abstract interface for querying the Monarch KG</p>
+      <p>Abstract interface for searching the Monarch KG in a Lucene way</p>
 
 
 
@@ -1074,7 +1074,7 @@ Developers can code to the interface, mostly ignoring whether the implementation
 
 
 
-<h3 id="src.monarch_py.interfaces.search_interface.SearchInterface.search" class="doc doc-heading">
+<h4 id="src.monarch_py.interfaces.search_interface.SearchInterface.search" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">search</span>
 
   
@@ -1082,7 +1082,7 @@ Developers can code to the interface, mostly ignoring whether the implementation
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h3>
+</h4>
 <div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">category</span><span class="p">,</span> <span class="n">taxon</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </code></pre></div>
 
