@@ -35,6 +35,6 @@ jobs:
         run: poetry install
       - name: run tests
         run: |
-        poetry run python -m pytest tests/unit
-        poetry run python -m pytest tests/integration/test_association_sql.py
-        poetry run python -m pytest tests/integration/test_entity_sql.py
+          poetry run python -m pytest tests/unit
+          poetry run python -m pytest tests/integration/test_association_sql.py
+          poetry run python -m pytest tests/integration/test_entity_sql.py
