@@ -4,7 +4,7 @@ import logging
 from pydantic import ValidationError
 import pystow
 
-from monarch_py.datamodels.model import Association, AssociationResults, Entity#, EntityResults
+from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
@@ -51,11 +51,14 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
                 'xref': result['xref'].split("|"),
                 'provided_by': result['provided_by'],
                 'in_taxon': result['in_taxon'],
-                'source': result['source'],
                 'symbol': result['symbol'],
                 'type': result['type'],
                 'synonym': result['synonym'].split("|")
             }
+        try:
+            params['source'] = result['source']
+        except KeyError:
+            pass
         # Convert empty strings to null value
         for p in params:
             params[p] = None if not params[p] else params[p]
