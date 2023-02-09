@@ -12,7 +12,7 @@ on:
 jobs:
   test-linux:
     name: test py${{ matrix.python-version }} on Linux
-    runs-on: ${{ env.OS }}-latest
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -43,7 +43,7 @@ jobs:
 
   test-windows:
     name: test py${{ matrix.python-version }} on Windows
-    runs-on: ${{ env.OS }}-latest
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
