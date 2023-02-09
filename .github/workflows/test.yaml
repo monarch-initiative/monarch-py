@@ -49,7 +49,7 @@ jobs:
         run: poetry install --no-interaction
       
       - name: Run tests
-      - run: |
+        run: |
           source $VENV
           pytest tests/unit
           pytest tests/integration/test_association_sql.py
