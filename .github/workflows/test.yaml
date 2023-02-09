@@ -2,7 +2,7 @@ name: Test
 
 on:
   push:
-    branches: [ main, remove-sh ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -54,77 +54,3 @@ jobs:
           pytest tests/unit
           pytest tests/integration/test_association_sql.py
           pytest tests/integration/test_entity_sql.py
-
-
-# name: CI
-
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
-
-#   workflow_dispatch:
-
-# jobs:
-#   test-linux:
-#     name: test py${{ matrix.python-version }} on Linux
-#     runs-on: ubuntu-latest
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         python-version: ['3.8', '3.9', '3.10', '3.11']
-#     env:
-#       PYTHON: ${{ matrix.python-version }}
-#       OS: ubuntu
-
-#     steps:
-#       - uses: actions/checkout@v3
-
-#       - name: set up python
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: ${{ matrix.python-version }}
-
-#       - name: install poetry
-#         run: curl -sSL https://install.python-poetry.org | python3 -
-
-#       - name: poetry install
-#         run: poetry install
-
-#       - name: run tests
-#         run: |
-#           poetry run python -m pytest tests/unit
-#           poetry run python -m pytest tests/integration/test_association_sql.py
-#           poetry run python -m pytest tests/integration/test_entity_sql.py
-
-#   test-windows:
-#     name: test py${{ matrix.python-version }} on Windows
-#     runs-on: windows-latest
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         python-version: ['3.8', '3.9', '3.10', '3.11']
-#     env:
-#       PYTHON: ${{ matrix.python-version }}
-#       OS: windows
-
-#     steps:
-#       - uses: actions/checkout@v3
-
-#       - name: set up python
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: ${{ matrix.python-version }}
-
-#       - name: install poetry
-#         run: (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python3 -
-
-#       - name: poetry install
-#         run: poetry install
-
-#       - name: run tests
-#         run: |
-#           poetry run python -m pytest tests/unit
-#           poetry run python -m pytest tests/integration/test_association_sql.py
-#           poetry run python -m pytest tests/integration/test_entity_sql.py
