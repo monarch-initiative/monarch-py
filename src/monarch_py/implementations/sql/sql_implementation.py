@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import logging
+from pathlib import Path
 
 from pydantic import ValidationError
 import pystow
@@ -8,7 +9,7 @@ from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
-from monarch_py.utilities.utils import dict_factory, escape, SQL_DATA_URL
+from monarch_py.utilities.utils import dict_factory, SQL_DATA_URL
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,9 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         Returns:
             Entity: Dataclass representing results of an entity search.
         """
-        # TODO: Implement association counts and heirarchy
+        
+        if not any(Path(monarchstow.base).iterdir()):
+            print("\nDownloading Monarch SQL KG...\n")
 
         with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL, force=update) as db:
             db.row_factory = dict_factory      

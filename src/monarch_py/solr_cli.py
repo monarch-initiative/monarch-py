@@ -28,6 +28,7 @@ def start_solr(update: bool = typer.Option(False, "--update", "-u", help="Whethe
     import docker
     dc = docker.from_env()
     
+    print("\nDownloading Monarch Solr KG...\n")
     monarchstow.ensure_untar(url=SOLR_DATA_URL, force=update)
     data = monarchstow.join("solr", "data")
     
