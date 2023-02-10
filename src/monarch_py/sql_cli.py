@@ -23,8 +23,7 @@ def entity(
         typer.Abort()
     else:
         print(entity.json(indent=4))
-
-    
+  
 
 @sql_app.command()
 def associations(
