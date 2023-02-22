@@ -3,6 +3,7 @@ import docker
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
 SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
 
+
 def strip_json(doc: dict, *fields_to_remove: str):
     for field in fields_to_remove:
         try:
