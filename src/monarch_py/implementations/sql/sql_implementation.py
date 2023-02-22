@@ -35,13 +35,11 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
         Returns:
             Entity: Dataclass representing results of an entity search.
         """
+        
+        if not any(Path(monarchstow.base).iterdir()):
+            print("\nDownloading Monarch SQL KG...\n")
 
-        with monarchstow.ensure_open_sqlite_gz(
-                "sql", 
-                url=SQL_DATA_URL, 
-                force=update, 
-                download_kwargs={'progress_bar':True}
-            ) as db:
+        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL, force=update) as db:
             db.row_factory = dict_factory      
             cur = db.cursor()
             result = cur.execute(f"SELECT * FROM nodes WHERE id = '{id}'").fetchone()
