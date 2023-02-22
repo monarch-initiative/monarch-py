@@ -1,4 +1,6 @@
 # monarch-py
-Monarch Python API
 
-<img src='docs/images/docs-coming-soon.jpg'>
+Python library for interfacing with the Monarch Initiative knowledge graph. 
+
+[Documentation](https://monarch-initiative.github.io/monarch-py/)
+

@@ -1,4 +1,3 @@
-import collections
 import logging
 from dataclasses import dataclass
 
@@ -29,9 +28,7 @@ class SolrImplementation(
     # Implements: EntityInterface #
     ###############################
 
-    def get_entity(
-        self, id: str, get_association_counts: bool = False, get_hierarchy: bool = False
-    ) -> Entity:
+    def get_entity(self, id: str) -> Entity:
         """Retrieve a specific entity by exact ID match, with optional extras
 
         Args:
@@ -46,7 +43,7 @@ class SolrImplementation(
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
         entity = Entity(**solr_document)
-
+        
         # todo: make an endpoint for getting facet counts?
         # if get_association_counts:
         #    entity["association_counts"] = self.get_entity_association_counts(id)
@@ -56,21 +53,6 @@ class SolrImplementation(
 
         return entity
 
-    def get_entity_association_counts(self, id: str):
-        """Returns a list and count of associations for an entity"""
-
-        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
-
-        object_categories = solr.get_filtered_facet(
-            id, filter_field="subject", facet_field="object_category"
-        )
-        subject_categories = solr.get_filtered_facet(
-            id, filter_field="object", facet_field="subject_category"
-        )
-        categories = collections.Counter(object_categories) + collections.Counter(
-            subject_categories
-        )
-        return categories
 
     ####################################
     # Implements: AssociationInterface #
@@ -139,9 +121,7 @@ class SolrImplementation(
                 logger.error(f"Validation error for {doc}")
                 raise
 
-        results = AssociationResults(
-            limit=limit, offset=offset, total=total, associations=associations
-        )
+        results = AssociationResults(associations=associations, limit=limit, offset=offset, total=total)
 
         return results
 
@@ -151,7 +131,7 @@ class SolrImplementation(
 
     def search(
             self,
-            q: str,
+            q: str = "*:*",
             category: str = None,
             taxon: str = None,
             offset: int = 0,
@@ -162,7 +142,7 @@ class SolrImplementation(
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         query = SolrQuery(start=offset, rows=limit)
 
-        query.q = q if q else "*:*"
+        query.q = q
 
         query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
         query.def_type = "edismax"
@@ -190,34 +170,3 @@ class SolrImplementation(
 
         return results
 
-
-# def get_node_hierarchy(entity_id):
-#     superClasses = f""
-#
-#     # query_params = {
-#     #     q: str = "*:*",
-#     #     offset: int = 0,
-#     #     limit: int = 20,
-#     #     category: str = None,
-#     #     predicate: str = None,
-#     #     subject: str = None,
-#     #     object: str = None,
-#     #     entity: str = None, # return nodes where entity is subject or object
-#     #     between: str = None
-#     # }
-#
-#     query = build_association_query(
-#         {
-#             #'q':'*:*',
-#             "entity": f'"{entity_id}"',
-#             "predicate": "biolink:same_as",
-#         }
-#     )
-#     equivalentClasses = requests.get(f"{solr_url}/association/select{query}").json()
-#
-#     subClasses = ""
-#     return {
-#         "superClasses": superClasses,
-#         "equivalentClasses": equivalentClasses,
-#         "subClasses": subClasses,
-#     }
