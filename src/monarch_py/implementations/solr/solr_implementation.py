@@ -144,7 +144,7 @@ class SolrImplementation(
 
         query.q = q
 
-        query.query_fields = "id^100 name^10 synonym"
+        query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
         query.def_type = "edismax"
 
         if category:
