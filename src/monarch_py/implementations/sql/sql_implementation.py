@@ -8,7 +8,6 @@ import pystow
 from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
-from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.utilities.utils import dict_factory, SQL_DATA_URL
 
 logger = logging.getLogger(__name__)
@@ -17,7 +16,7 @@ monarchstow = pystow.module("monarch")
 
 
 @dataclass
-class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
+class SQLImplementation(EntityInterface, AssociationInterface):
     """Implementation of Monarch Interfaces for SQL endpoint"""
 
     ###############################
@@ -172,9 +171,5 @@ class SQLImplementation(EntityInterface, AssociationInterface, SearchInterface):
                 logger.error(f"Validation error for {row}")
                 raise
 
-        results = AssociationResults(associations=associations, limit=limit, offset=offset, total=total)
+        results = AssociationResults(items=associations, limit=limit, offset=offset, total=total)
         return results
-
-    def search(self):
-        """Not Implemented"""
-        ...

@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
-from monarch_py.datamodels.model import EntityResults
+from monarch_py.datamodels.model import SearchResults
 
 
 class SearchInterface(ABC):
     """Abstract interface for searching the Monarch KG in a Lucene way"""
 
     @abstractmethod
-    def search(self, q: str, category: str, taxon: str, offset: int = 0, limit: int = 20) -> EntityResults:
+    def search(self, q: str, category: str, taxon: str, offset: int = 0, limit: int = 20) -> SearchResults:
         """
 
         Args:

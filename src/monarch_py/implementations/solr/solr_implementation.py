@@ -3,8 +3,7 @@ from dataclasses import dataclass
 
 from pydantic import ValidationError
 
-from monarch_py.datamodels.model import Association, AssociationResults, Entity, EntityResults
-from monarch_py.datamodels.solr import SolrQuery, core
+from monarch_py.datamodels.model import Association, AssociationResults, Entity, SearchResults, SearchResult
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
@@ -121,7 +120,7 @@ class SolrImplementation(
                 logger.error(f"Validation error for {doc}")
                 raise
 
-        results = AssociationResults(associations=associations, limit=limit, offset=offset, total=total)
+        results = AssociationResults(items=associations, limit=limit, offset=offset, total=total)
 
         return results
 
@@ -136,7 +135,7 @@ class SolrImplementation(
             taxon: str = None,
             offset: int = 0,
             limit: int = 20
-    ) -> EntityResults:
+    ) -> SearchResults:
         """Search for entities by label, with optional filters """
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
@@ -155,17 +154,17 @@ class SolrImplementation(
         query_result = solr.query(query)
         total = query_result.response.num_found
 
-        entities = []
+        items = []
         for doc in query_result.response.docs:
             try:
-                entity = Entity(**doc)
-                entities.append(entity)
+                result = SearchResult(**doc)
+                items.append(result)
             except ValidationError:
                 logger.error(f"Validation error for {doc}")
                 raise
 
-        results = EntityResults(
-            limit=limit, offset=offset, total=total, entities=entities
+        results = SearchResults(
+            limit=limit, offset=offset, total=total, items=items
         )
 
         return results
