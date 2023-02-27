@@ -7,6 +7,7 @@ nav:
   - Welcome: 'index.md'
   - Usage: 
     - Usage: 'Usage/index.md'
+    - CLI: 'Usage/CLI.md'
     - Interfaces: 'Usage/Interfaces/index.md'
     - Implementations: 'Usage/Implementations/index.md'
   - API Reference: 'API-Reference/index.md'
