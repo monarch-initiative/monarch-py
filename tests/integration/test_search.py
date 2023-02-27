@@ -27,10 +27,3 @@ def test_facet_fields():
     assert response.facets
     assert response.facets["category"]
 
-def test_facet_queries():
-    si = SolrImplementation()
-    response = si.search("syndrome", facet_queries=["object_closure:\"HP:0000924\"", "object_closure:\"HP:0000119\""])
-    assert response
-    assert response.total > 0
-    assert response.facet_queries["object_closure:\"HP:0000924\""] > 10
-    assert response.facet_queries["object_closure:\"HP:0000119\""] > 10

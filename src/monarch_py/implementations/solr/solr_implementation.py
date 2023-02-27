@@ -138,27 +138,33 @@ class SolrImplementation(
             limit: int = 20,
             # add a facet_fields params defaulting to an empty list
             facet_fields: List[str] = None,
+            filter_queries: List[str] = None,
             facet_queries: List[str] = None,
     ) -> SearchResults:
         """Search for entities by label, with optional filters """
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
-        query = SolrQuery(start=offset, rows=limit, facet_fields=facet_fields)
+        query = SolrQuery(start=offset, rows=limit)
 
         query.q = q
+
+
+        query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
+        query.def_type = "edismax"
 
         if facet_fields:
             query.facet_fields = facet_fields
         if facet_queries:
             query.facet_queries = facet_queries
 
-        query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
-        query.def_type = "edismax"
-
         if category:
             query.add_field_filter_query("category", category)
         if taxon:
             query.add_field_filter_query("in_taxon", taxon)
+        if filter_queries:
+            query.filter_queries.extend(filter_queries)
+
+
 
         query_result = solr.query(query)
         total = query_result.response.num_found
