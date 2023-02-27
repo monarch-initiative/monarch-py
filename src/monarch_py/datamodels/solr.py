@@ -18,8 +18,9 @@ class SolrQuery(BaseModel):
     start: int = 1
     facet: bool = True
     facet_min_count = 1
-    facet_fields: List[str] = Field(default_factory=list)
-    filter_queries: List[str] = Field(default_factory=list)
+    facet_fields: Optional[List[str]] = Field(default_factory=list)
+    facet_queries: Optional[List[str]] = Field(default_factory=list)
+    filter_queries: Optional[List[str]] = Field(default_factory=list)
     query_fields: str = None
     def_type: str = "edismax"
     mm: str = "100%" # All tokens in the query must be found in the doc, equivalent to q.op="AND"
@@ -52,6 +53,8 @@ class SolrQuery(BaseModel):
         """
         if value == "facet_fields":
             return "facet.field"
+        elif value == "facet_queries":
+            return "facet.query"
         elif value == "filter_queries":
             return "fq"
         elif value == "query_fields":
@@ -79,7 +82,7 @@ class SolrQueryResponse(BaseModel):
 
 class SolrFacetCounts(BaseModel):
     facet_fields: Optional[Dict]
-
+    facet_queries: Optional[Dict]
 
 class SolrQueryResult(BaseModel):
     responseHeader: SolrQueryResponseHeader

@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from typing import List
 
 from pydantic import ValidationError
 
@@ -134,14 +135,22 @@ class SolrImplementation(
             category: str = None,
             taxon: str = None,
             offset: int = 0,
-            limit: int = 20
+            limit: int = 20,
+            # add a facet_fields params defaulting to an empty list
+            facet_fields: List[str] = None,
+            facet_queries: List[str] = None,
     ) -> SearchResults:
         """Search for entities by label, with optional filters """
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
-        query = SolrQuery(start=offset, rows=limit)
+        query = SolrQuery(start=offset, rows=limit, facet_fields=facet_fields)
 
         query.q = q
+
+        if facet_fields:
+            query.facet_fields = facet_fields
+        if facet_queries:
+            query.facet_queries = facet_queries
 
         query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
         query.def_type = "edismax"

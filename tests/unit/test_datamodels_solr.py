@@ -15,6 +15,7 @@ import urllib
         (SolrQuery(q="marfan"),["q=marfan"]),
         (SolrQuery(facet_fields=["category"]),["facet.field=category", "facet=true"]),
         (SolrQuery(facet_fields=["category", "taxon"]),["q=*:*", "facet.field=category", "facet.field=taxon", "facet=true"]),
+        (SolrQuery(facet_queries=["object_closure:\"HP:0000924\"", "object_closure:\"HP:0000119\"]"]), ["q=*:*", "facet.query=object_closure:\"HP:0000924\"", "facet.query=object_closure:\"HP:0000119\"]", "facet=true"]),
         (SolrQuery(filter_queries=['subject_category:"biolink:Gene"']),['fq=subject_category:"biolink:Gene"']),
         (SolrQuery(q="marfan", query_fields="id^100 name^10 synonym"),['qf=', 'defType=edismax']) # don't worry about actual value of qf
     ],
