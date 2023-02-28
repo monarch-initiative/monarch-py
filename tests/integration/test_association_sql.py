@@ -46,6 +46,12 @@ def test_object():
     assert response.total > 1
     assert response.items[0].object == "MONDO:0007947"
 
+def test_object_closure():
+    data = SQLImplementation()
+    response = data.get_associations(object_closure="HP:0000240")
+    assert response
+    assert response.total in range(200, 10000)
+
 
 def test_entity():
     data = SQLImplementation()
