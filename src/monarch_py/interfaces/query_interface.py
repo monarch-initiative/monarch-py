@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from monarch_py.datamodels.model import EntityResults
 
 

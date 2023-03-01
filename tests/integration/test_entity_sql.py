@@ -7,4 +7,3 @@ def test_entity():
     entity = data.get_entity("MONDO:0007947")
     assert entity
     assert entity.name == "Marfan syndrome"
-

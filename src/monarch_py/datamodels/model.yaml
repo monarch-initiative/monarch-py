@@ -43,8 +43,9 @@ classes:
     - relation
   AssociationResults:
     is_a: Results
-    slots:
-    - associations
+    slot_usage:
+      items:
+        range: Association
   Entity:
     slots:
     - id
@@ -60,14 +61,43 @@ classes:
     - synonym
   EntityResults:
     is_a: Results
+    slot_usage:
+      items:
+        range: Entity
+  SearchResult:
+    is_a: Entity
     slots:
-    - entities
+      - highlight
+      - score
+  SearchResults:
+    is_a: Results
+    slot_usage:
+        items:
+          range: SearchResult
+    slots:
+      - facet_fields
+      - facet_queries
   Results:
     abstract: true
     slots:
-    - limit
-    - offset
-    - total
+      - limit
+      - offset
+      - total
+      - items
+  FacetValue:
+    slots:
+      - label
+      - count
+    slot_usage:
+        label:
+            identifier: true
+  FacetField:
+    slots:
+      - label
+      - facet_values
+    slot_usage:
+      label:
+        identifier: true
 slots:
   aggregator_knowledge_source:
     multivalued: true
@@ -78,16 +108,34 @@ slots:
     range: Association
   category:
     multivalued: true
+  count:
+    description: number of items a this facet value
+    range: integer
   description:
     range: string
-  entities:
+  items:
+    description: A collection of items, with the type to be overriden by slot_usage
     inlined: true
     inlined_as_list: true
     multivalued: true
-    range: Entity
+  facet_fields:
+    inlined: true
+    multivalued: true
+    range: FacetField
+  facet_queries:
+    inlined: true
+    multivalued: true
+    range: FacetValue
+  facet_values:
+    inlined: true
+    multivalued: true
+    range: FacetValue
   frequency_qualifier:
     range: string
   has_evidence:
+    range: string
+  highlight:
+    description: matching text snippet containing html tags
     range: string
   id:
     identifier: true
@@ -96,6 +144,8 @@ slots:
     range: string
   knowledge_source:
     multivalued: true
+  label:
+    range: string
   limit:
     range: integer
   name:
@@ -137,6 +187,8 @@ slots:
     multivalued: true
   relation:
     range: string
+  score:
+    range: float
   sex_qualifier:
     range: string
   source:

@@ -3,13 +3,15 @@ from pathlib import Path
 
 import typer
 
+from monarch_py.solr_cli import associations as solr_associations
+from monarch_py.solr_cli import entity as solr_entity
+from monarch_py.solr_cli import search as solr_search
 from monarch_py.solr_cli import solr_app
-from monarch_py.solr_cli import entity as solr_entity, associations as solr_associations, search as solr_search
 from monarch_py.sql_cli import sql_app
 
 app = typer.Typer()
 app.add_typer(solr_app, name="solr")
-app.add_typer(sql_app, name='sql')
+app.add_typer(sql_app, name="sql")
 
 
 @app.command("schema")
@@ -37,7 +39,7 @@ def entity(id: str = typer.Option(None, "--id")):
 
     """
     solr_entity(id)
-    
+
 
 @app.command("associations")
 def associations(
@@ -49,7 +51,7 @@ def associations(
     between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
-    ):
+):
     """
     Paginate through associations
 
