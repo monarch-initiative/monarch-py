@@ -471,13 +471,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#src.monarch_py.implementations.sql.sql_implementation.SQLImplementation.search" class="md-nav__link">
-    search()
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -539,7 +532,7 @@
 
   <div class="doc doc-contents ">
       <p class="doc doc-class-bases">
-        Bases: <code><span title="monarch_py.interfaces.entity_interface.EntityInterface">EntityInterface</span></code>, <code><span title="monarch_py.interfaces.association_interface.AssociationInterface">AssociationInterface</span></code>, <code><span title="monarch_py.interfaces.search_interface.SearchInterface">SearchInterface</span></code></p>
+        Bases: <code><span title="monarch_py.interfaces.entity_interface.EntityInterface">EntityInterface</span></code>, <code><span title="monarch_py.interfaces.association_interface.AssociationInterface">AssociationInterface</span></code></p>
 
   
       <p>Implementation of Monarch Interfaces for SQL endpoint</p>
@@ -571,7 +564,9 @@
     <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -626,11 +621,31 @@
           </td>
         </tr>
         <tr>
+          <td><code>subject_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>object</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
           </td>
           <td><p>Filter to only associations matching the specified object. Defaults to None.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>object_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations the specified term ID as an ancestor of the object. Defaults to None.</p></td>
           <td>
                 <code>None</code>
           </td>
@@ -777,26 +792,6 @@
         </tr>
     </tbody>
   </table>
-
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="src.monarch_py.implementations.sql.sql_implementation.SQLImplementation.search" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">search</span>
-
-
-</h4>
-<div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">()</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Not Implemented</p>
 
   </div>
 

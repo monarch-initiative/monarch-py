@@ -495,6 +495,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_facets" class="md-nav__link">
+    get_association_facets()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.search" class="md-nav__link">
     search()
   </a>
@@ -526,6 +533,20 @@
   
     <nav class="md-nav" aria-label="SolrImplementation">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.convert_facet_fields" class="md-nav__link">
+    convert_facet_fields()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.convert_facet_queries" class="md-nav__link">
+    convert_facet_queries()
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_associations" class="md-nav__link">
@@ -571,13 +592,6 @@
           <li class="md-nav__item">
   <a href="#src.monarch_py.implementations.sql.sql_implementation.SQLImplementation.get_entity" class="md-nav__link">
     get_entity()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#src.monarch_py.implementations.sql.sql_implementation.SQLImplementation.search" class="md-nav__link">
-    search()
   </a>
   
 </li>
@@ -698,6 +712,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_facets" class="md-nav__link">
+    get_association_facets()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.search" class="md-nav__link">
     search()
   </a>
@@ -729,6 +750,20 @@
   
     <nav class="md-nav" aria-label="SolrImplementation">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.convert_facet_fields" class="md-nav__link">
+    convert_facet_fields()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.convert_facet_queries" class="md-nav__link">
+    convert_facet_queries()
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_associations" class="md-nav__link">
@@ -774,13 +809,6 @@
           <li class="md-nav__item">
   <a href="#src.monarch_py.implementations.sql.sql_implementation.SQLImplementation.get_entity" class="md-nav__link">
     get_entity()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#src.monarch_py.implementations.sql.sql_implementation.SQLImplementation.search" class="md-nav__link">
-    search()
   </a>
   
 </li>
@@ -1059,7 +1087,9 @@
     <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1113,11 +1143,31 @@
           </td>
         </tr>
         <tr>
+          <td><code>subject_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>object</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
           </td>
           <td><p>Filter to only associations matching the specified object. Defaults to None.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>object_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None</p></td>
           <td>
                 <code>None</code>
           </td>
@@ -1275,6 +1325,175 @@
 
 
 
+<h4 id="src.monarch_py.interfaces.search_interface.SearchInterface.get_association_facets" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">get_association_facets</span>
+
+
+</h4>
+<div class="highlight"><pre><span></span><code><span class="n">get_association_facets</span><span class="p">(</span>
+    <span class="n">facet_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">facet_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Get facet counts and facet query counts for associations</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>facet_fields</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.List" href="https://docs.python.org/3/library/typing.html#typing.List">List</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
+          </td>
+          <td><p>Facet fields to return counts for</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>facet_queries</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.List" href="https://docs.python.org/3/library/typing.html#typing.List">List</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
+          </td>
+          <td><p>Facet queries to return counts for</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>category</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations matching the specified category</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>predicate</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations matching the specified predicate</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>subject</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations matching the specified subject</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>subject_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the subject</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>object</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations matching the specified object</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>object_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the object</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>entity</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations where the specified entity is the subject or the object</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>between</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Tuple" href="https://docs.python.org/3/library/typing.html#typing.Tuple">Tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
+          </td>
+          <td><p>Filter to bi-directional associations between two entities</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>SearchResults</code></td>          <td>
+                <code><span title="monarch_py.datamodels.model.SearchResults">SearchResults</span></code>
+          </td>
+          <td><p>Dataclass representing results of a search, with zero rows returned but total count</p></td>
+        </tr>
+        <tr>
+<td></td>          <td>
+                <code><span title="monarch_py.datamodels.model.SearchResults">SearchResults</span></code>
+          </td>
+          <td><p>and faceting information populated</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
 <h4 id="src.monarch_py.interfaces.search_interface.SearchInterface.search" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">search</span>
 
@@ -1383,7 +1602,7 @@
     <tbody>
         <tr>
 <td><code>EntityResults</code></td>          <td>
-                <code><span title="monarch_py.datamodels.model.EntityResults">EntityResults</span></code>
+                <code><span title="monarch_py.datamodels.model.SearchResults">SearchResults</span></code>
           </td>
           <td><p>Dataclass representing results of a generic entity search.</p></td>
         </tr>
@@ -1469,6 +1688,132 @@
 
 
 
+<h4 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.convert_facet_fields" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">convert_facet_fields</span>
+
+
+</h4>
+<div class="highlight"><pre><span></span><code><span class="n">convert_facet_fields</span><span class="p">(</span><span class="n">solr_facet_fields</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Converts a list of raw solr facet fields from the solr response to a list of
+FacetField instances</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>facet_fields</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Dict" href="https://docs.python.org/3/library/typing.html#typing.Dict">Dict</a></code>
+          </td>
+          <td><p>A list of facet fields from the solr response</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Dict" href="https://docs.python.org/3/library/typing.html#typing.Dict">Dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <span title="monarch_py.datamodels.model.FacetField">FacetField</span>]</code>
+          </td>
+          <td><p>List[FacetField]: A list of FacetField instances, with FacetValues populated within</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.convert_facet_queries" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">convert_facet_queries</span>
+
+
+</h4>
+<div class="highlight"><pre><span></span><code><span class="n">convert_facet_queries</span><span class="p">(</span><span class="n">solr_facet_queries</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Converts a list of raw solr facet queries from the solr response to a list of
+FacetValue instances</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>facet_queries</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Dict" href="https://docs.python.org/3/library/typing.html#typing.Dict">Dict</a></code>
+          </td>
+          <td><p>A dictionary of facet queries from the solr response</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.Dict" href="https://docs.python.org/3/library/typing.html#typing.Dict">Dict</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <span title="monarch_py.datamodels.model.FacetValue">FacetValue</span>]</code>
+          </td>
+          <td><p>List[FacetValue]: A list of FacetValue instances</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
 <h4 id="src.monarch_py.implementations.solr.solr_implementation.SolrImplementation.get_associations" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">get_associations</span>
 
@@ -1478,7 +1823,9 @@
     <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1532,11 +1879,31 @@
           </td>
         </tr>
         <tr>
+          <td><code>subject_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>object</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
           </td>
           <td><p>Filter to only associations matching the specified object. Defaults to None.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>object_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None</p></td>
           <td>
                 <code>None</code>
           </td>
@@ -1554,7 +1921,7 @@
         <tr>
           <td><code>between</code></td>
           <td>
-                <code>Tuple[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
+                <code><a class="autorefs autorefs-external" title="typing.Tuple" href="https://docs.python.org/3/library/typing.html#typing.Tuple">Tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
           </td>
           <td><p>Filter to bi-directional associations between two entities.</p></td>
           <td>
@@ -1698,7 +2065,14 @@
 
 </h4>
 <div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span>
-    <span class="n">q</span><span class="o">=</span><span class="s2">&quot;*:*&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span>
+    <span class="n">q</span><span class="o">=</span><span class="s2">&quot;*:*&quot;</span><span class="p">,</span>
+    <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">facet_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">filter_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">facet_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -1761,7 +2135,7 @@
 
   <div class="doc doc-contents ">
       <p class="doc doc-class-bases">
-        Bases: <code><span title="monarch_py.interfaces.entity_interface.EntityInterface">EntityInterface</span></code>, <code><span title="monarch_py.interfaces.association_interface.AssociationInterface">AssociationInterface</span></code>, <code><span title="monarch_py.interfaces.search_interface.SearchInterface">SearchInterface</span></code></p>
+        Bases: <code><span title="monarch_py.interfaces.entity_interface.EntityInterface">EntityInterface</span></code>, <code><span title="monarch_py.interfaces.association_interface.AssociationInterface">AssociationInterface</span></code></p>
 
   
       <p>Implementation of Monarch Interfaces for SQL endpoint</p>
@@ -1793,7 +2167,9 @@
     <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1848,11 +2224,31 @@
           </td>
         </tr>
         <tr>
+          <td><code>subject_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
           <td><code>object</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
           </td>
           <td><p>Filter to only associations matching the specified object. Defaults to None.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>object_closure</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations the specified term ID as an ancestor of the object. Defaults to None.</p></td>
           <td>
                 <code>None</code>
           </td>
@@ -1999,26 +2395,6 @@
         </tr>
     </tbody>
   </table>
-
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="src.monarch_py.implementations.sql.sql_implementation.SQLImplementation.search" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">search</span>
-
-
-</h4>
-<div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">()</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Not Implemented</p>
 
   </div>
 
