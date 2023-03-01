@@ -27,3 +27,25 @@ def test_facet_fields():
     assert response.facets
     assert response.facets["category"]
 
+def test_association_facets():
+    si = SolrImplementation()
+    response = si.get_association_facets(facet_fields=["category"])
+    assert response
+    assert response.facet_fields
+    assert response.facet_fields["category"]
+    assert response.facet_fields["category"].facet_values["biolink:DiseaseToPhenotypicFeatureAssociation"].count > 100000
+
+def test_association_facet_query():
+    si = SolrImplementation()
+
+    response = si.get_association_facets(subject_closure="MONDO:0007947",
+        facet_queries=["object_closure:\"HP:0000924\"",
+                        "object_closure:\"HP:0000707\"",
+                        "object_closure:\"HP:0000152\"",
+                        "object_closure:\"HP:0001574\"",
+                        "object_closure:\"HP:0000478\""])
+    assert response
+    assert response.facet_queries
+    assert response.facet_queries["object_closure:\"HP:0000924\""].count > 20
+    assert response.facet_queries["object_closure:\"HP:0000707\""].count > 5
+    assert response.facet_queries["object_closure:\"HP:0000152\""].count > 20

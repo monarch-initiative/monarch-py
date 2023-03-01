@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from typing import List, Tuple
+
 from monarch_py.datamodels.model import SearchResults
 
 
@@ -21,5 +23,35 @@ class SearchInterface(ABC):
 
         Returns:
             EntityResults: Dataclass representing results of a generic entity search.
+        """
+        raise NotImplementedError
+
+    def get_association_facets(self,
+                           facet_fields: List[str] = None,
+                           facet_queries: List[str] = None,
+                           category: str = None,
+                           predicate: str = None,
+                           subject: str = None,
+                           subject_closure: str = None,
+                           object: str = None,
+                           object_closure: str = None,
+                           entity: str = None,
+                           between: Tuple[str, str] = None) -> SearchResults:
+        """
+        Get facet counts and facet query counts for associations
+        Args:
+            facet_fields (List[str]): Facet fields to return counts for
+            facet_queries (List[str]): Facet queries to return counts for
+            category (str): Filter to only associations matching the specified category
+            predicate (str): Filter to only associations matching the specified predicate
+            subject (str): Filter to only associations matching the specified subject
+            subject_closure (str): Filter to only associations with the specified term ID as an ancestor of the subject
+            object (str): Filter to only associations matching the specified object
+            object_closure (str): Filter to only associations with the specified term ID as an ancestor of the object
+            entity (str): Filter to only associations where the specified entity is the subject or the object
+            between (Tuple[str, str]): Filter to bi-directional associations between two entities
+        Returns:
+            SearchResults: Dataclass representing results of a search, with zero rows returned but total count
+            and faceting information populated
         """
         raise NotImplementedError

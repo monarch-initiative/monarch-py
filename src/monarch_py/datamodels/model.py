@@ -109,10 +109,19 @@ class AssociationResults(Results):
     
 
 
+class EntityResults(Results):
+    
+    limit: Optional[int] = Field(None)
+    offset: Optional[int] = Field(None)
+    total: Optional[int] = Field(None)
+    items: Optional[List[Entity]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+    
+
+
 class SearchResults(Results):
     
-    facet_fields: Optional[List[FacetField]] = Field(default_factory=list)
-    facet_queries: Optional[List[FacetValue]] = Field(default_factory=list)
+    facet_fields: Optional[Dict[str, FacetField]] = Field(default_factory=dict)
+    facet_queries: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
@@ -130,7 +139,7 @@ class FacetValue(ConfiguredBaseModel):
 class FacetField(ConfiguredBaseModel):
     
     label: Optional[str] = Field(None)
-    facet_values: Optional[List[FacetValue]] = Field(default_factory=list)
+    facet_values: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
     
 
 
@@ -142,6 +151,7 @@ Entity.update_forward_refs()
 SearchResult.update_forward_refs()
 Results.update_forward_refs()
 AssociationResults.update_forward_refs()
+EntityResults.update_forward_refs()
 SearchResults.update_forward_refs()
 FacetValue.update_forward_refs()
 FacetField.update_forward_refs()

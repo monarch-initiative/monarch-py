@@ -59,6 +59,11 @@ classes:
     - symbol
     - type
     - synonym
+  EntityResults:
+    is_a: Results
+    slot_usage:
+      items:
+        range: Entity
   SearchResult:
     is_a: Entity
     slots:
@@ -83,10 +88,16 @@ classes:
     slots:
       - label
       - count
+    slot_usage:
+        label:
+            identifier: true
   FacetField:
     slots:
       - label
       - facet_values
+    slot_usage:
+      label:
+        identifier: true
 slots:
   aggregator_knowledge_source:
     multivalued: true
@@ -109,17 +120,14 @@ slots:
     multivalued: true
   facet_fields:
     inlined: true
-    inlined_as_list: true
     multivalued: true
     range: FacetField
   facet_queries:
     inlined: true
-    inlined_as_list: true
     multivalued: true
     range: FacetValue
   facet_values:
     inlined: true
-    inlined_as_list: true
     multivalued: true
     range: FacetValue
   frequency_qualifier:
