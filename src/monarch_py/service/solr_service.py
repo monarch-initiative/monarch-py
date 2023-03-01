@@ -49,8 +49,6 @@ class SolrService(BaseModel):
     def _facets_to_dict(self, facet_list: List[str]) -> Dict:
         return dict(zip(facet_list[::2], facet_list[1::2]))
 
-
-
     def get_filtered_facet(self, id, filter_field, facet_field):
 
         query = SolrQuery(

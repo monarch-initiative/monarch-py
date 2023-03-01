@@ -1,26 +1,30 @@
 import logging
 from dataclasses import dataclass
-from typing import List, Tuple, Dict
+from typing import Dict, List, Tuple
 
 from pydantic import ValidationError
 
-from monarch_py.datamodels.model import Association, AssociationResults, Entity, SearchResults, SearchResult, \
-    FacetField, FacetValue
+from monarch_py.datamodels.model import (
+    Association,
+    AssociationResults,
+    Entity,
+    FacetField,
+    FacetValue,
+    SearchResult,
+    SearchResults,
+)
+from monarch_py.datamodels.solr import SolrQuery, core
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
-from monarch_py.datamodels.solr import SolrQuery, core
-
 from monarch_py.utilities.utils import escape
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class SolrImplementation(
-    EntityInterface, AssociationInterface, SearchInterface
-):
+class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface):
     """Implementation of Monarch Interfaces for Solr endpoint"""
 
     base_url: str = "http://localhost:8983/solr"
@@ -44,7 +48,7 @@ class SolrImplementation(
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
         entity = Entity(**solr_document)
-        
+
         # todo: make an endpoint for getting facet counts?
         # if get_association_counts:
         #    entity["association_counts"] = self.get_entity_association_counts(id)
@@ -53,7 +57,6 @@ class SolrImplementation(
         #            entity["node_hierarchy"] = self.get_node_hierarchy(id)
 
         return entity
-
 
     ####################################
     # Implements: AssociationInterface #
@@ -117,21 +120,25 @@ class SolrImplementation(
                 logger.error(f"Validation error for {doc}")
                 raise
 
-        results = AssociationResults(items=associations, limit=limit, offset=offset, total=total)
+        results = AssociationResults(
+            items=associations, limit=limit, offset=offset, total=total
+        )
 
         return results
 
-    def _populate_association_query(self,
-                                    category: str = None,
-                                    predicate: str = None,
-                                    subject: str = None,
-                                    subject_closure: str = None,
-                                    object: str = None,
-                                    object_closure: str = None,
-                                    entity: str = None,
-                                    between: str = None,
-                                    offset: int = 0,
-                                    limit: int = 20, ) -> SolrQuery:
+    def _populate_association_query(
+        self,
+        category: str = None,
+        predicate: str = None,
+        subject: str = None,
+        subject_closure: str = None,
+        object: str = None,
+        object_closure: str = None,
+        entity: str = None,
+        between: str = None,
+        offset: int = 0,
+        limit: int = 20,
+    ) -> SolrQuery:
         """
         Populate a SolrQuery object with association filters
         Args:
@@ -183,24 +190,23 @@ class SolrImplementation(
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     def search(
-            self,
-            q: str = "*:*",
-            category: str = None,
-            taxon: str = None,
-            offset: int = 0,
-            limit: int = 20,
-            # add a facet_fields params defaulting to an empty list
-            facet_fields: List[str] = None,
-            filter_queries: List[str] = None,
-            facet_queries: List[str] = None,
+        self,
+        q: str = "*:*",
+        category: str = None,
+        taxon: str = None,
+        offset: int = 0,
+        limit: int = 20,
+        # add a facet_fields params defaulting to an empty list
+        facet_fields: List[str] = None,
+        filter_queries: List[str] = None,
+        facet_queries: List[str] = None,
     ) -> SearchResults:
-        """Search for entities by label, with optional filters """
+        """Search for entities by label, with optional filters"""
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         query = SolrQuery(start=offset, rows=limit)
 
         query.q = q
-
 
         query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
         query.def_type = "edismax"
@@ -216,8 +222,6 @@ class SolrImplementation(
             query.add_field_filter_query("in_taxon", taxon)
         if filter_queries:
             query.filter_queries.extend(filter_queries)
-
-
 
         query_result = solr.query(query)
         total = query_result.response.num_found
@@ -237,22 +241,24 @@ class SolrImplementation(
             total=total,
             items=items,
             facet_fields=query_result.facet_counts.facet_fields,
-            facet_queries=query_result.facet_counts.facet_queries
+            facet_queries=query_result.facet_counts.facet_queries,
         )
 
         return results
 
-    def get_association_facets(self,
-                           facet_fields: List[str] = None,
-                           facet_queries: List[str] = None,
-                           category: str = None,
-                           predicate: str = None,
-                           subject: str = None,
-                           subject_closure: str = None,
-                           object: str = None,
-                           object_closure: str = None,
-                           entity: str = None,
-                           between: Tuple[str, str] = None) -> SearchResults:
+    def get_association_facets(
+        self,
+        facet_fields: List[str] = None,
+        facet_queries: List[str] = None,
+        category: str = None,
+        predicate: str = None,
+        subject: str = None,
+        subject_closure: str = None,
+        object: str = None,
+        object_closure: str = None,
+        entity: str = None,
+        between: Tuple[str, str] = None,
+    ) -> SearchResults:
 
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         limit = 0
@@ -276,12 +282,17 @@ class SolrImplementation(
         query_result = solr.query(query)
         total = query_result.response.num_found
 
-
-
         results = SearchResults(
-            limit=limit, offset=offset, total=total, items=[],
-            facet_fields=self.convert_facet_fields(query_result.facet_counts.facet_fields),
-            facet_queries=self.convert_facet_queries(query_result.facet_counts.facet_queries)
+            limit=limit,
+            offset=offset,
+            total=total,
+            items=[],
+            facet_fields=self.convert_facet_fields(
+                query_result.facet_counts.facet_fields
+            ),
+            facet_queries=self.convert_facet_queries(
+                query_result.facet_counts.facet_queries
+            ),
         )
 
         return results
@@ -303,12 +314,16 @@ class SolrImplementation(
             ff = FacetField(label=field)
             facet_list = solr_facet_fields[field]
             facet_dict = dict(zip(facet_list[::2], facet_list[1::2]))
-            ff.facet_values = {k: FacetValue(label=k, count=v) for k, v in facet_dict.items()}
+            ff.facet_values = {
+                k: FacetValue(label=k, count=v) for k, v in facet_dict.items()
+            }
             facet_fields[field] = ff
 
         return facet_fields
 
-    def convert_facet_queries(self, solr_facet_queries: Dict[str, int]) -> Dict[str,FacetValue]:
+    def convert_facet_queries(
+        self, solr_facet_queries: Dict[str, int]
+    ) -> Dict[str, FacetValue]:
         """
         Converts a list of raw solr facet queries from the solr response to a list of
         FacetValue instances
@@ -320,5 +335,7 @@ class SolrImplementation(
             List[FacetValue]: A list of FacetValue instances
         """
 
-        facet_values = {k: FacetValue(label=k, count=v) for k,v in solr_facet_queries.items()}
+        facet_values = {
+            k: FacetValue(label=k, count=v) for k, v in solr_facet_queries.items()
+        }
         return facet_values

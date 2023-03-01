@@ -1,14 +1,14 @@
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
 from pathlib import Path
 
-from pydantic import ValidationError
 import pystow
+from pydantic import ValidationError
 
 from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
-from monarch_py.utilities.utils import dict_factory, SQL_DATA_URL
+from monarch_py.utilities.utils import SQL_DATA_URL, dict_factory
 
 logger = logging.getLogger(__name__)
 
@@ -34,31 +34,33 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         Returns:
             Entity: Dataclass representing results of an entity search.
         """
-        
+
         if not any(Path(monarchstow.base).iterdir()):
             print("\nDownloading Monarch SQL KG...\n")
 
-        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL, force=update) as db:
-            db.row_factory = dict_factory      
+        with monarchstow.ensure_open_sqlite_gz(
+            "sql", url=SQL_DATA_URL, force=update
+        ) as db:
+            db.row_factory = dict_factory
             cur = db.cursor()
             result = cur.execute(f"SELECT * FROM nodes WHERE id = '{id}'").fetchone()
 
         if not result:
             return None
         params = {
-                'id': result['id'],
-                'category': result['category'].split("|"),
-                'name': result['name'],
-                'description': result['description'],
-                'xref': result['xref'].split("|"),
-                'provided_by': result['provided_by'],
-                'in_taxon': result['in_taxon'],
-                'symbol': result['symbol'],
-                'type': result['type'],
-                'synonym': result['synonym'].split("|")
-            }
+            "id": result["id"],
+            "category": result["category"].split("|"),
+            "name": result["name"],
+            "description": result["description"],
+            "xref": result["xref"].split("|"),
+            "provided_by": result["provided_by"],
+            "in_taxon": result["in_taxon"],
+            "symbol": result["symbol"],
+            "type": result["type"],
+            "synonym": result["synonym"].split("|"),
+        }
         try:
-            params['source'] = result['source']
+            params["source"] = result["source"]
         except KeyError:
             pass
         # Convert empty strings to null value
@@ -66,17 +68,18 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             params[p] = None if not params[p] else params[p]
 
         try:
-            entity = Entity(**params)     
+            entity = Entity(**params)
         except ValidationError:
             logger.error(f"Validation error for {result}")
             raise
         return entity
-    
+
     ####################################
     # Implements: AssociationInterface #
     ####################################
 
-    def get_associations(self,
+    def get_associations(
+        self,
         category: str = None,
         predicate: str = None,
         subject: str = None,
@@ -106,7 +109,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         Returns:
             AssociationResults: Dataclass representing results of an association search.
         """
-                
+
         clauses = []
         if category:
             clauses.append(f"category = '{category}'")
@@ -127,7 +130,9 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             b = between.split(",")
             e1 = b[0]
             e2 = b[1]
-            clauses.append(f"subject = '{e1}' AND object = '{e2}' OR subject = '{e2}' AND object = '{e1}'")
+            clauses.append(
+                f"subject = '{e1}' AND object = '{e2}' OR subject = '{e2}' AND object = '{e1}'"
+            )
 
         query = f"SELECT * FROM denormalized_edges "
         if clauses:
@@ -138,37 +143,41 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         count_query = f"SELECT COUNT(*) FROM denormalized_edges "
         if clauses:
             count_query += "WHERE " + " AND ".join(clauses)
-        
-        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL, force=update) as db:
-            db.row_factory = dict_factory      
+
+        with monarchstow.ensure_open_sqlite_gz(
+            "sql", url=SQL_DATA_URL, force=update
+        ) as db:
+            db.row_factory = dict_factory
             cur = db.cursor()
             results = cur.execute(query).fetchall()
             count = cur.execute(count_query).fetchone()
             total = count[f"COUNT(*)"]
-        
+
         associations = []
         for row in results:
             params = {
-                'id': row['id'],
-                'original_subject': row['original_subject'],
-                'predicate': row['predicate'],
-                'original_object': row['original_object'],
-                'category': row['category'].split("|"),
-                'aggregator_knowledge_source': row['aggregator_knowledge_source'].split("|"),
-                'primary_knowledge_source': row['primary_knowledge_source'].split("|"),
-                'publications': row['publications'].split("|"),
-                'qualifiers': row['qualifiers'].split("|"),
-                'provided_by': row['provided_by'],
-                'has_evidence': row['has_evidence'],
-                'stage_qualifier': row['stage_qualifier'],
-                'relation': row['relation'],
-                'knowledge_source': row['knowledge_source'].split("|"),
-                'negated': False if not row['negated'] else True,
-                'frequency_qualifier': row['frequency_qualifier'],
-                'onset_qualifier': row['onset_qualifier'],
-                'sex_qualifier': row['sex_qualifier'],
-                'subject': row['subject'],
-                'object': row['object']
+                "id": row["id"],
+                "original_subject": row["original_subject"],
+                "predicate": row["predicate"],
+                "original_object": row["original_object"],
+                "category": row["category"].split("|"),
+                "aggregator_knowledge_source": row["aggregator_knowledge_source"].split(
+                    "|"
+                ),
+                "primary_knowledge_source": row["primary_knowledge_source"].split("|"),
+                "publications": row["publications"].split("|"),
+                "qualifiers": row["qualifiers"].split("|"),
+                "provided_by": row["provided_by"],
+                "has_evidence": row["has_evidence"],
+                "stage_qualifier": row["stage_qualifier"],
+                "relation": row["relation"],
+                "knowledge_source": row["knowledge_source"].split("|"),
+                "negated": False if not row["negated"] else True,
+                "frequency_qualifier": row["frequency_qualifier"],
+                "onset_qualifier": row["onset_qualifier"],
+                "sex_qualifier": row["sex_qualifier"],
+                "subject": row["subject"],
+                "object": row["object"],
             }
             # Convert empty strings to null value
             for p in params:
@@ -179,5 +188,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
                 logger.error(f"Validation error for {row}")
                 raise
 
-        results = AssociationResults(items=associations, limit=limit, offset=offset, total=total)
+        results = AssociationResults(
+            items=associations, limit=limit, offset=offset, total=total
+        )
         return results

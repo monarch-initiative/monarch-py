@@ -8,7 +8,9 @@ class SearchInterface(ABC):
     """Abstract interface for searching the Monarch KG in a Lucene way"""
 
     @abstractmethod
-    def search(self, q: str, category: str, taxon: str, offset: int = 0, limit: int = 20) -> SearchResults:
+    def search(
+        self, q: str, category: str, taxon: str, offset: int = 0, limit: int = 20
+    ) -> SearchResults:
         """
 
         Args:
@@ -26,17 +28,19 @@ class SearchInterface(ABC):
         """
         raise NotImplementedError
 
-    def get_association_facets(self,
-                           facet_fields: List[str] = None,
-                           facet_queries: List[str] = None,
-                           category: str = None,
-                           predicate: str = None,
-                           subject: str = None,
-                           subject_closure: str = None,
-                           object: str = None,
-                           object_closure: str = None,
-                           entity: str = None,
-                           between: Tuple[str, str] = None) -> SearchResults:
+    def get_association_facets(
+        self,
+        facet_fields: List[str] = None,
+        facet_queries: List[str] = None,
+        category: str = None,
+        predicate: str = None,
+        subject: str = None,
+        subject_closure: str = None,
+        object: str = None,
+        object_closure: str = None,
+        entity: str = None,
+        between: Tuple[str, str] = None,
+    ) -> SearchResults:
         """
         Get facet counts and facet query counts for associations
         Args:

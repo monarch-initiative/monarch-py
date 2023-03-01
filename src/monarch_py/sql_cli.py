@@ -7,9 +7,13 @@ sql_app = typer.Typer()
 
 @sql_app.command()
 def entity(
-    id: str = typer.Option(None, "--id", help="The identifier of the entity to be retrieved"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG")
-    ):
+    id: str = typer.Option(
+        None, "--id", help="The identifier of the entity to be retrieved"
+    ),
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+):
     """Retrieve an entity by ID
 
     Args:
@@ -23,7 +27,7 @@ def entity(
         typer.Abort()
     else:
         print(entity.json(indent=4))
-  
+
 
 @sql_app.command()
 def associations(
@@ -37,7 +41,7 @@ def associations(
     offset: int = typer.Option(0, "--offset"),
     update: bool = typer.Option(False, "--update"),
     # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
-    ):
+):
     """Paginate through associations
 
     Args:
@@ -55,4 +59,3 @@ def associations(
     data = SQLImplementation()
     response = data.get_associations(**args)
     print(response.json(indent=4))
-
