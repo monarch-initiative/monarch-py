@@ -771,7 +771,9 @@
     object: The object of the association
     entity: The subject or object of the association
     limit: The number of associations to return
-    offset: The offset of the first association to be retrieved</p>
+    offset: The offset of the first association to be retrieved
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>associations<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -785,19 +787,24 @@
 <li><code>--between TEXT</code></li>
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="entity"><code>entity</code></h2>
 <p>Retrieve an entity by ID</p>
 <p>Args:
-    input: Which KG to use - solr or sql
-    id: The identifier of the entity to be retrieved</p>
+    id: The identifier of the entity to be retrieved
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
 <li><code>--id TEXT</code></li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="schema"><code>schema</code></h2>
@@ -816,7 +823,9 @@
     category: The category of the entity
     taxon: The taxon of the entity
     limit: The number of entities to return
-    offset: The offset of the first entity to be retrieved</p>
+    offset: The offset of the first entity to be retrieved
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>search<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -827,6 +836,8 @@
 <li><code>--taxon TEXT</code></li>
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="solr"><code>solr</code></h2>
@@ -843,21 +854,24 @@
 <li><code>entity</code>: Retrieve an entity by ID</li>
 <li><code>remove</code></li>
 <li><code>search</code>: Search for entities</li>
-<li><code>start</code></li>
-<li><code>status</code></li>
-<li><code>stop</code></li>
+<li><code>start</code>: Start a local Monarch Solr instance.</li>
+<li><code>status</code>: Check the status of the local Monarch Solr...</li>
+<li><code>stop</code>: Stop the local Monarch Solr instance.</li>
 </ul>
 <h3 id="solr-associations"><code>solr associations</code></h3>
 <p>Paginate through associations</p>
 <p>Args:
-    category: The category of the association
-    predicate: The predicate of the association
-    subject: The subject of the association
-    object: The object of the association
-    entity: The subject or object of the association
-    between: Two comma-separated entities to get bi-directional associations
-    limit: The number of associations to return
-    offset: The offset of the first association to be retrieved</p>
+    category (str, optional): The category of the association.
+    subject (str, optional): The subject of the association.
+    predicate (str, optional): The predicate of the association.
+    object (str, optional): The object of the association.
+    entity (str, optional): The subject or object of the association.
+    between (str, optional): Two comma-separated entities to get bi-directional associations.
+    limit (int, optional): The number of associations to return. Default 20
+    offset (int, optional): The offset of the first association to be retrieved. Default 0
+    update (bool, optional): Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>associations<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -872,13 +886,17 @@
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-entity"><code>solr entity</code></h3>
 <p>Retrieve an entity by ID</p>
 <p>Args:
     id (str): The identifier of the entity to be retrieved
-    update (bool): = Whether to re-download the Monarch KG. Default False</p>
+    update (bool): = Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -886,6 +904,8 @@
 <ul>
 <li><code>--id TEXT</code>: The identifier of the entity to be retrieved</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-remove"><code>solr remove</code></h3>
@@ -903,7 +923,9 @@
     category: The category of the entity
     taxon: The taxon of the entity
     limit: The number of entities to return
-    offset: The offset of the first entity to be retrieved</p>
+    offset: The offset of the first entity to be retrieved
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>search<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -915,9 +937,12 @@
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-start"><code>solr start</code></h3>
+<p>Start a local Monarch Solr instance.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>start<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -927,6 +952,7 @@
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-status"><code>solr status</code></h3>
+<p>Check the status of the local Monarch Solr instance.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -935,6 +961,7 @@
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-stop"><code>solr stop</code></h3>
+<p>Stop the local Monarch Solr instance.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>stop<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -966,7 +993,9 @@
     between (str, optional): Two comma-separated entities to get bi-directional associations.
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
-    update (bool, optional): Whether to re-download the Monarch KG. Default False</p>
+    update (bool, optional): Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>sql<span class="w"> </span>associations<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -981,13 +1010,17 @@
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>--update</code></li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="sql-entity"><code>sql entity</code></h3>
 <p>Retrieve an entity by ID</p>
 <p>Args:
     id (str): The identifier of the entity to be retrieved
-    update (bool): = Whether to re-download the Monarch KG. Default False</p>
+    update (bool): = Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>sql<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -995,6 +1028,8 @@
 <ul>
 <li><code>--id TEXT</code>: The identifier of the entity to be retrieved</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 

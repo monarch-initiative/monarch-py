@@ -546,11 +546,17 @@
       Results &lt;|-- SearchResults
 
       SearchResults : facet_fields
+        SearchResults &lt;.. FacetField : facet_fields
       SearchResults : facet_queries
+        SearchResults &lt;.. FacetValue : facet_queries
       SearchResults : items
+        SearchResults &lt;.. SearchResult : items
       SearchResults : limit
+        SearchResults &lt;.. integer : limit
       SearchResults : offset
+        SearchResults &lt;.. integer : offset
       SearchResults : total
+        SearchResults &lt;.. integer : total
 </code></pre></div>
 <h2 id="inheritance">Inheritance</h2>
 <ul>
@@ -584,19 +590,19 @@
 </tr>
 <tr>
 <td><a href="../limit/">limit</a></td>
-<td>0..1 <br/> <a href="xsd:integer">xsd:integer</a></td>
+<td>0..1 <br/> <a href="../Integer/">Integer</a></td>
 <td></td>
 <td><a href="../Results/">Results</a></td>
 </tr>
 <tr>
 <td><a href="../offset/">offset</a></td>
-<td>0..1 <br/> <a href="xsd:integer">xsd:integer</a></td>
+<td>0..1 <br/> <a href="../Integer/">Integer</a></td>
 <td></td>
 <td><a href="../Results/">Results</a></td>
 </tr>
 <tr>
 <td><a href="../total/">total</a></td>
-<td>0..1 <br/> <a href="xsd:integer">xsd:integer</a></td>
+<td>0..1 <br/> <a href="../Integer/">Integer</a></td>
 <td></td>
 <td><a href="../Results/">Results</a></td>
 </tr>
@@ -649,7 +655,6 @@
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">items</span>
 <span class="w">    </span><span class="nt">domain_of</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Results</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Results</span>
 <span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SearchResult</span>
 </code></pre></div>
 </details>
@@ -664,7 +669,6 @@
 <span class="w">  </span><span class="nt">items</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">items</span>
 <span class="w">    </span><span class="nt">domain_of</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Results</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Results</span>
 <span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SearchResult</span>
 <span class="nt">attributes</span><span class="p">:</span>
@@ -726,7 +730,6 @@
 <span class="w">    </span><span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">items</span>
 <span class="w">    </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SearchResults</span>
 <span class="w">    </span><span class="nt">domain_of</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Results</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Results</span>
 <span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SearchResult</span>
 <span class="w">    </span><span class="nt">inlined</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>

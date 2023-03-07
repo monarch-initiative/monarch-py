@@ -553,18 +553,31 @@
       Entity &lt;|-- SearchResult
 
       SearchResult : category
+        SearchResult &lt;.. string : category
       SearchResult : description
+        SearchResult &lt;.. string : description
       SearchResult : highlight
+        SearchResult &lt;.. string : highlight
       SearchResult : id
+        SearchResult &lt;.. string : id
       SearchResult : in_taxon
+        SearchResult &lt;.. string : in_taxon
       SearchResult : name
+        SearchResult &lt;.. string : name
       SearchResult : provided_by
+        SearchResult &lt;.. string : provided_by
       SearchResult : score
+        SearchResult &lt;.. float : score
       SearchResult : source
+        SearchResult &lt;.. string : source
       SearchResult : symbol
+        SearchResult &lt;.. string : symbol
       SearchResult : synonym
+        SearchResult &lt;.. string : synonym
       SearchResult : type
+        SearchResult &lt;.. string : type
       SearchResult : xref
+        SearchResult &lt;.. string : xref
 </code></pre></div>
 <h2 id="inheritance">Inheritance</h2>
 <ul>
@@ -586,79 +599,79 @@
 <tbody>
 <tr>
 <td><a href="../highlight/">highlight</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td>matching text snippet containing html tags</td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../score/">score</a></td>
-<td>0..1 <br/> <a href="xsd:float">xsd:float</a></td>
+<td>0..1 <br/> <a href="../Float/">Float</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../id/">id</a></td>
-<td>1..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>1..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../category/">category</a></td>
-<td>0..* <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..* <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../name/">name</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../description/">description</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../xref/">xref</a></td>
-<td>0..* <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..* <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../provided_by/">provided_by</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../in_taxon/">in_taxon</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../source/">source</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../symbol/">symbol</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../type/">type</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>
 <tr>
 <td><a href="../synonym/">synonym</a></td>
-<td>0..* <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..* <br/> <a href="../String/">String</a></td>
 <td></td>
 <td><a href="../Entity/">Entity</a></td>
 </tr>

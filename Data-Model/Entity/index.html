@@ -553,16 +553,27 @@
       Entity &lt;|-- SearchResult
 
       Entity : category
+        Entity &lt;.. string : category
       Entity : description
+        Entity &lt;.. string : description
       Entity : id
+        Entity &lt;.. string : id
       Entity : in_taxon
+        Entity &lt;.. string : in_taxon
       Entity : name
+        Entity &lt;.. string : name
       Entity : provided_by
+        Entity &lt;.. string : provided_by
       Entity : source
+        Entity &lt;.. string : source
       Entity : symbol
+        Entity &lt;.. string : symbol
       Entity : synonym
+        Entity &lt;.. string : synonym
       Entity : type
+        Entity &lt;.. string : type
       Entity : xref
+        Entity &lt;.. string : xref
 </code></pre></div>
 <h2 id="inheritance">Inheritance</h2>
 <ul>
@@ -584,67 +595,67 @@
 <tbody>
 <tr>
 <td><a href="../id/">id</a></td>
-<td>1..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>1..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../category/">category</a></td>
-<td>0..* <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..* <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../name/">name</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../description/">description</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../xref/">xref</a></td>
-<td>0..* <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..* <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../provided_by/">provided_by</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../in_taxon/">in_taxon</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../source/">source</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../symbol/">symbol</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../type/">type</a></td>
-<td>0..1 <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..1 <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../synonym/">synonym</a></td>
-<td>0..* <br/> <a href="xsd:string">xsd:string</a></td>
+<td>0..* <br/> <a href="../String/">String</a></td>
 <td></td>
 <td>direct</td>
 </tr>
