@@ -26,19 +26,24 @@ def schema():
     schema_path = schema_dir / Path(schema_name + ".yaml")
     with open(schema_path, "r") as schema_file:
         print(schema_file.read())
-
+    typer.Exit()
 
 @app.command("entity")
-def entity(id: str = typer.Option(None, "--id")):
+def entity(
+    id: str = typer.Option(None, "--id"),
+    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
+    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
+    ):
     """
     Retrieve an entity by ID
 
     Args:
-        input: Which KG to use - solr or sql
         id: The identifier of the entity to be retrieved
+        fmt: The format of the output (TSV, YAML, JSON)
+        output: The path to the output file (stdout if not specified)
 
     """
-    solr_entity(id)
+    solr_entity(id, fmt, output)
 
 
 @app.command("associations")
@@ -51,6 +56,8 @@ def associations(
     between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
+    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
+    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
 ):
     """
     Paginate through associations
@@ -63,6 +70,8 @@ def associations(
         entity: The subject or object of the association
         limit: The number of associations to return
         offset: The offset of the first association to be retrieved
+        fmt: The format of the output (TSV, YAML, JSON)
+        output: The path to the output file (stdout if not specified)
     """
     # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
 
@@ -76,6 +85,8 @@ def search(
     taxon: str = typer.Option(None, "--taxon"),
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
+    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
+    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
 ):
     """
     Search for entities
@@ -86,6 +97,8 @@ def search(
         taxon: The taxon of the entity
         limit: The number of entities to return
         offset: The offset of the first entity to be retrieved
+        fmt: The format of the output (TSV, YAML, JSON)
+        output: The path to the output file (stdout if not specified)
     """
     solr_search(**locals())
 
