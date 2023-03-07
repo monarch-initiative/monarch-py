@@ -1,4 +1,10 @@
+import csv
+import sys
+from typing import Union
+
 import docker
+
+from monarch_py.datamodels.model import ConfiguredBaseModel, Entity, Results
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
 SQL_DATA_URL = (
@@ -27,5 +33,47 @@ def check_for_solr():
 
 
 def dict_factory(cursor, row):
+    """Converts a sqlite3 row to a dictionary."""
     fields = [column[0] for column in cursor.description]
     return {key: value for key, value in zip(fields, row)}
+
+### Output conversion methods ###
+
+def to_json(obj: ConfiguredBaseModel, file: str):
+    """Converts a pydantic model to a JSON string."""
+    if file:
+        with open(file, "w") as f:
+            f.write(obj.json(indent=4))
+        print(f"\nOutput written to {file}\n")
+    else:
+        print(obj.json(indent=4))
+
+
+def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
+    """Converts a pydantic model to a TSV string."""
+
+    fh = open(file, "w") if file else sys.stdout
+    writer = csv.writer(fh, delimiter="\t")
+
+    if isinstance(obj, Entity):
+        d = obj.dict()
+        headers = d.keys()
+        writer.writerow(headers)
+        writer.writerow(d.values())
+    elif isinstance(obj, Results):
+        headers = obj.items[0].dict().keys()
+        writer.writerow(headers)
+        for item in obj.items:
+            writer.writerow(item.dict().values())
+    else:
+        raise TypeError("Text conversion method only accepts Entity or Results objects.")
+
+    if file: 
+        fh.close()
+        print(f"\nOutput written to {file}\n")
+    
+    return
+
+def to_yaml(obj: ConfiguredBaseModel, file: str):
+    """Converts a pydantic model to a YAML string."""
+    pass
