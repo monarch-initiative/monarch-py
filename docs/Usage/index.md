@@ -22,6 +22,9 @@ $ monarch solr entity --id MONDO:0012933
 $ monarch sql entity --id MONDO:0012933
 ```
 
+You can also use an environment variable to specify a Solr URL to query a different Solr instance.  
+monarch-py checks for the `MONARCH_SOLR_URL` environment variable, and uses it if it exists.  
+If not, it uses the default Solr URL of `http://localhost:8983/solr`.
 
 ### Commands
 

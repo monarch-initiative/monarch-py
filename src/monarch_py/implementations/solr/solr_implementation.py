@@ -1,3 +1,4 @@
+import os
 import logging
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface):
     """Implementation of Monarch Interfaces for Solr endpoint"""
 
-    base_url: str = "http://localhost:8983/solr"
+    base_url: str = os.getenv("MONARCH_SOLR_URL", "http://localhost:8983/solr")
 
     ###############################
     # Implements: EntityInterface #
