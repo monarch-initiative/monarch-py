@@ -262,16 +262,6 @@ def histopheno(
 
     data = get_solr(update)
     response = data.get_histopheno(subject)
-    # response = data.get_association_facets(
-    #     subject_closure=subject,
-    #     facet_queries=[
-    #         'object_closure:"HP:0000924"',
-    #         'object_closure:"HP:0000707"',
-    #         'object_closure:"HP:0000152"',
-    #         'object_closure:"HP:0001574"',
-    #         'object_closure:"HP:0000478"',
-    #     ],
-    # )
     
     if fmt == "json":
         to_json(response, output)

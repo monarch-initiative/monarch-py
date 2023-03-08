@@ -4,11 +4,6 @@ from pathlib import Path
 import typer
 
 from monarch_py import solr_cli, sql_cli
-# from monarch_py.solr_cli import associations as solr_associations
-# from monarch_py.solr_cli import entity as solr_entity
-# from monarch_py.solr_cli import search as solr_search
-# from monarch_py.solr_cli import solr_app
-# from monarch_py.sql_cli import sql_app
 
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
@@ -74,8 +69,6 @@ def associations(
         fmt: The format of the output (TSV, YAML, JSON)
         output: The path to the output file (stdout if not specified)
     """
-    # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
-
     solr_cli.associations(**locals())
 
 
