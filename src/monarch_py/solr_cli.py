@@ -9,8 +9,11 @@ from monarch_py.utilities.utils import SOLR_DATA_URL, check_for_solr, to_tsv, to
 
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
-# os.chown(monarchstow.path, )
 
+if sys.platform in ["linux", "linux2"]:
+    import stat
+    os.chown(monarchstow.path, gid = 8983)
+    os.chmod(monarchstow.path, stat.S_IWGRP)
 
 def get_solr(update):
     if not check_for_solr():
@@ -26,6 +29,8 @@ def get_solr(update):
         start_solr(update)
     return SolrImplementation()
 
+
+### Solr Docker Commands ###
 
 @solr_app.command("start")
 def start_solr(
@@ -116,9 +121,11 @@ Container status: {c.status}
             )
 
 
+### Solr Query Commands ###
+
 @solr_app.command("entity")
 def entity(
-    id: str = typer.Option(None, "--id", help="The identifier of the entity to be retrieved"),
+    id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
     update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
     fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
     output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
@@ -134,6 +141,11 @@ def entity(
         fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
         output (str): The path to the output file. Default stdout
     """
+
+    if not id:
+        print("\nEntity ID required.\n")
+        typer.Exit(1)
+
     data = get_solr(update)
     response = data.get_entity(id)
     

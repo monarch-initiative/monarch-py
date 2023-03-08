@@ -8,7 +8,7 @@ sql_app = typer.Typer()
 
 @sql_app.command()
 def entity(
-    id: str = typer.Option(None, "--id", help="The identifier of the entity to be retrieved"),
+    id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
     update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
     fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
     output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
@@ -21,6 +21,11 @@ def entity(
         fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
         output (str): The path to the output file. Default stdout
     """
+
+    if not id:
+        print("\nEntity ID required.\n")
+        typer.Exit(1)
+
     data = SQLImplementation()
     response = data.get_entity(id, update)
 

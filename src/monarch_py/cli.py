@@ -24,9 +24,12 @@ def schema():
         print(schema_file.read())
     typer.Exit()
 
+### "Aliases" for Solr CLI ###
+
 @app.command("entity")
 def entity(
-    id: str = typer.Option(None, "--id"),
+    id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
     fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
     output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
     ):
@@ -39,7 +42,7 @@ def entity(
         output: The path to the output file (stdout if not specified)
 
     """
-    solr_cli.entity(id, fmt, output)
+    solr_cli.entity(**locals())
 
 
 @app.command("associations")
@@ -100,6 +103,7 @@ def search(
 @app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
     fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
     output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
 ):
