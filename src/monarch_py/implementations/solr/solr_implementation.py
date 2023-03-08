@@ -3,17 +3,8 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 from pydantic import ValidationError
-
-from monarch_py.datamodels.model import (
-    Association,
-    AssociationResults,
-    Entity,
-    FacetField,
-    FacetValue,
-    SearchResult,
-    SearchResults,
-)
-from monarch_py.datamodels.solr import SolrQuery, core
+from monarch_py.datamodels.model import (Association, AssociationResults, Entity, FacetField, FacetValue, HistoPheno, HistoPhenoResults, SearchResult, SearchResults)
+from monarch_py.datamodels.solr import core, SolrQuery, HistoPhenoKeys
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
@@ -48,7 +39,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
         entity = Entity(**solr_document)
-
         # todo: make an endpoint for getting facet counts?
         # if get_association_counts:
         #    entity["association_counts"] = self.get_entity_association_counts(id)
@@ -185,9 +175,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return query
 
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    # Implements: SearchInterface
-    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ###############################
+    # Implements: SearchInterface #
+    ###############################
 
     def search(
         self,
@@ -297,6 +287,43 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return results
 
+    def get_histopheno(self, subject_closure: str = None) -> HistoPhenoResults:
+
+        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
+        limit = 0
+        offset = 0
+
+        query = self._populate_association_query(
+            subject_closure=subject_closure,
+            offset=limit,
+            limit=offset,
+        )
+    
+        hpkeys = [i.value for i in HistoPhenoKeys]
+
+        query.facet_queries = [f"object_closure:\"{i}\"" for i in hpkeys]
+        query_result = solr.query(query)
+        total = query_result.response.num_found
+        
+        hp = []
+        for k, v in query_result.facet_counts.facet_queries.items():
+            id = f"{k.split(':')[1]}:{k.split(':')[2]}".replace('"', '')
+            name = HistoPhenoKeys(id).name
+            hp.append(HistoPheno(id=id, name=name, count=v))
+        # missing = [i for i in hpkeys if i not in [i.id for i in hp]]
+        # missing2 = [i for i in hp if i.id not in hpkeys]
+        # print(missing2)
+        
+        results = HistoPhenoResults(
+            limit=limit,
+            offset=offset,
+            total=total,
+            items=hp,
+        )
+
+        return results
+
+
     def convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
         """
         Converts a list of raw solr facet fields from the solr response to a list of
@@ -320,6 +347,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             facet_fields[field] = ff
 
         return facet_fields
+
 
     def convert_facet_queries(
         self, solr_facet_queries: Dict[str, int]

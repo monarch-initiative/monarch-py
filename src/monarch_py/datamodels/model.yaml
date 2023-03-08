@@ -64,6 +64,16 @@ classes:
     slot_usage:
       items:
         range: Entity
+  HistoPheno:
+    slots:
+      - id
+      - name
+      - count
+  HistoPhenoResults:
+    is_a: Results
+    slot_usage:
+      items:
+        range: HistoPheno
   SearchResult:
     is_a: Entity
     slots:

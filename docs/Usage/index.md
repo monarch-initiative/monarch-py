@@ -7,8 +7,9 @@ monarch-py can be used via command line, or as a Python module.
 ### Overview 
 
 monarch-py can be used to query various implementations of the Monarch knowledge graph.  
-The default implementation is Solr, and can optionally be omitted from the command,  
-or an implementation can be specified as the first argument for `monarch`.  
+The default, and more feature-rich, implementation is Solr, and is the default.
+
+Subcommands are available to specify the backend.
 
 For example:
 ```bash
@@ -20,6 +21,7 @@ $ monarch solr entity --id MONDO:0012933
 # Whereas the following specifies the SQL implementation
 $ monarch sql entity --id MONDO:0012933
 ```
+
 
 ### Commands
 
