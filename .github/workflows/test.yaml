@@ -48,9 +48,21 @@ jobs:
       - name: Install library
         run: poetry install --no-interaction
       
-      - name: Run tests (SQL backend)
+      - name: Run tests (unit)
         run: |
           source $VENV
           pytest tests/unit
-          pytest tests/integration/test_association_sql.py
-          pytest tests/integration/test_entity_sql.py
+
+      - name: Run tests (SQL backend)
+        run: |
+          source $VENV
+          pytest tests/integration/ -k 'sql'
+
+      # TODO: Mock Solr backend
+      #
+      # - name: Run tests (Solr backend)
+      #   run: |
+      #     source $VENV
+      #     pytest tests/integration/ -k 'solr'
+
+
