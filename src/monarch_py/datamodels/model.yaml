@@ -41,6 +41,10 @@ classes:
     - stage_qualifier
     - pathway
     - relation
+  AssociationCount:
+    is_a: FacetValue
+    slots:
+      - id
   AssociationResults:
     is_a: Results
     slot_usage:
@@ -67,13 +71,10 @@ classes:
   HistoPheno:
     slots:
       - id
-      - name
-      - count
-  HistoPhenoResults:
-    is_a: Results
+      - items
     slot_usage:
       items:
-        range: HistoPheno
+        range: AssociationCount
   SearchResult:
     is_a: Entity
     slots:

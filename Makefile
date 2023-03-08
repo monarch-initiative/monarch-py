@@ -17,6 +17,10 @@ generate-docs: install
 	$(RUN) gen-doc -d docs/Data-Model/ src/monarch_py/datamodels/model.yaml
 	$(RUN) typer src/monarch_py/cli.py utils docs > docs/Usage/CLI.md
 
+.PHONY: generate-model
+generate-model: install
+	$(RUN) gen-pydantic src/monarch_py/datamodels/model.yaml > src/monarch_py/datamodels/model.py
+
 .PHONY: clobber
 clobber:
 	rm src/monarch_py/datamodels/model.py

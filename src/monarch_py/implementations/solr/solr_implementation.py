@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 from pydantic import ValidationError
-from monarch_py.datamodels.model import (Association, AssociationResults, Entity, FacetField, FacetValue, HistoPheno, HistoPhenoResults, SearchResult, SearchResults)
+from monarch_py.datamodels.model import (Association, AssociationCount, AssociationResults, Entity, FacetField, FacetValue, HistoPheno, SearchResult, SearchResults)
 from monarch_py.datamodels.solr import core, SolrQuery, HistoPhenoKeys
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
@@ -288,7 +288,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return results
 
-    def get_histopheno(self, subject_closure: str = None) -> HistoPhenoResults:
+    def get_histopheno(self, subject_closure: str = None) -> HistoPheno:
 
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         limit = 0
@@ -306,23 +306,18 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query_result = solr.query(query)
         total = query_result.response.num_found
         
-        hp = []
+        association_counts = []
         for k, v in query_result.facet_counts.facet_queries.items():
             id = f"{k.split(':')[1]}:{k.split(':')[2]}".replace('"', '')
-            name = HistoPhenoKeys(id).name
-            hp.append(HistoPheno(id=id, name=name, count=v))
-        # missing = [i for i in hpkeys if i not in [i.id for i in hp]]
-        # missing2 = [i for i in hp if i.id not in hpkeys]
-        # print(missing2)
+            label = HistoPhenoKeys(id).name
+            association_counts.append(AssociationCount(id=id, label=label, count=v))
         
-        results = HistoPhenoResults(
-            limit=limit,
-            offset=offset,
-            total=total,
-            items=hp,
+        hp = HistoPheno(
+            id=subject_closure,
+            items=association_counts,
         )
 
-        return results
+        return hp
 
 
     def convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:

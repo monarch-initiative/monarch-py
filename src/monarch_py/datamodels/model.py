@@ -76,8 +76,7 @@ class Entity(ConfiguredBaseModel):
 class HistoPheno(ConfiguredBaseModel):
     
     id: Optional[str] = Field(None)
-    name: Optional[str] = Field(None)
-    count: Optional[int] = Field(None, description="""number of items a this facet value""")
+    items: Optional[List[AssociationCount]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     
 
 
@@ -126,15 +125,6 @@ class EntityResults(Results):
     
 
 
-class HistoPhenoResults(Results):
-    
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
-    items: Optional[List[HistoPheno]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
-    
-
-
 class SearchResults(Results):
     
     facet_fields: Optional[Dict[str, FacetField]] = Field(default_factory=dict)
@@ -148,6 +138,14 @@ class SearchResults(Results):
 
 class FacetValue(ConfiguredBaseModel):
     
+    label: Optional[str] = Field(None)
+    count: Optional[int] = Field(None, description="""number of items a this facet value""")
+    
+
+
+class AssociationCount(FacetValue):
+    
+    id: Optional[str] = Field(None)
     label: Optional[str] = Field(None)
     count: Optional[int] = Field(None, description="""number of items a this facet value""")
     
@@ -170,8 +168,8 @@ SearchResult.update_forward_refs()
 Results.update_forward_refs()
 AssociationResults.update_forward_refs()
 EntityResults.update_forward_refs()
-HistoPhenoResults.update_forward_refs()
 SearchResults.update_forward_refs()
 FacetValue.update_forward_refs()
+AssociationCount.update_forward_refs()
 FacetField.update_forward_refs()
 
