@@ -3,15 +3,11 @@ from pathlib import Path
 
 import typer
 
-from monarch_py.solr_cli import associations as solr_associations
-from monarch_py.solr_cli import entity as solr_entity
-from monarch_py.solr_cli import search as solr_search
-from monarch_py.solr_cli import solr_app
-from monarch_py.sql_cli import sql_app
+from monarch_py import solr_cli, sql_cli
 
 app = typer.Typer()
-app.add_typer(solr_app, name="solr")
-app.add_typer(sql_app, name="sql")
+app.add_typer(solr_cli.solr_app, name="solr")
+app.add_typer(sql_cli.sql_app, name="sql")
 
 
 @app.command("schema")
@@ -28,9 +24,12 @@ def schema():
         print(schema_file.read())
     typer.Exit()
 
+### "Aliases" for Solr CLI ###
+
 @app.command("entity")
 def entity(
-    id: str = typer.Option(None, "--id"),
+    id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
     fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
     output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
     ):
@@ -43,7 +42,7 @@ def entity(
         output: The path to the output file (stdout if not specified)
 
     """
-    solr_entity(id, fmt, output)
+    solr_cli.entity(**locals())
 
 
 @app.command("associations")
@@ -73,9 +72,7 @@ def associations(
         fmt: The format of the output (TSV, YAML, JSON)
         output: The path to the output file (stdout if not specified)
     """
-    # todo: add output_type as an option to support tsv, json, etc. Maybe also rich-cli tables?
-
-    solr_associations(**locals())
+    solr_cli.associations(**locals())
 
 
 @app.command("search")
@@ -100,7 +97,27 @@ def search(
         fmt: The format of the output (TSV, YAML, JSON)
         output: The path to the output file (stdout if not specified)
     """
-    solr_search(**locals())
+    solr_cli.search(**locals())
+
+
+@app.command("histopheno")
+def histopheno(
+    subject: str = typer.Argument(None, help="The subject of the association"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
+    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
+    output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
+):
+    """
+    Retrieve the histopheno data for an entity by ID
+
+    Args:
+        subject: The subject of the association
+
+    Optional Args:
+        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        output (str): The path to the output file. Default stdout
+    """
+    solr_cli.histopheno(**locals())
 
 
 if __name__ == "__main__":

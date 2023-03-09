@@ -24,7 +24,7 @@ def test_search_query_has_some_results(query: str):
 
 def test_facet_fields():
     si = SolrImplementation()
-    response = si.search("syndrome", facet_fields=["category", "taxon"])
+    response = si.search("syndrome", facet_fields=["category", "in_taxon"])
     assert response
     assert response.total > 0
     assert response.facets

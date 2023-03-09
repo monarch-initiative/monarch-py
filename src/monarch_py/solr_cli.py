@@ -1,4 +1,4 @@
-import sys
+import os, sys
 import time
 
 import pystow
@@ -10,6 +10,10 @@ from monarch_py.utilities.utils import SOLR_DATA_URL, check_for_solr, to_tsv, to
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
 
+if sys.platform in ["linux", "linux2"]:
+    import stat
+    os.chown(monarchstow.path, gid = 8983)
+    os.chmod(monarchstow.path, stat.S_IWGRP)
 
 def get_solr(update):
     if not check_for_solr():
@@ -25,6 +29,8 @@ def get_solr(update):
         start_solr(update)
     return SolrImplementation()
 
+
+### Solr Docker Commands ###
 
 @solr_app.command("start")
 def start_solr(
@@ -115,9 +121,11 @@ Container status: {c.status}
             )
 
 
-@solr_app.command()
+### Solr Query Commands ###
+
+@solr_app.command("entity")
 def entity(
-    id: str = typer.Option(None, "--id", help="The identifier of the entity to be retrieved"),
+    id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
     update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
     fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
     output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
@@ -127,10 +135,17 @@ def entity(
 
     Args:
         id (str): The identifier of the entity to be retrieved
+
+    Optional Args:
         update (bool): = Whether to re-download the Monarch KG. Default False
         fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
         output (str): The path to the output file. Default stdout
     """
+
+    if not id:
+        print("\nEntity ID required.\n")
+        typer.Exit(1)
+
     data = get_solr(update)
     response = data.get_entity(id)
     
@@ -145,7 +160,7 @@ def entity(
     typer.Exit()
 
 
-@solr_app.command()
+@solr_app.command("associations")
 def associations(
     category: str = typer.Option(None, "--category"),
     subject: str = typer.Option(None, "--subject"),
@@ -208,7 +223,7 @@ def search(
     """
     Search for entities
 
-    Args:
+    Optional Args:
         q: The query string to search for
         category: The category of the entity
         taxon: The taxon of the entity
@@ -222,6 +237,43 @@ def search(
     response = data.search(
         q=q, category=category, taxon=taxon, limit=limit, offset=offset
     )
+    
+    if fmt == "json":
+        to_json(response, output)
+    elif fmt == "tsv":
+        to_tsv(response, output)
+    elif fmt == "yaml":
+        to_yaml(response, output)
+    else:
+        print(f"\nFormat '{fmt}' not supported.\n")
+    typer.Exit()
+
+
+@solr_app.command("histopheno")
+def histopheno(
+    subject: str = typer.Argument(None, help="The subject of the association"),
+    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
+    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
+    output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
+    ):
+    """
+    Retrieve the histopheno associations for a given subject
+
+    Args:
+        subject (str): The subject of the association
+
+    Optional Args:
+        update (bool): Whether to re-download the Monarch KG. Default False
+        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        output (str): The path to the output file. Default stdout
+    """
+
+    if not subject:
+        print("\nSubject ID required.\n")
+        typer.Exit(1)
+
+    data = get_solr(update)
+    response = data.get_histopheno(subject)
     
     if fmt == "json":
         to_json(response, output)
