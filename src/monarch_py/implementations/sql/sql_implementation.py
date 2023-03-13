@@ -170,7 +170,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
                 "provided_by": row["provided_by"],
                 "has_evidence": row["has_evidence"],
                 "stage_qualifier": row["stage_qualifier"],
-                "relation": row["relation"],,
+                "relation": row["relation"],
                 "negated": False if not row["negated"] else True,
                 "frequency_qualifier": row["frequency_qualifier"],
                 "onset_qualifier": row["onset_qualifier"],
