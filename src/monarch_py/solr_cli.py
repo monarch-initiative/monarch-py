@@ -11,9 +11,9 @@ solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
 
 if sys.platform in ["linux", "linux2"]:
-    import stat
-    os.chown(monarchstow.path, gid = 8983)
-    os.chmod(monarchstow.path, stat.S_IWGRP)
+    os.system(f"sudo chown -R 8983:8983 {monarchstow.base}")
+    os.system(f"sudo chmod -R g+w {monarchstow.base}")
+    
 
 def get_solr(update):
     if not check_for_solr():

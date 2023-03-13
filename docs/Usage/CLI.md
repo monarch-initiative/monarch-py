@@ -16,6 +16,7 @@ $ [OPTIONS] COMMAND [ARGS]...
 
 * `associations`: Paginate through associations
 * `entity`: Retrieve an entity by ID
+* `histopheno`: Retrieve the histopheno data for an entity...
 * `schema`: Print the linkml schema for the data model
 * `search`: Search for entities
 * `solr`
@@ -33,6 +34,8 @@ Args:
     entity: The subject or object of the association
     limit: The number of associations to return
     offset: The offset of the first association to be retrieved
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)
 
 **Usage**:
 
@@ -50,6 +53,8 @@ $ associations [OPTIONS]
 * `--between TEXT`
 * `-l, --limit INTEGER`: [default: 20]
 * `--offset INTEGER`: [default: 0]
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
 ## `entity`
@@ -57,18 +62,53 @@ $ associations [OPTIONS]
 Retrieve an entity by ID
 
 Args:
-    input: Which KG to use - solr or sql
     id: The identifier of the entity to be retrieved
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)
 
 **Usage**:
 
 ```console
-$ entity [OPTIONS]
+$ entity [OPTIONS] [ID]
 ```
+
+**Arguments**:
+
+* `[ID]`: The identifier of the entity to be retrieved
 
 **Options**:
 
-* `--id TEXT`
+* `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
+* `--help`: Show this message and exit.
+
+## `histopheno`
+
+Retrieve the histopheno data for an entity by ID
+
+Args:
+    subject: The subject of the association
+
+Optional Args:
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout
+
+**Usage**:
+
+```console
+$ histopheno [OPTIONS] [SUBJECT]
+```
+
+**Arguments**:
+
+* `[SUBJECT]`: The subject of the association
+
+**Options**:
+
+* `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
 ## `schema`
@@ -95,6 +135,8 @@ Args:
     taxon: The taxon of the entity
     limit: The number of entities to return
     offset: The offset of the first entity to be retrieved
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)
 
 **Usage**:
 
@@ -109,6 +151,8 @@ $ search [OPTIONS]
 * `--taxon TEXT`
 * `--limit INTEGER`: [default: 20]
 * `--offset INTEGER`: [default: 0]
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
 ## `solr`
@@ -127,25 +171,29 @@ $ solr [OPTIONS] COMMAND [ARGS]...
 
 * `associations`: Paginate through associations
 * `entity`: Retrieve an entity by ID
+* `histopheno`: Retrieve the histopheno associations for a...
 * `remove`
 * `search`: Search for entities
-* `start`
-* `status`
-* `stop`
+* `start`: Start a local Monarch Solr instance.
+* `status`: Check the status of the local Monarch Solr...
+* `stop`: Stop the local Monarch Solr instance.
 
 ### `solr associations`
 
 Paginate through associations
 
 Args:
-    category: The category of the association
-    predicate: The predicate of the association
-    subject: The subject of the association
-    object: The object of the association
-    entity: The subject or object of the association
-    between: Two comma-separated entities to get bi-directional associations
-    limit: The number of associations to return
-    offset: The offset of the first association to be retrieved
+    category (str, optional): The category of the association.
+    subject (str, optional): The subject of the association.
+    predicate (str, optional): The predicate of the association.
+    object (str, optional): The object of the association.
+    entity (str, optional): The subject or object of the association.
+    between (str, optional): Two comma-separated entities to get bi-directional associations.
+    limit (int, optional): The number of associations to return. Default 20
+    offset (int, optional): The offset of the first association to be retrieved. Default 0
+    update (bool, optional): Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout
 
 **Usage**:
 
@@ -164,6 +212,8 @@ $ solr associations [OPTIONS]
 * `--limit INTEGER`: [default: 20]
 * `--offset INTEGER`: [default: 0]
 * `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
 ### `solr entity`
@@ -172,18 +222,56 @@ Retrieve an entity by ID
 
 Args:
     id (str): The identifier of the entity to be retrieved
+
+Optional Args:
     update (bool): = Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout
 
 **Usage**:
 
 ```console
-$ solr entity [OPTIONS]
+$ solr entity [OPTIONS] [ID]
 ```
+
+**Arguments**:
+
+* `[ID]`: The identifier of the entity to be retrieved
 
 **Options**:
 
-* `--id TEXT`: The identifier of the entity to be retrieved
 * `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
+* `--help`: Show this message and exit.
+
+### `solr histopheno`
+
+Retrieve the histopheno associations for a given subject
+
+Args:
+    subject (str): The subject of the association
+
+Optional Args:
+    update (bool): Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout
+
+**Usage**:
+
+```console
+$ solr histopheno [OPTIONS] [SUBJECT]
+```
+
+**Arguments**:
+
+* `[SUBJECT]`: The subject of the association
+
+**Options**:
+
+* `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
 ### `solr remove`
@@ -202,12 +290,14 @@ $ solr remove [OPTIONS]
 
 Search for entities
 
-Args:
+Optional Args:
     q: The query string to search for
     category: The category of the entity
     taxon: The taxon of the entity
     limit: The number of entities to return
     offset: The offset of the first entity to be retrieved
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout
 
 **Usage**:
 
@@ -223,9 +313,13 @@ $ solr search [OPTIONS]
 * `-l, --limit INTEGER`: [default: 20]
 * `--offset INTEGER`: [default: 0]
 * `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
 ### `solr start`
+
+Start a local Monarch Solr instance.
 
 **Usage**:
 
@@ -240,6 +334,8 @@ $ solr start [OPTIONS]
 
 ### `solr status`
 
+Check the status of the local Monarch Solr instance.
+
 **Usage**:
 
 ```console
@@ -251,6 +347,8 @@ $ solr status [OPTIONS]
 * `--help`: Show this message and exit.
 
 ### `solr stop`
+
+Stop the local Monarch Solr instance.
 
 **Usage**:
 
@@ -293,6 +391,8 @@ Args:
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
     update (bool, optional): Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout
 
 **Usage**:
 
@@ -311,6 +411,8 @@ $ sql associations [OPTIONS]
 * `--limit INTEGER`: [default: 20]
 * `--offset INTEGER`: [default: 0]
 * `--update`
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
 ### `sql entity`
@@ -320,16 +422,23 @@ Retrieve an entity by ID
 Args:
     id (str): The identifier of the entity to be retrieved
     update (bool): = Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout
 
 **Usage**:
 
 ```console
-$ sql entity [OPTIONS]
+$ sql entity [OPTIONS] [ID]
 ```
+
+**Arguments**:
+
+* `[ID]`: The identifier of the entity to be retrieved
 
 **Options**:
 
-* `--id TEXT`: The identifier of the entity to be retrieved
 * `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
