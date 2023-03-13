@@ -9,13 +9,23 @@ from monarch_py.utilities.utils import SOLR_DATA_URL, check_for_solr, to_tsv, to
 
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
-
-if sys.platform in ["linux", "linux2"]:
-    os.system(f"sudo chown -R 8983:8983 {monarchstow.base}")
-    os.system(f"sudo chmod -R g+w {monarchstow.base}")
     
 
 def get_solr(update):
+
+    if sys.platform in ["linux", "linux2"]:
+        import stat
+
+        stat_info = os.stat(monarchstow.base)
+        if (stat_info.st_uid != 8983 or
+            stat_info.st_gid != 8983):
+            print(f"""
+Solr container requires write access to {monarchstow.base}.
+Please run the following command to fix permissions:
+    sudo chown -R 8983:8983 {monarchstow.base}
+    sudo chmod -R g+w {monarchstow.base}
+""")
+
     if not check_for_solr():
         cont = typer.confirm(
             "\nNo monarch_solr container found. Would you like to create and run one?"
@@ -27,6 +37,7 @@ def get_solr(update):
             sys.exit(1)
         print("Starting local Monarch Solr instance...")
         start_solr(update)
+
     return SolrImplementation()
 
 
@@ -42,7 +53,6 @@ def start_solr(
 
     dc = docker.from_env()
 
-    # print("\nDownloading Monarch Solr KG...\n")
     monarchstow.ensure_untar(url=SOLR_DATA_URL, force=update)
     data = monarchstow.join("solr", "data")
 
