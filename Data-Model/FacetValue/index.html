@@ -452,6 +452,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#inheritance" class="md-nav__link">
+    Inheritance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#slots" class="md-nav__link">
     Slots
   </a>
@@ -543,13 +550,20 @@
 <p>URI: <a href="https://w3id.org/monarch/monarch-py/:FacetValue">https://w3id.org/monarch/monarch-py/:FacetValue</a></p>
 <div class="highlight"><pre><span></span><code> classDiagram
     class FacetValue
+      FacetValue &lt;|-- AssociationCount
+
       FacetValue : count
         FacetValue &lt;.. integer : count
       FacetValue : label
         FacetValue &lt;.. string : label
 </code></pre></div>
-<!-- no inheritance hierarchy -->
-
+<h2 id="inheritance">Inheritance</h2>
+<ul>
+<li><strong>FacetValue</strong><ul>
+<li><a href="../AssociationCount/">AssociationCount</a></li>
+</ul>
+</li>
+</ul>
 <h2 id="slots">Slots</h2>
 <table>
 <thead>

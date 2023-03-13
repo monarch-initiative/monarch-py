@@ -405,6 +405,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#histopheno" class="md-nav__link">
+    histopheno
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#schema" class="md-nav__link">
     schema
   </a>
@@ -436,6 +443,13 @@
           <li class="md-nav__item">
   <a href="#solr-entity" class="md-nav__link">
     solr entity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solr-histopheno" class="md-nav__link">
+    solr histopheno
   </a>
   
 </li>
@@ -621,6 +635,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#histopheno" class="md-nav__link">
+    histopheno
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#schema" class="md-nav__link">
     schema
   </a>
@@ -652,6 +673,13 @@
           <li class="md-nav__item">
   <a href="#solr-entity" class="md-nav__link">
     solr entity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solr-histopheno" class="md-nav__link">
+    solr histopheno
   </a>
   
 </li>
@@ -757,6 +785,7 @@
 <ul>
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>entity</code>: Retrieve an entity by ID</li>
+<li><code>histopheno</code>: Retrieve the histopheno data for an entity...</li>
 <li><code>schema</code>: Print the linkml schema for the data model</li>
 <li><code>search</code>: Search for entities</li>
 <li><code>solr</code></li>
@@ -798,11 +827,36 @@
     fmt: The format of the output (TSV, YAML, JSON)
     output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ID<span class="o">]</span>
 </code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[ID]</code>: The identifier of the entity to be retrieved</li>
+</ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>--id TEXT</code></li>
+<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="histopheno"><code>histopheno</code></h2>
+<p>Retrieve the histopheno data for an entity by ID</p>
+<p>Args:
+    subject: The subject of the association</p>
+<p>Optional Args:
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>histopheno<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>SUBJECT<span class="o">]</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[SUBJECT]</code>: The subject of the association</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -852,6 +906,7 @@
 <ul>
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>entity</code>: Retrieve an entity by ID</li>
+<li><code>histopheno</code>: Retrieve the histopheno associations for a...</li>
 <li><code>remove</code></li>
 <li><code>search</code>: Search for entities</li>
 <li><code>start</code>: Start a local Monarch Solr instance.</li>
@@ -893,16 +948,42 @@
 <h3 id="solr-entity"><code>solr entity</code></h3>
 <p>Retrieve an entity by ID</p>
 <p>Args:
-    id (str): The identifier of the entity to be retrieved
+    id (str): The identifier of the entity to be retrieved</p>
+<p>Optional Args:
     update (bool): = Whether to re-download the Monarch KG. Default False
     fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ID<span class="o">]</span>
 </code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[ID]</code>: The identifier of the entity to be retrieved</li>
+</ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>--id TEXT</code>: The identifier of the entity to be retrieved</li>
+<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="solr-histopheno"><code>solr histopheno</code></h3>
+<p>Retrieve the histopheno associations for a given subject</p>
+<p>Args:
+    subject (str): The subject of the association</p>
+<p>Optional Args:
+    update (bool): Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>histopheno<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>SUBJECT<span class="o">]</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[SUBJECT]</code>: The subject of the association</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
@@ -918,7 +999,7 @@
 </ul>
 <h3 id="solr-search"><code>solr search</code></h3>
 <p>Search for entities</p>
-<p>Args:
+<p>Optional Args:
     q: The query string to search for
     category: The category of the entity
     taxon: The taxon of the entity
@@ -1022,11 +1103,14 @@
     fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>sql<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>sql<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ID<span class="o">]</span>
 </code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[ID]</code>: The identifier of the entity to be retrieved</li>
+</ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>--id TEXT</code>: The identifier of the entity to be retrieved</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>

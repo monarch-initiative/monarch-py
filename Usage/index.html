@@ -582,8 +582,8 @@
 <h2 id="cli">CLI</h2>
 <h3 id="overview">Overview</h3>
 <p>monarch-py can be used to query various implementations of the Monarch knowledge graph.<br />
-The default implementation is Solr, and can optionally be omitted from the command,<br />
-or an implementation can be specified as the first argument for <code>monarch</code>.  </p>
+The default, and more feature-rich, implementation is Solr, and is the default.</p>
+<p>Subcommands are available to specify the backend.</p>
 <p>For example:
 <div class="highlight"><pre><span></span><code><span class="c1"># The following two commands are equivalent,</span>
 <span class="c1"># as both query the Solr KG</span>
@@ -593,6 +593,9 @@ $<span class="w"> </span>monarch<span class="w"> </span>solr<span class="w"> </s
 <span class="c1"># Whereas the following specifies the SQL implementation</span>
 $<span class="w"> </span>monarch<span class="w"> </span>sql<span class="w"> </span>entity<span class="w"> </span>--id<span class="w"> </span>MONDO:0012933
 </code></pre></div></p>
+<p>You can also use an environment variable to specify a Solr URL to query a different Solr instance.<br />
+monarch-py checks for the <code>MONARCH_SOLR_URL</code> environment variable, and uses it if it exists.<br />
+If not, it uses the default Solr URL of <code>http://localhost:8983/solr</code>.</p>
 <h3 id="commands">Commands</h3>
 <p>CLI commands are listed <a href="CLI/">here</a>, or can be found by running <code>monarch --help</code>.</p>
 <h2 id="module">Module</h2>
