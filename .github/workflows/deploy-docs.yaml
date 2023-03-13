@@ -28,5 +28,5 @@ jobs:
     
     - name: Build and Deploy Documentation.
       run: |
-        make generate-docs
+        make docs
         poetry run mkdocs gh-deploy --force
