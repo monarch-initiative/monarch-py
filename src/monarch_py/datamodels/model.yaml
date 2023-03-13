@@ -26,7 +26,6 @@ classes:
     - object_closure
     - object_label
     - object_closure_label
-    - knowledge_source
     - primary_knowledge_source
     - category
     - negated
