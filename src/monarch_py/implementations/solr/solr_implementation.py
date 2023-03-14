@@ -1,7 +1,8 @@
 import os
-import logging
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
+
+from loguru import logger
 
 from pydantic import ValidationError
 from monarch_py.datamodels.model import (Association, AssociationCount, AssociationResults, Entity, FacetField, FacetValue, HistoPheno, SearchResult, SearchResults)
@@ -11,8 +12,6 @@ from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
 from monarch_py.utilities.utils import escape
-
-logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -40,12 +39,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
         entity = Entity(**solr_document)
-        # todo: make an endpoint for getting facet counts?
-        # if get_association_counts:
-        #    entity["association_counts"] = self.get_entity_association_counts(id)
-
-        #        if get_hierarchy:
-        #            entity["node_hierarchy"] = self.get_node_hierarchy(id)
 
         return entity
 

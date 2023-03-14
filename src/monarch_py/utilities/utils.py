@@ -2,6 +2,7 @@ import sys
 import csv, yaml
 
 import docker
+from loguru import logger
 
 from monarch_py.datamodels.model import ConfiguredBaseModel, Entity, Results
 
@@ -23,7 +24,7 @@ def escape(value: str) -> str:
 
 
 def check_for_solr():
-    print("\nChecking for solr container...")
+    logger.debug("\nChecking for solr container...")
     dc = docker.from_env()
     c = dc.containers.list(all=True, filters={"name": "monarch_solr"})
     return None if not c else c[0]
@@ -41,7 +42,7 @@ def to_json(obj: ConfiguredBaseModel, file: str):
     if file:
         with open(file, "w") as f:
             f.write(obj.json(indent=4))
-        print(f"\nOutput written to {file}\n")
+        logger.info(f"\nOutput written to {file}\n")
     else:
         print(obj.json(indent=4))
 
@@ -67,7 +68,7 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
 
     if file: 
         fh.close()
-        print(f"\nOutput written to {file}\n")
+        logger.info(f"\nOutput written to {file}\n")
     
     return
 
@@ -86,7 +87,7 @@ def to_yaml(obj: ConfiguredBaseModel, file: str):
         raise TypeError("YAML conversion method only accepts Entity or Results objects.")
     
     if file:
-        print(f"\nOutput written to {file}\n")
+        logger.info(f"\nOutput written to {file}\n")
         fh.close()
 
     return

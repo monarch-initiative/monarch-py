@@ -1,4 +1,5 @@
 import typer
+from loguru import logger
 
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 from monarch_py.utilities.utils import to_tsv, to_yaml, to_json
@@ -23,14 +24,14 @@ def entity(
     """
 
     if not id:
-        print("\nEntity ID required.\n")
+        logger.error("\nEntity ID required.\n")
         typer.Exit(1)
 
     data = SQLImplementation()
     response = data.get_entity(id, update)
 
     if not response:
-        print(f"\nEntity '{id}' not found.\n")
+        logger.error(f"\nEntity '{id}' not found.\n")
         typer.Abort()
 
     if fmt == "json":
@@ -40,7 +41,8 @@ def entity(
     elif fmt == "yaml":
         to_yaml(response, output)
     else:
-        print(f"\nFormat '{fmt}' not supported.\n")
+        logger.error(f"\nFormat '{fmt}' not supported.\n")
+        typer.Abort()
     typer.Exit()
 
 @sql_app.command()
@@ -86,6 +88,7 @@ def associations(
     elif fmt == "yaml":
         to_yaml(response, output)
     else:
-        print(f"\nFormat '{fmt}' not supported.\n")
+        logger.error(f"\nFormat '{fmt}' not supported.\n")
+        typer.Abort()
     typer.Exit()
 

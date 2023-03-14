@@ -1,6 +1,7 @@
 import os, sys
 import time
 
+from loguru import logger
 import pystow
 import typer
 
@@ -19,23 +20,24 @@ def get_solr(update):
         stat_info = os.stat(monarchstow.base)
         if (stat_info.st_uid != 8983 or
             stat_info.st_gid != 8983):
-            print(f"""
+            logger.error(f"""
 Solr container requires write access to {monarchstow.base}.
 Please run the following command to fix permissions:
     sudo chown -R 8983:8983 {monarchstow.base}
     sudo chmod -R g+w {monarchstow.base}
-""")
+            """)
+            typer.Abort()
 
     if not check_for_solr():
         cont = typer.confirm(
             "\nNo monarch_solr container found. Would you like to create and run one?"
         )
         if not cont:
-            print(
+            logger.error(
                 "\nPlease run a local Monarch Solr instance before proceeding:\n\tmonarch solr start\n"
             )
             sys.exit(1)
-        print("Starting local Monarch Solr instance...")
+        logger.info("Starting local Monarch Solr instance...")
         start_solr(update)
 
     return SolrImplementation()
@@ -69,15 +71,15 @@ def start_solr(
                 detach=True,
             )
             time.sleep(10)
-            print(f"{c.name} {c.status}")
+            logger.info(f"{c.name} {c.status}")
         except Exception as e:
-            print(f"Error instantiating monarch solr container: {e}")
+            logger.error(f"Error instantiating monarch solr container: {e}")
             raise typer.Exit(1)
     else:
         try:
             c.start()
         except Exception as e:
-            print(f"Error running existing container {c.name} ({c.status}) - {e}")
+            logger.error(f"Error running existing container {c.name} ({c.status}) - {e}")
             raise typer.Exit(1)
     typer.Exit()
 
@@ -90,11 +92,11 @@ def stop_solr():
     c = check_for_solr()
     if c:
         try:
-            print("Stopping Monarch Solr container...")
+            logger.info("Stopping Monarch Solr container...")
             c.stop()
             c.remove()
         except Exception as e:
-            print(e)
+            logger.error(e)
             raise typer.Exit(1)
 
 
@@ -108,7 +110,7 @@ def check_solr_status():
     """Check the status of the local Monarch Solr instance."""
     c = check_for_solr()
     if not c:
-        print(
+        logger.info(
             """
 No monarch_solr container found. 
 
@@ -117,16 +119,16 @@ Download the Monarch Solr KG and start a local solr instance:
 """
         )
     else:
-        print(
+        logger.info(
             f"""
 Found monarch_solr container: {c.id}
 Container status: {c.status}
         """
         )
         if c.status == "exited":
-            print("Start the container using:\n\tmonarch solr start\n")
+            logger.info("Start the container using:\n\tmonarch solr start\n")
         if c.status == "running":
-            print(
+            logger.info(
                 "You can create a new container with\n\tmonarch solr stop\n\tmonarch solr start\n"
             )
 
@@ -153,7 +155,7 @@ def entity(
     """
 
     if not id:
-        print("\nEntity ID required.\n")
+        logger.error("\nEntity ID required.\n")
         typer.Exit(1)
 
     data = get_solr(update)
@@ -166,7 +168,7 @@ def entity(
     elif fmt == "yaml":
         to_yaml(response, output)
     else:
-        print(f"\nFormat '{fmt}' not supported.\n")
+        logger.error(f"\nFormat '{fmt}' not supported.\n")
     typer.Exit()
 
 
@@ -215,7 +217,7 @@ def associations(
     elif fmt == "yaml":
         to_yaml(response, output)
     else:
-        print(f"\nFormat '{fmt}' not supported.\n")
+        logger.error(f"\nFormat '{fmt}' not supported.\n")
     typer.Exit()
 
 
@@ -255,7 +257,7 @@ def search(
     elif fmt == "yaml":
         to_yaml(response, output)
     else:
-        print(f"\nFormat '{fmt}' not supported.\n")
+        logger.error(f"\nFormat '{fmt}' not supported.\n")
     typer.Exit()
 
 
@@ -279,7 +281,7 @@ def histopheno(
     """
 
     if not subject:
-        print("\nSubject ID required.\n")
+        logger.error("\nSubject ID required.\n")
         typer.Exit(1)
 
     data = get_solr(update)
@@ -292,5 +294,5 @@ def histopheno(
     elif fmt == "yaml":
         to_yaml(response, output)
     else:
-        print(f"\nFormat '{fmt}' not supported.\n")
+        logger.error(f"\nFormat '{fmt}' not supported.\n")
     typer.Exit()

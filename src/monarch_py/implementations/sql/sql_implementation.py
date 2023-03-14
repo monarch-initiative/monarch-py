@@ -1,7 +1,6 @@
-import logging
 from dataclasses import dataclass
-from pathlib import Path
 
+from loguru import logger
 import pystow
 from pydantic import ValidationError
 
@@ -9,8 +8,6 @@ from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.utilities.utils import SQL_DATA_URL, dict_factory
-
-logger = logging.getLogger(__name__)
 
 monarchstow = pystow.module("monarch")
 
@@ -34,9 +31,6 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         Returns:
             Entity: Dataclass representing results of an entity search.
         """
-
-        if not any(Path(monarchstow.base).iterdir()):
-            print("\nDownloading Monarch SQL KG...\n")
 
         with monarchstow.ensure_open_sqlite_gz(
             "sql", url=SQL_DATA_URL, force=update
