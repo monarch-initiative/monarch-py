@@ -1,14 +1,12 @@
 import json
-import logging
 from typing import Dict, List
 
+from loguru import logger
 import requests
 from pydantic import BaseModel
 
 from monarch_py.datamodels.solr import SolrQuery, SolrQueryResult, core
-from monarch_py.utilities.utils import escape
-
-logger = logging.getLogger(__name__)
+from monarch_py.utils.utils import console, escape
 
 
 class SolrService(BaseModel):
@@ -16,15 +14,17 @@ class SolrService(BaseModel):
     core: core
 
     def get(self, id):
-        core_url = self.base_url + f"/{self.core.value}"
-        url = f"{core_url}/get?id={id}"
-        r = requests.get(url)
-        entity = r.json()["doc"]
+        url = f"{self.base_url}/{self.core.value}/get?id={id}"
+        console.log(f"Solr request: {url}")
+        response = requests.get(url)
+        response.raise_for_status()
+        entity = response.json()["doc"]
         self._strip_json(entity, "_version_")
         return entity
 
     def query(self, q: SolrQuery) -> SolrQueryResult:
         url = f"{self.base_url}/{self.core.value}/select?{q.query_string()}"
+        console.log(f"Solr request: {url}")
         response = requests.get(url)
 
         data = json.loads(response.text)

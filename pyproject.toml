@@ -21,7 +21,7 @@ typer-cli = "^0.0.13"
 mkdocs = "^1.4.2"
 mkdocs-material = "^8.5.10"
 mkdocstrings = {extras = ["python"], version = "^0.19.0"}
-rich = "^12.6.0"
+rich = "*"
 docker = "^6.0.1"
 pystow = ">=0.5.0"
 loguru = "*"

@@ -11,7 +11,7 @@ from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
-from monarch_py.utilities.utils import escape
+from monarch_py.utils.utils import escape
 
 
 @dataclass

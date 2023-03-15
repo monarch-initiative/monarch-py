@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from monarch_py.datamodels.model import Association, AssociationResults, Entity
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
-from monarch_py.utilities.utils import SQL_DATA_URL, dict_factory
+from monarch_py.utils.utils import SQL_DATA_URL, dict_factory
 
 monarchstow = pystow.module("monarch")
 

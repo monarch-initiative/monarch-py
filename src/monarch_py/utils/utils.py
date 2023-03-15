@@ -1,14 +1,19 @@
 import sys
-import csv, yaml
+import csv
+import yaml
 
-import docker
-from loguru import logger
+from rich.console import Console
 
 from monarch_py.datamodels.model import ConfiguredBaseModel, Entity, Results
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
 SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
 
+console = Console(
+    color_system="truecolor",
+    stderr=True,
+    style="bold blue1",
+)
 
 def strip_json(doc: dict, *fields_to_remove: str):
     for field in fields_to_remove:
@@ -23,17 +28,11 @@ def escape(value: str) -> str:
     return value.replace(":", "\:")
 
 
-def check_for_solr():
-    logger.debug("\nChecking for solr container...")
-    dc = docker.from_env()
-    c = dc.containers.list(all=True, filters={"name": "monarch_solr"})
-    return None if not c else c[0]
-
-
 def dict_factory(cursor, row):
     """Converts a sqlite3 row to a dictionary."""
     fields = [column[0] for column in cursor.description]
     return {key: value for key, value in zip(fields, row)}
+
 
 ### Output conversion methods ###
 
@@ -42,7 +41,7 @@ def to_json(obj: ConfiguredBaseModel, file: str):
     if file:
         with open(file, "w") as f:
             f.write(obj.json(indent=4))
-        logger.info(f"\nOutput written to {file}\n")
+        console.print(f"\nOutput written to {file}\n")
     else:
         print(obj.json(indent=4))
 
@@ -68,9 +67,10 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
 
     if file: 
         fh.close()
-        logger.info(f"\nOutput written to {file}\n")
+        console.print(f"\nOutput written to {file}\n")
     
     return
+
 
 def to_yaml(obj: ConfiguredBaseModel, file: str):
     """Converts a pydantic model to a YAML string."""
@@ -87,7 +87,7 @@ def to_yaml(obj: ConfiguredBaseModel, file: str):
         raise TypeError("YAML conversion method only accepts Entity or Results objects.")
     
     if file:
-        logger.info(f"\nOutput written to {file}\n")
+        console.print(f"\nOutput written to {file}\n")
         fh.close()
 
     return

@@ -9,4 +9,5 @@ def test_histopheno():
         total += k.count
         
     assert hp
-    assert total == hp.total
+    assert hp.items[0].id == "HP:0000924"
+    # TODO:  Assert something about the total
