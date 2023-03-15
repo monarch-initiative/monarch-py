@@ -22,7 +22,7 @@ def schema():
     schema_path = schema_dir / Path(schema_name + ".yaml")
     with open(schema_path, "r") as schema_file:
         print(schema_file.read())
-    typer.Exit()
+    raise typer.Exit()
 
 ### "Aliases" for Solr CLI ###
 
