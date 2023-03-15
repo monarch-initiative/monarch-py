@@ -3,7 +3,7 @@ import typer
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 from monarch_py.utils.utils import console, SOLR_DATA_URL, to_tsv, to_yaml, to_json
-from monarch_py.utils.solr_utils import check_solr_permissions, check_for_solr, get_solr, start_solr, solr_status, stop_solr
+from monarch_py.utils.solr_cli_utils import check_solr_permissions, check_for_solr, get_solr, start_solr, solr_status, stop_solr
 
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
