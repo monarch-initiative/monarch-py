@@ -455,13 +455,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#solr-remove" class="md-nav__link">
-    solr remove
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#solr-search" class="md-nav__link">
     solr search
   </a>
@@ -685,13 +678,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#solr-remove" class="md-nav__link">
-    solr remove
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#solr-search" class="md-nav__link">
     solr search
   </a>
@@ -907,11 +893,10 @@
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>entity</code>: Retrieve an entity by ID</li>
 <li><code>histopheno</code>: Retrieve the histopheno associations for a...</li>
-<li><code>remove</code></li>
 <li><code>search</code>: Search for entities</li>
-<li><code>start</code>: Start a local Monarch Solr instance.</li>
-<li><code>status</code>: Check the status of the local Monarch Solr...</li>
-<li><code>stop</code>: Stop the local Monarch Solr instance.</li>
+<li><code>start</code>: Starts a local Solr container.</li>
+<li><code>status</code></li>
+<li><code>stop</code>: Stops the local Solr container.</li>
 </ul>
 <h3 id="solr-associations"><code>solr associations</code></h3>
 <p>Paginate through associations</p>
@@ -989,14 +974,6 @@
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
-<h3 id="solr-remove"><code>solr remove</code></h3>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>remove<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
-</code></pre></div>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
 <h3 id="solr-search"><code>solr search</code></h3>
 <p>Search for entities</p>
 <p>Optional Args:
@@ -1023,17 +1000,16 @@
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-start"><code>solr start</code></h3>
-<p>Start a local Monarch Solr instance.</p>
+<p>Starts a local Solr container.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>start<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG.</li>
+<li><code>--update / --no-update</code>: [default: no-update]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-status"><code>solr status</code></h3>
-<p>Check the status of the local Monarch Solr instance.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -1042,7 +1018,7 @@
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="solr-stop"><code>solr stop</code></h3>
-<p>Stop the local Monarch Solr instance.</p>
+<p>Stops the local Solr container.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>solr<span class="w"> </span>stop<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>

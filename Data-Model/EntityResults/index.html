@@ -546,13 +546,14 @@
       Results &lt;|-- EntityResults
 
       EntityResults : items
-        EntityResults &lt;.. Entity : items
+
+          EntityResults ..&gt; Entity : items
+
       EntityResults : limit
-        EntityResults &lt;.. integer : limit
+
       EntityResults : offset
-        EntityResults &lt;.. integer : offset
+
       EntityResults : total
-        EntityResults &lt;.. integer : total
 </code></pre></div>
 <h2 id="inheritance">Inheritance</h2>
 <ul>

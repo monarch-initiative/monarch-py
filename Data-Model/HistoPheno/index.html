@@ -537,9 +537,10 @@
 <div class="highlight"><pre><span></span><code> classDiagram
     class HistoPheno
       HistoPheno : id
-        HistoPheno &lt;.. string : id
+
       HistoPheno : items
-        HistoPheno &lt;.. AssociationCount : items
+
+          HistoPheno ..&gt; AssociationCount : items
 </code></pre></div>
 <!-- no inheritance hierarchy -->
 

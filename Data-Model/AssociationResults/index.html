@@ -546,13 +546,14 @@
       Results &lt;|-- AssociationResults
 
       AssociationResults : items
-        AssociationResults &lt;.. Association : items
+
+          AssociationResults ..&gt; Association : items
+
       AssociationResults : limit
-        AssociationResults &lt;.. integer : limit
+
       AssociationResults : offset
-        AssociationResults &lt;.. integer : offset
+
       AssociationResults : total
-        AssociationResults &lt;.. integer : total
 </code></pre></div>
 <h2 id="inheritance">Inheritance</h2>
 <ul>

@@ -546,17 +546,22 @@
       Results &lt;|-- SearchResults
 
       SearchResults : facet_fields
-        SearchResults &lt;.. FacetField : facet_fields
+
+          SearchResults ..&gt; FacetField : facet_fields
+
       SearchResults : facet_queries
-        SearchResults &lt;.. FacetValue : facet_queries
+
+          SearchResults ..&gt; FacetValue : facet_queries
+
       SearchResults : items
-        SearchResults &lt;.. SearchResult : items
+
+          SearchResults ..&gt; SearchResult : items
+
       SearchResults : limit
-        SearchResults &lt;.. integer : limit
+
       SearchResults : offset
-        SearchResults &lt;.. integer : offset
+
       SearchResults : total
-        SearchResults &lt;.. integer : total
 </code></pre></div>
 <h2 id="inheritance">Inheritance</h2>
 <ul>

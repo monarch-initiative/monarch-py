@@ -544,9 +544,10 @@
 <div class="highlight"><pre><span></span><code> classDiagram
     class FacetField
       FacetField : facet_values
-        FacetField &lt;.. FacetValue : facet_values
+
+          FacetField ..&gt; FacetValue : facet_values
+
       FacetField : label
-        FacetField &lt;.. string : label
 </code></pre></div>
 <!-- no inheritance hierarchy -->
 
