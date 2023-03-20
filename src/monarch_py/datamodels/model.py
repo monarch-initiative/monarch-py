@@ -39,7 +39,6 @@ class Association(ConfiguredBaseModel):
     object_closure: Optional[List[str]] = Field(default_factory=list)
     object_label: Optional[str] = Field(None)
     object_closure_label: Optional[List[str]] = Field(default_factory=list)
-    knowledge_source: Optional[List[str]] = Field(default_factory=list)
     primary_knowledge_source: Optional[List[str]] = Field(default_factory=list)
     category: Optional[List[str]] = Field(default_factory=list)
     negated: Optional[bool] = Field(None)
@@ -103,36 +102,35 @@ class Results(ConfiguredBaseModel):
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
-    items: Optional[List[str]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     
 
 
 class AssociationResults(Results):
     
+    items: Optional[List[Association]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
-    items: Optional[List[Association]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     
 
 
 class EntityResults(Results):
     
+    items: Optional[List[Entity]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
-    items: Optional[List[Entity]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     
 
 
 class SearchResults(Results):
     
+    items: Optional[List[SearchResult]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     facet_fields: Optional[Dict[str, FacetField]] = Field(default_factory=dict)
     facet_queries: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
     limit: Optional[int] = Field(None)
     offset: Optional[int] = Field(None)
     total: Optional[int] = Field(None)
-    items: Optional[List[SearchResult]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     
 
 

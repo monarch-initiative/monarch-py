@@ -13,7 +13,7 @@ dc = docker.from_env()
 def check_solr_permissions(update: bool = False) -> None:
     """Checks that the solr data directory has the correct permissions."""
     monarchstow.ensure_untar(url=SOLR_DATA_URL, force=update)
-    if sys.platform in ["linux", "linux2"]:
+    if sys.platform in ["linux", "linux2", "darwin"]:
         stat_info = os.stat(monarchstow.base / "solr" / "data")
         if stat_info.st_gid != 8983:
             console.print(f"""
@@ -35,8 +35,11 @@ def check_for_solr(quiet: bool = False):
 def get_solr(update: bool = False):
     """Checks for Solr data and container, and returns a SolrImplementation."""  
     check_solr_permissions(update)
-    check_for_solr(quiet=True)
-    return SolrImplementation()
+    if check_for_solr(quiet=True):
+        return SolrImplementation()
+    else:
+        console.print("\nNo Solr container found!\nStart a Solr container with [bold]monarch solr start[/].")
+        sys.exit(1)
 
 
 def start_solr():
