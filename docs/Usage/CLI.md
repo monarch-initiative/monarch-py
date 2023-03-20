@@ -1,9 +1,9 @@
-# CLI
+# `monarch`
 
 **Usage**:
 
 ```console
-$ [OPTIONS] COMMAND [ARGS]...
+$ monarch [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -22,7 +22,7 @@ $ [OPTIONS] COMMAND [ARGS]...
 * `solr`
 * `sql`
 
-## `associations`
+## `monarch associations`
 
 Paginate through associations
 
@@ -40,7 +40,7 @@ Args:
 **Usage**:
 
 ```console
-$ associations [OPTIONS]
+$ monarch associations [OPTIONS]
 ```
 
 **Options**:
@@ -57,7 +57,7 @@ $ associations [OPTIONS]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-## `entity`
+## `monarch entity`
 
 Retrieve an entity by ID
 
@@ -69,7 +69,7 @@ Args:
 **Usage**:
 
 ```console
-$ entity [OPTIONS] [ID]
+$ monarch entity [OPTIONS] [ID]
 ```
 
 **Arguments**:
@@ -83,7 +83,7 @@ $ entity [OPTIONS] [ID]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-## `histopheno`
+## `monarch histopheno`
 
 Retrieve the histopheno data for an entity by ID
 
@@ -97,7 +97,7 @@ Optional Args:
 **Usage**:
 
 ```console
-$ histopheno [OPTIONS] [SUBJECT]
+$ monarch histopheno [OPTIONS] [SUBJECT]
 ```
 
 **Arguments**:
@@ -111,21 +111,21 @@ $ histopheno [OPTIONS] [SUBJECT]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-## `schema`
+## `monarch schema`
 
 Print the linkml schema for the data model
 
 **Usage**:
 
 ```console
-$ schema [OPTIONS]
+$ monarch schema [OPTIONS]
 ```
 
 **Options**:
 
 * `--help`: Show this message and exit.
 
-## `search`
+## `monarch search`
 
 Search for entities
 
@@ -141,7 +141,7 @@ Args:
 **Usage**:
 
 ```console
-$ search [OPTIONS]
+$ monarch search [OPTIONS]
 ```
 
 **Options**:
@@ -155,12 +155,12 @@ $ search [OPTIONS]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-## `solr`
+## `monarch solr`
 
 **Usage**:
 
 ```console
-$ solr [OPTIONS] COMMAND [ARGS]...
+$ monarch solr [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -172,13 +172,12 @@ $ solr [OPTIONS] COMMAND [ARGS]...
 * `associations`: Paginate through associations
 * `entity`: Retrieve an entity by ID
 * `histopheno`: Retrieve the histopheno associations for a...
-* `remove`
 * `search`: Search for entities
-* `start`: Start a local Monarch Solr instance.
-* `status`: Check the status of the local Monarch Solr...
-* `stop`: Stop the local Monarch Solr instance.
+* `start`: Starts a local Solr container.
+* `status`
+* `stop`: Stops the local Solr container.
 
-### `solr associations`
+### `monarch solr associations`
 
 Paginate through associations
 
@@ -198,7 +197,7 @@ Args:
 **Usage**:
 
 ```console
-$ solr associations [OPTIONS]
+$ monarch solr associations [OPTIONS]
 ```
 
 **Options**:
@@ -216,7 +215,7 @@ $ solr associations [OPTIONS]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-### `solr entity`
+### `monarch solr entity`
 
 Retrieve an entity by ID
 
@@ -231,7 +230,7 @@ Optional Args:
 **Usage**:
 
 ```console
-$ solr entity [OPTIONS] [ID]
+$ monarch solr entity [OPTIONS] [ID]
 ```
 
 **Arguments**:
@@ -245,7 +244,7 @@ $ solr entity [OPTIONS] [ID]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-### `solr histopheno`
+### `monarch solr histopheno`
 
 Retrieve the histopheno associations for a given subject
 
@@ -260,7 +259,7 @@ Optional Args:
 **Usage**:
 
 ```console
-$ solr histopheno [OPTIONS] [SUBJECT]
+$ monarch solr histopheno [OPTIONS] [SUBJECT]
 ```
 
 **Arguments**:
@@ -274,19 +273,7 @@ $ solr histopheno [OPTIONS] [SUBJECT]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-### `solr remove`
-
-**Usage**:
-
-```console
-$ solr remove [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-### `solr search`
+### `monarch solr search`
 
 Search for entities
 
@@ -302,7 +289,7 @@ Optional Args:
 **Usage**:
 
 ```console
-$ solr search [OPTIONS]
+$ monarch solr search [OPTIONS]
 ```
 
 **Options**:
@@ -317,55 +304,53 @@ $ solr search [OPTIONS]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-### `solr start`
+### `monarch solr start`
 
-Start a local Monarch Solr instance.
+Starts a local Solr container.
 
 **Usage**:
 
 ```console
-$ solr start [OPTIONS]
+$ monarch solr start [OPTIONS]
 ```
 
 **Options**:
 
-* `-u, --update`: Whether to re-download the Monarch KG.
+* `--update / --no-update`: [default: no-update]
 * `--help`: Show this message and exit.
 
-### `solr status`
-
-Check the status of the local Monarch Solr instance.
+### `monarch solr status`
 
 **Usage**:
 
 ```console
-$ solr status [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-### `solr stop`
-
-Stop the local Monarch Solr instance.
-
-**Usage**:
-
-```console
-$ solr stop [OPTIONS]
+$ monarch solr status [OPTIONS]
 ```
 
 **Options**:
 
 * `--help`: Show this message and exit.
 
-## `sql`
+### `monarch solr stop`
+
+Stops the local Solr container.
 
 **Usage**:
 
 ```console
-$ sql [OPTIONS] COMMAND [ARGS]...
+$ monarch solr stop [OPTIONS]
+```
+
+**Options**:
+
+* `--help`: Show this message and exit.
+
+## `monarch sql`
+
+**Usage**:
+
+```console
+$ monarch sql [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -377,7 +362,7 @@ $ sql [OPTIONS] COMMAND [ARGS]...
 * `associations`: Paginate through associations
 * `entity`: Retrieve an entity by ID
 
-### `sql associations`
+### `monarch sql associations`
 
 Paginate through associations
 
@@ -397,7 +382,7 @@ Args:
 **Usage**:
 
 ```console
-$ sql associations [OPTIONS]
+$ monarch sql associations [OPTIONS]
 ```
 
 **Options**:
@@ -415,7 +400,7 @@ $ sql associations [OPTIONS]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
 
-### `sql entity`
+### `monarch sql entity`
 
 Retrieve an entity by ID
 
@@ -428,7 +413,7 @@ Args:
 **Usage**:
 
 ```console
-$ sql entity [OPTIONS] [ID]
+$ monarch sql entity [OPTIONS] [ID]
 ```
 
 **Arguments**:
@@ -441,4 +426,3 @@ $ sql entity [OPTIONS] [ID]
 * `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
-

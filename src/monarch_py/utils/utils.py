@@ -12,7 +12,7 @@ SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch
 console = Console(
     color_system="truecolor",
     stderr=True,
-    style="bold blue1",
+    style="blue1",
 )
 
 def strip_json(doc: dict, *fields_to_remove: str):
