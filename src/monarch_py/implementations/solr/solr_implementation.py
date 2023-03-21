@@ -271,10 +271,10 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             offset=offset,
             total=total,
             items=[],
-            facet_fields=self.convert_facet_fields(
+            facet_fields=self._convert_facet_fields(
                 query_result.facet_counts.facet_fields
             ),
-            facet_queries=self.convert_facet_queries(
+            facet_queries=self._convert_facet_queries(
                 query_result.facet_counts.facet_queries
             ),
         )
@@ -297,14 +297,15 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         query.facet_queries = [f"object_closure:\"{i}\"" for i in hpkeys]
         query_result = solr.query(query)
-        total = query_result.response.num_found
-        
+                
         association_counts = []
         for k, v in query_result.facet_counts.facet_queries.items():
             id = f"{k.split(':')[1]}:{k.split(':')[2]}".replace('"', '')
             label = HistoPhenoKeys(id).name
             association_counts.append(AssociationCount(id=id, label=label, count=v))
         
+        association_counts = sorted(association_counts, key=lambda x: x.count, reverse=True)
+
         hp = HistoPheno(
             id=subject_closure,
             items=association_counts,
@@ -312,8 +313,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return hp
 
-
-    def convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
+    def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
         """
         Converts a list of raw solr facet fields from the solr response to a list of
         FacetField instances
@@ -337,8 +337,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return facet_fields
 
-
-    def convert_facet_queries(
+    def _convert_facet_queries(
         self, solr_facet_queries: Dict[str, int]
     ) -> Dict[str, FacetValue]:
         """
