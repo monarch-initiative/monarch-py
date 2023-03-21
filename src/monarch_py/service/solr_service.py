@@ -1,8 +1,8 @@
 import json
 from typing import Dict, List
 
-from loguru import logger
 import requests
+from loguru import logger
 from pydantic import BaseModel
 
 from monarch_py.datamodels.solr import SolrQuery, SolrQueryResult, core

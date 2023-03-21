@@ -1,19 +1,22 @@
-import sys
 import csv
-import yaml
+import sys
 
+import yaml
 from rich.console import Console
 
 from monarch_py.datamodels.model import ConfiguredBaseModel, Entity, Results
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
-SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
+SQL_DATA_URL = (
+    "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
+)
 
 console = Console(
     color_system="truecolor",
     stderr=True,
     style="blue1",
 )
+
 
 def strip_json(doc: dict, *fields_to_remove: str):
     for field in fields_to_remove:
@@ -35,6 +38,7 @@ def dict_factory(cursor, row):
 
 
 ### Output conversion methods ###
+
 
 def to_json(obj: ConfiguredBaseModel, file: str):
     """Converts a pydantic model to a JSON string."""
@@ -63,20 +67,22 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
         for item in obj.items:
             writer.writerow(item.dict().values())
     else:
-        raise TypeError("Text conversion method only accepts Entity or Results objects.")
+        raise TypeError(
+            "Text conversion method only accepts Entity or Results objects."
+        )
 
-    if file: 
+    if file:
         fh.close()
         console.print(f"\nOutput written to {file}\n")
-    
+
     return
 
 
 def to_yaml(obj: ConfiguredBaseModel, file: str):
     """Converts a pydantic model to a YAML string."""
-    
+
     fh = open(file, "w") if file else sys.stdout
-    
+
     if isinstance(obj, Entity):
         d = obj.dict()
         yaml.dump(d, fh, indent=4)
@@ -84,8 +90,10 @@ def to_yaml(obj: ConfiguredBaseModel, file: str):
         d = [item.dict() for item in obj.items]
         yaml.dump(d, fh, indent=4)
     else:
-        raise TypeError("YAML conversion method only accepts Entity or Results objects.")
-    
+        raise TypeError(
+            "YAML conversion method only accepts Entity or Results objects."
+        )
+
     if file:
         console.print(f"\nOutput written to {file}\n")
         fh.close()

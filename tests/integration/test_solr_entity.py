@@ -6,4 +6,3 @@ def test_entity():
     entity = si.get_entity("MONDO:0007947")
     assert entity
     assert entity.name == "Marfan syndrome"
-

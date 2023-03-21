@@ -24,15 +24,23 @@ def schema():
         print(schema_file.read())
     raise typer.Exit()
 
+
 ### "Aliases" for Solr CLI ###
+
 
 @app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
-    ):
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """
     Retrieve an entity by ID
 
@@ -55,8 +63,12 @@ def associations(
     between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
 ):
     """
     Paginate through associations
@@ -82,8 +94,12 @@ def search(
     taxon: str = typer.Option(None, "--taxon"),
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
 ):
     """
     Search for entities
@@ -103,9 +119,15 @@ def search(
 @app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
 ):
     """
     Retrieve the histopheno data for an entity by ID

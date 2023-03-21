@@ -1,8 +1,7 @@
 import typer
 
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
-from monarch_py.utils.utils import console
-from monarch_py.utils.utils import to_tsv, to_yaml, to_json
+from monarch_py.utils.utils import console, to_json, to_tsv, to_yaml
 
 sql_app = typer.Typer()
 
@@ -10,10 +9,16 @@ sql_app = typer.Typer()
 @sql_app.command()
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
-    ):
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """Retrieve an entity by ID
 
     Args:
@@ -45,6 +50,7 @@ def entity(
         raise typer.Exit(1)
     raise typer.Exit()
 
+
 @sql_app.command()
 def associations(
     category: str = typer.Option(None, "--category"),
@@ -56,9 +62,13 @@ def associations(
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
     update: bool = typer.Option(False, "--update"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
-    ):
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """Paginate through associations
 
     Args:
@@ -80,7 +90,7 @@ def associations(
 
     data = SQLImplementation()
     response = data.get_associations(**args)
-    
+
     if fmt == "json":
         to_json(response, output)
     elif fmt == "tsv":
@@ -91,4 +101,3 @@ def associations(
         console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
         raise typer.Exit(1)
     raise typer.Exit()
-

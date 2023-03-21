@@ -1,21 +1,28 @@
 import pystow
 import typer
 
-from monarch_py.implementations.solr.solr_implementation import SolrImplementation
-from monarch_py.utils.utils import console, SOLR_DATA_URL, to_tsv, to_yaml, to_json
-from monarch_py.utils.solr_cli_utils import check_solr_permissions, check_for_solr, get_solr, start_solr, solr_status, stop_solr
+from monarch_py.utils.solr_cli_utils import (
+    check_solr_permissions,
+    get_solr,
+    solr_status,
+    start_solr,
+    stop_solr,
+)
+from monarch_py.utils.utils import console, to_json, to_tsv, to_yaml
 
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
 
 ### SOLR DOCKER COMMANDS ###
 
+
 @solr_app.command("start")
 def start(update: bool = False):
     """Starts a local Solr container."""
     check_solr_permissions(update)
     start_solr()
-    
+
+
 @solr_app.command("stop")
 def stop():
     """Stops the local Solr container."""
@@ -31,13 +38,20 @@ def status():
 
 ### SOLR QUERY COMMANDS ###
 
+
 @solr_app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
-    ):
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """
     Retrieve an entity by ID
 
@@ -56,7 +70,7 @@ def entity(
 
     data = get_solr(update)
     response = data.get_entity(id)
-    
+
     if fmt == "json":
         to_json(response, output)
     elif fmt == "tsv":
@@ -78,10 +92,16 @@ def associations(
     between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
-    ):
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """
     Paginate through associations
 
@@ -124,10 +144,16 @@ def search(
     taxon: str = typer.Option(None, "--taxon", "-t"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file"),
-    ):
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """
     Search for entities
 
@@ -145,7 +171,7 @@ def search(
     response = data.search(
         q=q, category=category, taxon=taxon, limit=limit, offset=offset
     )
-    
+
     if fmt == "json":
         to_json(response, output)
     elif fmt == "tsv":
@@ -160,10 +186,16 @@ def search(
 @solr_app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
-    update: bool = typer.Option(False, "--update", "-u", help="Whether to re-download the Monarch KG"),
-    fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
-    ):
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """
     Retrieve the histopheno associations for a given subject
 
@@ -182,7 +214,7 @@ def histopheno(
 
     data = get_solr(update)
     response = data.get_histopheno(subject)
-    
+
     if fmt == "json":
         to_json(response, output)
     elif fmt == "tsv":
