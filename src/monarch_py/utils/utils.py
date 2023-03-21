@@ -25,7 +25,7 @@ def strip_json(doc: dict, *fields_to_remove: str):
 
 
 def escape(value: str) -> str:
-    return value.replace(":", "\:")
+    return value.replace(":", r"\:")
 
 
 def dict_factory(cursor, row):
