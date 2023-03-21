@@ -27,8 +27,8 @@ def test_facet_fields():
     response = si.search("syndrome", facet_fields=["category", "in_taxon"])
     assert response
     assert response.total > 0
-    assert response.facets
-    assert response.facets["category"]
+    assert response.facet_fields
+    assert response.facet_fields["category"]
 
 
 def test_association_facets():
