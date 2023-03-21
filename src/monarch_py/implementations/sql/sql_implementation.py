@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from loguru import logger
 import pystow
+from loguru import logger
 from pydantic import ValidationError
 
 from monarch_py.datamodels.model import Association, AssociationResults, Entity

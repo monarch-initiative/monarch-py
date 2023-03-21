@@ -3,10 +3,20 @@ from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 from loguru import logger
-
 from pydantic import ValidationError
-from monarch_py.datamodels.model import (Association, AssociationCount, AssociationResults, Entity, FacetField, FacetValue, HistoPheno, SearchResult, SearchResults)
-from monarch_py.datamodels.solr import core, SolrQuery, HistoPhenoKeys
+
+from monarch_py.datamodels.model import (
+    Association,
+    AssociationCount,
+    AssociationResults,
+    Entity,
+    FacetField,
+    FacetValue,
+    HistoPheno,
+    SearchResult,
+    SearchResults,
+)
+from monarch_py.datamodels.solr import HistoPhenoKeys, SolrQuery, core
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
@@ -296,19 +306,21 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             offset=limit,
             limit=offset,
         )
-    
+
         hpkeys = [i.value for i in HistoPhenoKeys]
 
-        query.facet_queries = [f"object_closure:\"{i}\"" for i in hpkeys]
+        query.facet_queries = [f'object_closure:"{i}"' for i in hpkeys]
         query_result = solr.query(query)
-                
+
         association_counts = []
         for k, v in query_result.facet_counts.facet_queries.items():
-            id = f"{k.split(':')[1]}:{k.split(':')[2]}".replace('"', '')
+            id = f"{k.split(':')[1]}:{k.split(':')[2]}".replace('"', "")
             label = HistoPhenoKeys(id).name
             association_counts.append(AssociationCount(id=id, label=label, count=v))
-        
-        association_counts = sorted(association_counts, key=lambda x: x.count, reverse=True)
+
+        association_counts = sorted(
+            association_counts, key=lambda x: x.count, reverse=True
+        )
 
         hp = HistoPheno(
             id=subject_closure,

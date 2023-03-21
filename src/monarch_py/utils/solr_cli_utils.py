@@ -1,14 +1,16 @@
-import os, sys
+import os
+import sys
 import time
 
 import docker
 import pystow
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
-from monarch_py.utils.utils import console, SOLR_DATA_URL
+from monarch_py.utils.utils import SOLR_DATA_URL, console
 
 monarchstow = pystow.module("monarch")
 dc = docker.from_env()
+
 
 def check_solr_permissions(update: bool = False) -> None:
     """Checks that the solr data directory has the correct permissions."""
@@ -16,12 +18,14 @@ def check_solr_permissions(update: bool = False) -> None:
     if sys.platform in ["linux", "linux2", "darwin"]:
         stat_info = os.stat(monarchstow.base / "solr" / "data")
         if stat_info.st_gid != 8983:
-            console.print(f"""
+            console.print(
+                f"""
 Solr container requires write access to {monarchstow.base}.
 Please run the following command to set permissions:
     [grey84 on black]sudo chgrp -R 8983 {monarchstow.base}[/]
     [grey84 on black]sudo chmod -R g+w {monarchstow.base}[/]
-            """)
+            """
+            )
             sys.exit(1)
 
 
@@ -33,12 +37,14 @@ def check_for_solr(quiet: bool = False):
 
 
 def get_solr(update: bool = False):
-    """Checks for Solr data and container, and returns a SolrImplementation."""  
+    """Checks for Solr data and container, and returns a SolrImplementation."""
     check_solr_permissions(update)
     if check_for_solr(quiet=True):
         return SolrImplementation()
     else:
-        console.print("\nNo Solr container found!\nStart a Solr container with [bold]monarch solr start[/].")
+        console.print(
+            "\nNo Solr container found!\nStart a Solr container with [bold]monarch solr start[/]."
+        )
         sys.exit(1)
 
 
@@ -66,7 +72,9 @@ def start_solr():
         try:
             c.start()
         except Exception as e:
-            console.print(f"Error running existing container {c.name} ({c.status}) - {e}")
+            console.print(
+                f"Error running existing container {c.name} ({c.status}) - {e}"
+            )
             raise e
 
 
@@ -86,7 +94,8 @@ def stop_solr():
 def solr_status():
     c = check_for_solr()
     if not c:
-        console.print("""
+        console.print(
+            """
 No monarch_solr container found. 
 
 Download the Monarch Solr KG and start a local solr instance:
@@ -101,13 +110,17 @@ Container status: {c.status}
         """
         )
         if c.status == "exited":
-            console.print("""
+            console.print(
+                """
 Start the container using:
     [grey84 on black]monarch solr start[/]
-""")
+"""
+            )
         if c.status == "running":
-            console.print("""
+            console.print(
+                """
 You can create a new container with
     [grey84 on black]monarch solr stop[/]
     [grey84 on black]monarch solr start[/]
-""")
+"""
+            )
