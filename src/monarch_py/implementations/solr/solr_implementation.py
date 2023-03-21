@@ -224,8 +224,12 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             offset=offset,
             total=total,
             items=items,
-            facet_fields=query_result.facet_counts.facet_fields,
-            facet_queries=query_result.facet_counts.facet_queries,
+            facet_fields=self._convert_facet_fields(
+                query_result.facet_counts.facet_fields
+            ),
+            facet_queries=self._convert_facet_queries(
+                query_result.facet_counts.facet_queries
+            ),
         )
 
         return results
