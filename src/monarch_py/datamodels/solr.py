@@ -47,18 +47,21 @@ class SolrQuery(BaseModel):
     query_fields: str = None
     def_type: str = "edismax"
     mm: str = "100%"  # All tokens in the query must be found in the doc, equivalent to q.op="AND"
+    boost: str = None
 
     def add_field_filter_query(self, field, value):
         if field is not None and value is not None:
             self.filter_queries.append(f"{field}:{escape(value)}")
         else:
             raise ValueError("Can't add a field filter query without a field and value")
+        return self
 
     def add_filter_query(self, filter_query):
         if filter_query is not None:
             self.filter_queries.append(filter_query)
         else:
             raise ValueError("Can't append an empty filter query")
+        return self
 
     def query_string(self):
         return urllib.parse.urlencode(

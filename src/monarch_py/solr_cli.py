@@ -183,6 +183,40 @@ def search(
     raise typer.Exit()
 
 
+@solr_app.command("autocomplete")
+def autocomplete(
+    q: str = typer.Argument(None, help="Query string to autocomplete against"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
+    """
+    Return entity autcomplete matches for a query string
+
+    Args:
+        q: The query string to autocomplete against
+        fmt: The format of the output (TSV, YAML, JSON)
+        output: The path to the output file (stdout if not specified)
+
+    """
+
+    data = get_solr()
+    response = data.autocomplete(q)
+
+    if fmt == "json":
+        to_json(response, output)
+    elif fmt == "tsv":
+        to_tsv(response, output)
+    elif fmt == "yaml":
+        to_yaml(response, output)
+    else:
+        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
+    raise typer.Exit()
+
+
 @solr_app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),

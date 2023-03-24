@@ -40,6 +40,13 @@ from monarch_py.datamodels.solr import SolrQuery
             SolrQuery(q="marfan", query_fields="id^100 name^10 synonym"),
             ["qf=", "defType=edismax"],
         ),  # don't worry about actual value of qf
+        (
+            SolrQuery(
+                q="marfan",
+                boost='boost=if(termfreq(category,"biolink:Disease"),10.0,1)',
+            ),
+            ['boost=if(termfreq(category,"biolink:Disease"),10.0,1)'],
+        ),
     ],
 )
 def test_query(query: SolrQuery, query_string_parts: List[str]):
