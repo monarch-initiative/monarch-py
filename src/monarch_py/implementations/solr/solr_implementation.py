@@ -202,8 +202,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         query.q = q
 
-        query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
         query.def_type = "edismax"
+        query.query_fields = self._entity_query_fields()
+        query.boost = self._entity_boosts()
 
         if facet_fields:
             query.facet_fields = facet_fields
@@ -253,13 +254,10 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.q = q
 
         # match the query fields to start with
-        query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 symbol_ac synonym synonym_t synonym_ac"
+        query.query_fields = self._entity_query_fields()
         query.def_type = "edismax"
 
-        disease_boost = "if(termfreq(category,\"biolink:Disease\"),10.0,1)"
-        human_gene_boost = "if(and(termfreq(in_taxon,\"NCBITaxon:9606\"),termfreq(category,\"biolink:Gene\")),5.0,1)"
-
-        query.boost = f"product({disease_boost},{human_gene_boost})"
+        query.boost = _self._entity_boost()
 
         query_result = solr.query(query)
         total = query_result.response.num_found
@@ -282,6 +280,20 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return results
 
+    def _entity_query_fields(self):
+        """
+        Shared query field list between search and autocomplete, since the field list and boosts are currently the same
+        """
+        return "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 symbol_ac synonym synonym_t synonym_ac"
+
+    def _entity_boost(self):
+        """
+        Shared boost function between search and autocomplete
+        """
+        disease_boost = "if(termfreq(category,\"biolink:Disease\"),10.0,1)"
+        human_gene_boost = "if(and(termfreq(in_taxon,\"NCBITaxon:9606\"),termfreq(category,\"biolink:Gene\")),5.0,1)"
+
+        return f"product({disease_boost},{human_gene_boost})"
 
     def get_association_facets(
         self,

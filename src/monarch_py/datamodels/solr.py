@@ -63,28 +63,6 @@ class SolrQuery(BaseModel):
             raise ValueError("Can't append an empty filter query")
         return self
 
-    def set_boost(self, boosts: Dict[str, float]):
-        """
-        Set the boost query parameter, which multiplies the natural score of a document. Each
-        key in the dictionary is a query that will be evaluated for each document, and if true,
-        the score of the document will be multiplied by the value for that key.
-
-        This method is expected to be used to multiply scores for diseases and human genes primarily,
-        but may be worth expanding/refactoring to support data quantity or popularity boosts at some point.
-
-        If that happens, it would make sense to pass additional arguments to this method to further build the
-        ranking algorithm.
-
-        Args:
-            boosts: dictionary of solr query strings to match against and the multiplier expressed as a float
-
-        Returns:
-            self to match builder pattern
-
-        """
-        self.boost = "product(" + ",".join([f"if({k},{v},1)" for k, v in boosts.items()]) + ")"
-        return self
-
     def query_string(self):
         return urllib.parse.urlencode(
             {
