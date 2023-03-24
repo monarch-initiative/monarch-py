@@ -182,11 +182,17 @@ def search(
         console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
     raise typer.Exit()
 
+
 @solr_app.command("autocomplete")
-def autocomplete(q: str = typer.Argument(None, help="Query string to autocomplete against"),
-                 fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-                 output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
-                 ):
+def autocomplete(
+    q: str = typer.Argument(None, help="Query string to autocomplete against"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """
     Return entity autcomplete matches for a query string
 
@@ -209,6 +215,7 @@ def autocomplete(q: str = typer.Argument(None, help="Query string to autocomplet
     else:
         console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
     raise typer.Exit()
+
 
 @solr_app.command("histopheno")
 def histopheno(

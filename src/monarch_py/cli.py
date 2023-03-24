@@ -4,7 +4,6 @@ from pathlib import Path
 import typer
 
 from monarch_py import solr_cli, sql_cli
-from monarch_py.datamodels.model import SearchResults
 
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
@@ -116,11 +115,17 @@ def search(
     """
     solr_cli.search(**locals())
 
+
 @app.command("autocomplete")
-def autocomplete(q: str = typer.Argument(None, help="Query string to autocomplete against"),
-                 fmt: str = typer.Option("json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"),
-                 output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
-                 ):
+def autocomplete(
+    q: str = typer.Argument(None, help="Query string to autocomplete against"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
     """
     Return entity autcomplete matches for a query string
 
@@ -131,6 +136,7 @@ def autocomplete(q: str = typer.Argument(None, help="Query string to autocomplet
 
     """
     solr_cli.autocomplete(**locals())
+
 
 @app.command("histopheno")
 def histopheno(
