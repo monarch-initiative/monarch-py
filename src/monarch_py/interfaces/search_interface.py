@@ -28,6 +28,20 @@ class SearchInterface(ABC):
         """
         raise NotImplementedError
 
+    def autocomplete(self, q: str) -> SearchResults:
+        """
+
+        Args:
+            q (str): Query string to match against
+
+        Raises:
+            NotImplementedError: Use a specific implementation (see the documentation for a list of implementations)
+
+        Returns:
+            SearchResults: Dataclass representing results of a generic entity search.
+        """
+        raise NotImplementedError
+
     def get_association_facets(
         self,
         facet_fields: List[str] = None,

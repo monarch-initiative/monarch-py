@@ -244,6 +244,45 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return results
 
+    def autocomplete(self, q: str) -> SearchResults:
+        solr = SolrService(base_url=self.base_url, core=core.ENTITY)
+        limit=10
+        offset=0
+        query = SolrQuery(q=q, limit=limit, offset=offset)
+
+        query.q = q
+
+        # match the query fields to start with
+        query.query_fields = "id^100 name^10 name_t^5 name_ac symbol^10 symbol_t^5 synonym synonym_t synonym_ac"
+        query.def_type = "edismax"
+
+        query.set_boost({
+            "category:\"biolink:Disease\"": 10.0,
+            "category:\"biolink:Gene\" and in_taxon:\"NCBITaxon:9606\"": 5.0,
+        })
+
+        query_result = solr.query(query)
+        total = query_result.response.num_found
+
+        items = []
+        for doc in query_result.response.docs:
+            try:
+                result = SearchResult(**doc)
+                items.append(result)
+            except ValidationError:
+                logger.error(f"Validation error for {doc}")
+                raise
+
+        results = SearchResults(
+            limit=limit,
+            offset=offset,
+            total=total,
+            items=items
+        )
+
+        return results
+
+
     def get_association_facets(
         self,
         facet_fields: List[str] = None,
