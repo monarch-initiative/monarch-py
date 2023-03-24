@@ -204,7 +204,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         query.def_type = "edismax"
         query.query_fields = self._entity_query_fields()
-        query.boost = self._entity_boosts()
+        query.boost = self._entity_boost()
 
         if facet_fields:
             query.facet_fields = facet_fields
