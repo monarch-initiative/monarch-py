@@ -41,8 +41,8 @@ from monarch_py.datamodels.solr import SolrQuery
             ["qf=", "defType=edismax"],
         ),  # don't worry about actual value of qf
         (
-                SolrQuery(q="marfan").set_boost({"category:\"biolink:Disease\"}":10.0}),
-                ["boost=product(if(category:\"biolink:Disease\"},10.0,1))"]
+            SolrQuery(q="marfan").set_boost({'category:"biolink:Disease"}': 10.0}),
+            ['boost=product(if(category:"biolink:Disease"},10.0,1))'],
         ),
     ],
 )

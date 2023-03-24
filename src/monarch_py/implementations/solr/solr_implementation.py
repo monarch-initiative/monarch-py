@@ -247,8 +247,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def autocomplete(self, q: str) -> SearchResults:
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
-        limit=10
-        offset=0
+        limit = 10
+        offset = 0
         query = SolrQuery(q=q, limit=limit, offset=offset)
 
         query.q = q
@@ -271,12 +271,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 logger.error(f"Validation error for {doc}")
                 raise
 
-        results = SearchResults(
-            limit=limit,
-            offset=offset,
-            total=total,
-            items=items
-        )
+        results = SearchResults(limit=limit, offset=offset, total=total, items=items)
 
         return results
 
@@ -290,8 +285,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         """
         Shared boost function between search and autocomplete
         """
-        disease_boost = "if(termfreq(category,\"biolink:Disease\"),10.0,1)"
-        human_gene_boost = "if(and(termfreq(in_taxon,\"NCBITaxon:9606\"),termfreq(category,\"biolink:Gene\")),5.0,1)"
+        disease_boost = 'if(termfreq(category,"biolink:Disease"),10.0,1)'
+        human_gene_boost = 'if(and(termfreq(in_taxon,"NCBITaxon:9606"),termfreq(category,"biolink:Gene")),5.0,1)'
 
         return f"product({disease_boost},{human_gene_boost})"
 
