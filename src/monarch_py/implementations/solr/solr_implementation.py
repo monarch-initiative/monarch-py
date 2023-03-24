@@ -257,7 +257,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.query_fields = self._entity_query_fields()
         query.def_type = "edismax"
 
-        query.boost = _self._entity_boost()
+        query.boost = self._entity_boost()
 
         query_result = solr.query(query)
         total = query_result.response.num_found
