@@ -2,7 +2,7 @@
 
 ## Introduction  
 
-`monarch-py` is a Python library for interacting with and querying the  
+**Monarch-Py** is a Python library for interacting with and querying the  
 Monarch knowledge graph, with implementations for Solr and SQLite backends.  
 This means the same API methods can be used regardless of the implementation.  
 This library provides a collection of interfaces for graph operations such as retrieving entities and browsing associations. 
@@ -21,7 +21,7 @@ Full usage instructions [here](./Usage/index.md)
 ### Basic Example - CLI
 
 ```bash
-$ monarch sql entity --id MONDO:0012933
+$ monarch sql entity MONDO:0012933
 {
     "id": "MONDO:0012933",
     "category": [
