@@ -15,6 +15,7 @@ $ monarch [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `associations`: Paginate through associations
+* `autocomplete`: Return entity autcomplete matches for a...
 * `entity`: Retrieve an entity by ID
 * `histopheno`: Retrieve the histopheno data for an entity...
 * `schema`: Print the linkml schema for the data model
@@ -53,6 +54,31 @@ $ monarch associations [OPTIONS]
 * `--between TEXT`
 * `-l, --limit INTEGER`: [default: 20]
 * `--offset INTEGER`: [default: 0]
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
+* `--help`: Show this message and exit.
+
+## `monarch autocomplete`
+
+Return entity autcomplete matches for a query string
+
+Args:
+    q: The query string to autocomplete against
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)
+
+**Usage**:
+
+```console
+$ monarch autocomplete [OPTIONS] [Q]
+```
+
+**Arguments**:
+
+* `[Q]`: Query string to autocomplete against
+
+**Options**:
+
 * `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
@@ -170,6 +196,7 @@ $ monarch solr [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `associations`: Paginate through associations
+* `autocomplete`: Return entity autcomplete matches for a...
 * `entity`: Retrieve an entity by ID
 * `histopheno`: Retrieve the histopheno associations for a...
 * `search`: Search for entities
@@ -211,6 +238,31 @@ $ monarch solr associations [OPTIONS]
 * `--limit INTEGER`: [default: 20]
 * `--offset INTEGER`: [default: 0]
 * `-u, --update`: Whether to re-download the Monarch KG
+* `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
+* `-o, --output TEXT`: The path to the output file
+* `--help`: Show this message and exit.
+
+### `monarch solr autocomplete`
+
+Return entity autcomplete matches for a query string
+
+Args:
+    q: The query string to autocomplete against
+    fmt: The format of the output (TSV, YAML, JSON)
+    output: The path to the output file (stdout if not specified)
+
+**Usage**:
+
+```console
+$ monarch solr autocomplete [OPTIONS] [Q]
+```
+
+**Arguments**:
+
+* `[Q]`: Query string to autocomplete against
+
+**Options**:
+
 * `-f, --format TEXT`: The format of the output (TSV, YAML, JSON)  [default: json]
 * `-o, --output TEXT`: The path to the output file
 * `--help`: Show this message and exit.
