@@ -78,8 +78,6 @@ classes:
     slot_usage:
       items:
         range: AssociationCount
-  # MetaObject:
-  #   class_uri: linkml:Any
   Results:
     abstract: true
     slots:
@@ -235,6 +233,3 @@ slots:
   xref:
     multivalued: true
     range: string
-
-
-
