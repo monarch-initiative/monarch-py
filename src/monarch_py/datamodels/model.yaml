@@ -78,8 +78,8 @@ classes:
     slot_usage:
       items:
         range: AssociationCount
-  MetaObject:
-    class_uri: linkml:Any
+  # MetaObject:
+  #   class_uri: linkml:Any
   Results:
     abstract: true
     slots:
@@ -132,7 +132,7 @@ slots:
     range: string
   items:
     description: A collection of items, with the type to be overriden by slot_usage
-    range: MetaObject
+    range: string
     inlined: true
     inlined_as_list: true
     multivalued: true
@@ -236,5 +236,6 @@ slots:
   xref:
     multivalued: true
     range: string
+
 
 
