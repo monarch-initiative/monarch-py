@@ -72,6 +72,9 @@ def associations(
     between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
