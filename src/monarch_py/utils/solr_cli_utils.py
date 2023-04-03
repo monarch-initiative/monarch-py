@@ -37,7 +37,7 @@ def check_for_solr(dc: docker.DockerClient, quiet: bool = False):
 def get_solr(update: bool = False):
     """Checks for Solr data and container, and returns a SolrImplementation."""
     check_solr_permissions(update)
-    if check_for_solr(quiet=True):
+    if check_for_solr(dc = docker.from_env(), quiet=True):
         return SolrImplementation()
     else:
         console.print(
@@ -50,7 +50,7 @@ def start_solr():
     """Starts a local Solr container."""
     data = monarchstow.join("solr", "data")
     dc = docker.from_env()
-    c = check_for_solr(quiet=True)
+    c = check_for_solr(dc, quiet=True)
     if not c:
         try:
             c = dc.containers.run(
