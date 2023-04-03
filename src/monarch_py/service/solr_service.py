@@ -6,7 +6,8 @@ from loguru import logger
 from pydantic import BaseModel
 
 from monarch_py.datamodels.solr import SolrQuery, SolrQueryResult, core
-from monarch_py.utils.utils import console, escape
+from monarch_py.utils.utils import console
+from monarch_py.utils.utils import escape
 
 
 class SolrService(BaseModel):
