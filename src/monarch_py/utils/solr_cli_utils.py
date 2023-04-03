@@ -9,8 +9,6 @@ from monarch_py.implementations.solr.solr_implementation import SolrImplementati
 from monarch_py.utils.utils import SOLR_DATA_URL, console
 
 monarchstow = pystow.module("monarch")
-dc = docker.from_env()
-
 
 def check_solr_permissions(update: bool = False) -> None:
     """Checks that the solr data directory has the correct permissions."""
@@ -29,7 +27,7 @@ Please run the following command to set permissions:
             sys.exit(1)
 
 
-def check_for_solr(quiet: bool = False):
+def check_for_solr(dc: docker.DockerClient, quiet: bool = False):
     if not quiet:
         console.print("\nChecking for Solr container...")
     c = dc.containers.list(all=True, filters={"name": "monarch_solr"})
@@ -51,6 +49,7 @@ def get_solr(update: bool = False):
 def start_solr():
     """Starts a local Solr container."""
     data = monarchstow.join("solr", "data")
+    dc = docker.from_env()
     c = check_for_solr(quiet=True)
     if not c:
         try:
