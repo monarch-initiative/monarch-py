@@ -10,6 +10,7 @@ from monarch_py.utils.utils import SOLR_DATA_URL, console
 
 monarchstow = pystow.module("monarch")
 
+
 def check_solr_permissions(update: bool = False) -> None:
     """Checks that the solr data directory has the correct permissions."""
     monarchstow.ensure_untar(url=SOLR_DATA_URL, force=update)
@@ -37,7 +38,7 @@ def check_for_solr(dc: docker.DockerClient, quiet: bool = False):
 def get_solr(update: bool = False):
     """Checks for Solr data and container, and returns a SolrImplementation."""
     check_solr_permissions(update)
-    if check_for_solr(dc = docker.from_env(), quiet=True):
+    if check_for_solr(dc=docker.from_env(), quiet=True):
         return SolrImplementation()
     else:
         console.print(
