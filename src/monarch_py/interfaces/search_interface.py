@@ -9,7 +9,15 @@ class SearchInterface(ABC):
 
     @abstractmethod
     def search(
-        self, q: str, category: str, taxon: str, offset: int = 0, limit: int = 20
+        self,
+        q: str,
+        category: str,
+        taxon: str,
+        offset: int = 0,
+        limit: int = 20,
+        facet_fields: List[str] = None,
+        filter_queries: List[str] = None,
+        facet_queries: List[str] = None,
     ) -> SearchResults:
         """
 
