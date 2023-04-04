@@ -15,11 +15,11 @@ For example:
 ```bash
 # The following two commands are equivalent,
 # as both query the Solr KG
-$ monarch entity --id MONDO:0012933 
-$ monarch solr entity --id MONDO:0012933
+$ monarch entity MONDO:0012933 
+$ monarch solr entity MONDO:0012933
 
 # Whereas the following specifies the SQL implementation
-$ monarch sql entity --id MONDO:0012933
+$ monarch sql entity MONDO:0012933
 ```
 
 You can also use an environment variable to specify a Solr URL to query a different Solr instance.  

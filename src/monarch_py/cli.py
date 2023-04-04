@@ -1,5 +1,6 @@
 import importlib
 from pathlib import Path
+from typing import Optional
 
 import typer
 
@@ -8,6 +9,14 @@ from monarch_py import solr_cli, sql_cli
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
 app.add_typer(sql_cli.sql_app, name="sql")
+
+
+@app.callback(invoke_without_command=True)
+def callback(version: Optional[bool] = typer.Option(None, "--version", is_eager=True)):
+    if version:
+        from monarch_py import __version__
+        typer.echo(f"monarch_py version: {__version__}")
+        raise typer.Exit() 
 
 
 @app.command("schema")
@@ -63,6 +72,9 @@ def associations(
     between: str = typer.Option(None, "--between"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
+    update: bool = typer.Option(
+        False, "--update", "-u", help="Whether to re-download the Monarch KG"
+    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
