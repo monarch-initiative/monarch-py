@@ -9,7 +9,9 @@ from rich.table import Table
 from monarch_py.datamodels.model import ConfiguredBaseModel, Entity, HistoPheno, Results
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
-SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
+SQL_DATA_URL = (
+    "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
+)
 
 
 console = Console(
@@ -40,7 +42,10 @@ def dict_factory(cursor, row):
 
 ### Output conversion methods ###
 
-FMT_INPUR_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, or Results objects."
+FMT_INPUR_ERROR_MSG = (
+    "Text conversion method only accepts Entity, HistoPheno, or Results objects."
+)
+
 
 def to_json(obj: ConfiguredBaseModel, file: str):
     """Converts a pydantic model to a JSON string."""
@@ -59,7 +64,7 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
     if isinstance(obj, Entity):
         headers = obj.dict().keys()
         rows = [list(obj.dict().values())]
-    elif (isinstance(obj, Results) or isinstance(obj, HistoPheno)):
+    elif isinstance(obj, Results) or isinstance(obj, HistoPheno):
         headers = obj.items[0].dict().keys()
         rows = [list(item.dict().values()) for item in obj.items]
     else:
@@ -75,7 +80,7 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
         writer = csv.writer(fh, delimiter="\t")
         writer.writerow(headers)
         for row in rows:
-            writer.writerow(list(row)) 
+            writer.writerow(list(row))
         fh.close()
         console.print(f"\nOutput written to {file}\n")
 
@@ -87,12 +92,16 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
                     row[i] = ", ".join(value)
                 elif not isinstance(value, str):
                     row[i] = str(value)
-        title = f"{obj.__class__.__name__}: {obj.id}" if hasattr(obj, "id") else obj.__class__.__name__
+        title = (
+            f"{obj.__class__.__name__}: {obj.id}"
+            if hasattr(obj, "id")
+            else obj.__class__.__name__
+        )
         table = Table(
             title=console.rule(title),
             show_header=True,
             header_style="bold cyan",
-            )
+        )
         for header in headers:
             table.add_column(header)
         for row in rows:
@@ -110,7 +119,7 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
     #     headers = obj.items[0].dict().keys()
     #     writer.writerow(headers)
     #     for item in obj.items:
-    #         writer.writerow(item.dict().values())            
+    #         writer.writerow(item.dict().values())
     # else:
     #     raise TypeError(FMT_INPUR_ERROR_MSG)
 
@@ -128,12 +137,8 @@ def to_yaml(obj: ConfiguredBaseModel, file: str):
 
     if isinstance(obj, Entity):
         yaml.dump(obj.dict(), fh, indent=4)
-    elif (isinstance(obj, Results) or isinstance(obj, HistoPheno)):
-        yaml.dump(
-            [item.dict() for item in obj.items], 
-            fh, 
-            indent=4
-        )
+    elif isinstance(obj, Results) or isinstance(obj, HistoPheno):
+        yaml.dump([item.dict() for item in obj.items], fh, indent=4)
     else:
         raise TypeError(FMT_INPUR_ERROR_MSG)
 
