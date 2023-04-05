@@ -61,8 +61,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         category: str = None,
         predicate: str = None,
         subject: str = None,
-        subject_closure: str = None,
         object: str = None,
+        subject_closure: str = None,
         object_closure: str = None,
         entity: str = None,
         between: str = None,
@@ -75,8 +75,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             category (str, optional): Filter to only associations matching the specified category. Defaults to None.
             predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
             subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
-            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
             object (str, optional): Filter to only associations matching the specified object. Defaults to None.
+            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
             object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
             between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
@@ -93,8 +93,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             category=category,
             predicate=predicate,
             subject=subject,
-            subject_closure=subject_closure,
             object=object,
+            subject_closure=subject_closure,
             object_closure=object_closure,
             entity=entity,
             between=between,
@@ -125,8 +125,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         category: str = None,
         predicate: str = None,
         subject: str = None,
-        subject_closure: str = None,
         object: str = None,
+        subject_closure: str = None,
         object_closure: str = None,
         entity: str = None,
         between: str = None,
@@ -139,8 +139,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             category (str, optional): Filter to only associations matching the specified category. Defaults to None.
             predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
             subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
-            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
             object (str, optional): Filter to only associations matching the specified object. Defaults to None.
+            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
             object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
             between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
@@ -158,10 +158,10 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             query.add_field_filter_query("predicate", predicate)
         if subject:
             query.add_field_filter_query("subject", subject)
-        if subject_closure:
-            query.add_field_filter_query("subject_closure", subject_closure)
         if object:
             query.add_field_filter_query("object", object)
+        if subject_closure:
+            query.add_field_filter_query("subject_closure", subject_closure)
         if object_closure:
             query.add_field_filter_query("object_closure", object_closure)
         if between:

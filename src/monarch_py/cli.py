@@ -71,6 +71,7 @@ def associations(
     object: str = typer.Option(None, "--object", "-o"),
     entity: str = typer.Option(None, "--entity", "-e"),
     between: str = typer.Option(None, "--between"),
+    direct: bool = typer.Option(False, "--direct"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     update: bool = typer.Option(
@@ -93,6 +94,7 @@ def associations(
         object: The object of the association
         entity: The subject or object of the association
         limit: The number of associations to return
+        direct: Whether to only return associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved
         fmt: The format of the output (TSV, YAML, JSON)
         output: The path to the output file (stdout if not specified)
