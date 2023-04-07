@@ -78,8 +78,8 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         predicate: str = None,
         subject: str = None,
         object: str = None,
-        # subject_closure: str = None,
-        # object_closure: str = None,
+        subject_closure: str = None,
+        object_closure: str = None,
         entity: str = None,
         between: str = None,
         offset: int = 0,
@@ -113,10 +113,10 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             clauses.append(f"subject = '{subject}'")
         if object:
             clauses.append(f"object = '{object}'")
-        # if subject_closure:
-        #     clauses.append(f"subject_closure like '%{subject_closure}%'")
-        # if object_closure:
-        #     clauses.append(f"object_closure like '%{object_closure}%'")
+        if subject_closure:
+            clauses.append(f"subject_closure like '%{subject_closure}%'")
+        if object_closure:
+            clauses.append(f"object_closure like '%{object_closure}%'")
         if entity:
             clauses.append(f"subject = '{entity}' OR object = '{entity}'")
         if between:
