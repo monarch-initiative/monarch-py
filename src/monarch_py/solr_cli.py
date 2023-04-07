@@ -125,10 +125,6 @@ def associations(
     args.pop("fmt", None)
     args.pop("output", None)
 
-    if not direct: 
-        args["subject_closure"] = args.pop("subject", None)
-        args["object_closure"] = args.pop("object", None)
-
     data = get_solr(update)
     response = data.get_associations(**args)
 
