@@ -34,6 +34,7 @@ class HistoPhenoKeys(Enum):
     growth = "HP:0001507"
     breast = "HP:0000769"
 
+
 class SolrQuery(BaseModel):
     q: str = "*:*"
     rows: int = 20

@@ -15,8 +15,9 @@ app.add_typer(sql_cli.sql_app, name="sql")
 def callback(version: Optional[bool] = typer.Option(None, "--version", is_eager=True)):
     if version:
         from monarch_py import __version__
+
         typer.echo(f"monarch_py version: {__version__}")
-        raise typer.Exit() 
+        raise typer.Exit()
 
 
 @app.command("schema")

@@ -1,14 +1,15 @@
 import os
 from dataclasses import dataclass
+from enum import Enum
 from typing import Dict, List, Tuple
 
 from loguru import logger
 from pydantic import ValidationError
-from enum import Enum
 
 from monarch_py.datamodels.model import (
     Association,
     AssociationCount,
+    AssociationLabel,
     AssociationResults,
     Entity,
     FacetField,
@@ -16,7 +17,6 @@ from monarch_py.datamodels.model import (
     HistoPheno,
     SearchResult,
     SearchResults,
-    AssociationLabel
 )
 from monarch_py.datamodels.solr import HistoPhenoKeys, SolrQuery, core
 from monarch_py.interfaces.association_interface import AssociationInterface
@@ -27,16 +27,18 @@ from monarch_py.utils.utils import escape
 
 
 class AssociationLabelQuery(Enum):
-    disease_phenotype = "category:\"biolink:DiseaseToPhenotypicFeatureAssociation\""
-    gene_phenotype = "category:\"biolink:GeneToPhenotypicFeatureAssociation\""
-    gene_interaction = "category:\"biolink:PairwiseGeneToGeneInteraction\""
-    gene_pathway = "category:\"biolink:GeneToPathwayAssociation\""
-    gene_expression = "category:\"biolink:GeneToExpressionSiteAssociation\""
-    gene_orthology = "category:\"biolink:GeneToGeneHomologyAssociation\""
-    chemical_pathway = "category:\"biolink:ChemicalToPathwayAssociation\""
-    gene_function = "category:\"biolink:MacromolecularMachineToMolecularActivityAssociation\""
-    gene_associated_with_disease = "category:\"biolink:GeneToDiseaseAssociation\" AND predicate:\"biolink:gene_associated_with_condition\""
-    gene_affects_risk_for_disease = "category:\"biolink:GeneToDiseaseAssociation\" AND predicate:\"biolink:affects_risk_for\""
+    disease_phenotype = 'category:"biolink:DiseaseToPhenotypicFeatureAssociation"'
+    gene_phenotype = 'category:"biolink:GeneToPhenotypicFeatureAssociation"'
+    gene_interaction = 'category:"biolink:PairwiseGeneToGeneInteraction"'
+    gene_pathway = 'category:"biolink:GeneToPathwayAssociation"'
+    gene_expression = 'category:"biolink:GeneToExpressionSiteAssociation"'
+    gene_orthology = 'category:"biolink:GeneToGeneHomologyAssociation"'
+    chemical_pathway = 'category:"biolink:ChemicalToPathwayAssociation"'
+    gene_function = (
+        'category:"biolink:MacromolecularMachineToMolecularActivityAssociation"'
+    )
+    gene_associated_with_disease = 'category:"biolink:GeneToDiseaseAssociation" AND predicate:"biolink:gene_associated_with_condition"'
+    gene_affects_risk_for_disease = 'category:"biolink:GeneToDiseaseAssociation" AND predicate:"biolink:affects_risk_for"'
 
 
 @dataclass
@@ -405,7 +407,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         facet_values: List[FacetValue] = []
         for k, v in query_result.facet_counts.facet_queries.items():
             if v > 0:
-                facet_values.append(FacetValue(label=AssociationLabelQuery(k).name, count=v))
+                facet_values.append(
+                    FacetValue(label=AssociationLabelQuery(k).name, count=v)
+                )
         return facet_values
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:

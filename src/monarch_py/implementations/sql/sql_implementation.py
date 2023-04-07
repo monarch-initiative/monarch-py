@@ -12,17 +12,20 @@ from monarch_py.utils.utils import SQL_DATA_URL, dict_factory
 
 monarchstow = pystow.module("monarch")
 
+
 class AssociationLabelQuery(Enum):
-    disease_phenotype = "category = \"biolink:DiseaseToPhenotypicFeatureAssociation\""
-    gene_phenotype = "category = \"biolink:GeneToPhenotypicFeatureAssociation\""
-    gene_interaction = "category = \"biolink:PairwiseGeneToGeneInteraction\""
-    gene_pathway = "category = \"biolink:GeneToPathwayAssociation\""
-    gene_expression = "category = \"biolink:GeneToExpressionSiteAssociation\""
-    gene_orthology = "category = \"biolink:GeneToGeneHomologyAssociation\""
-    chemical_pathway = "category = \"biolink:ChemicalToPathwayAssociation\""
-    gene_function = "category = \"biolink:MacromolecularMachineToMolecularActivityAssociation\""
-    gene_associated_with_disease = "category = \"biolink:GeneToDiseaseAssociation\" AND predicate = \"biolink:gene_associated_with_condition\""
-    gene_affects_risk_for_disease = "category = \"biolink:GeneToDiseaseAssociation\" AND predicate = \"biolink:affects_risk_for\""
+    disease_phenotype = 'category = "biolink:DiseaseToPhenotypicFeatureAssociation"'
+    gene_phenotype = 'category = "biolink:GeneToPhenotypicFeatureAssociation"'
+    gene_interaction = 'category = "biolink:PairwiseGeneToGeneInteraction"'
+    gene_pathway = 'category = "biolink:GeneToPathwayAssociation"'
+    gene_expression = 'category = "biolink:GeneToExpressionSiteAssociation"'
+    gene_orthology = 'category = "biolink:GeneToGeneHomologyAssociation"'
+    chemical_pathway = 'category = "biolink:ChemicalToPathwayAssociation"'
+    gene_function = (
+        'category = "biolink:MacromolecularMachineToMolecularActivityAssociation"'
+    )
+    gene_associated_with_disease = 'category = "biolink:GeneToDiseaseAssociation" AND predicate = "biolink:gene_associated_with_condition"'
+    gene_affects_risk_for_disease = 'category = "biolink:GeneToDiseaseAssociation" AND predicate = "biolink:affects_risk_for"'
 
 
 @dataclass
@@ -144,7 +147,6 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             )
         if association_label:
             clauses.append(AssociationLabelQuery[association_label].value)
-
 
         query = f"SELECT * FROM denormalized_edges "
         if clauses:

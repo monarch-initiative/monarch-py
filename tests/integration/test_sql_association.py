@@ -90,9 +90,12 @@ def test_between_reversed():
             and association.object == "HP:0000098"
         )
 
+
 def test_associations_by_label():
     data = SQLImplementation()
-    response = data.get_associations(entity="MONDO:0007947", association_label=AssociationLabel.disease_phenotype)
+    response = data.get_associations(
+        entity="MONDO:0007947", association_label=AssociationLabel.disease_phenotype
+    )
 
     assert response
     assert response.total > 60
