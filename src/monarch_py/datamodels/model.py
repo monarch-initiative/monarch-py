@@ -20,6 +20,21 @@ class ConfiguredBaseModel(WeakRefShimBaseModel,
     pass                    
 
 
+class AssociationLabel(str, Enum):
+    
+    disease_phenotype = "disease_phenotype"
+    gene_phenotype = "gene_phenotype"
+    gene_interaction = "gene_interaction"
+    gene_pathway = "gene_pathway"
+    gene_expression = "gene_expression"
+    gene_orthology = "gene_orthology"
+    chemical_pathway = "chemical_pathway"
+    gene_function = "gene_function"
+    gene_associated_with_disease = "gene_associated_with_disease"
+    gene_affects_risk_for_disease = "gene_affects_risk_for_disease"
+    
+    
+
 class Association(ConfiguredBaseModel):
     
     aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)

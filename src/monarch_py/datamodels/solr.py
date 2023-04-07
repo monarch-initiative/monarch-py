@@ -34,6 +34,17 @@ class HistoPhenoKeys(Enum):
     growth = "HP:0001507"
     breast = "HP:0000769"
 
+class AssociationLabel(Enum):
+    disease_phenotype = "category:\"biolink:DiseaseToPhenotypicFeatureAssociation\""
+    gene_phenotype = "category:\"biolink:GeneToPhenotypicFeatureAssociation\""
+    gene_interaction = "category:\"biolink:PairwiseGeneToGeneInteraction\""
+    gene_pathway = "category:\"biolink:GeneToPathwayAssociation\""
+    gene_expression = "category:\"biolink:GeneToExpressionSiteAssociation\""
+    gene_orthology = "category:\"biolink:GeneToGeneHomologyAssociation\""
+    chemical_pathway = "category:\"biolink:ChemicalToPathwayAssociation\""
+    gene_function = "category:\"biolink:MacromolecularMachineToMolecularActivityAssociation\" OR category:\"biolink:MacromolecularMachineToBiologicalProcessAssociation\" OR category:\"biolink:GeneToCellularComponentAssociation\" OR category:\"biolink:MacromolecularMachineToCellularComponentAssociation\""
+    gene_associated_with_disease = "category:\"biolink:GeneToDiseaseAssociation\" AND predicate:\"biolink:gene_associated_with_condition\""
+    gene_affects_risk_for_disease = "category:\"biolink:GeneToDiseaseAssociation\" AND predicate:\"biolink:affects_risk_for\""
 
 class SolrQuery(BaseModel):
     q: str = "*:*"

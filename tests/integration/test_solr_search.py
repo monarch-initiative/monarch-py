@@ -1,5 +1,6 @@
 import pytest
 
+from monarch_py.datamodels.solr import AssociationLabel
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
 
@@ -63,3 +64,14 @@ def test_association_facet_query():
     assert response.facet_queries['object_closure:"HP:0000924"'].count > 20
     assert response.facet_queries['object_closure:"HP:0000707"'].count > 5
     assert response.facet_queries['object_closure:"HP:0000152"'].count > 20
+
+def test_association_counts():
+    si = SolrImplementation()
+    response = si.get_association_counts(entity="MONDO:0007947")
+    assert response
+    assert len(response) > 1
+
+def test_associations_by_label():
+    si = SolrImplementation()
+    response = si.get_associations(entity="HGNC:1100", association_label=AssociationLabel.gene_affects_risk_for_disease)
+

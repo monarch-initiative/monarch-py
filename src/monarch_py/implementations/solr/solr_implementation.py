@@ -16,7 +16,7 @@ from monarch_py.datamodels.model import (
     SearchResult,
     SearchResults,
 )
-from monarch_py.datamodels.solr import HistoPhenoKeys, SolrQuery, core
+from monarch_py.datamodels.solr import AssociationLabel, HistoPhenoKeys, SolrQuery, core
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
@@ -66,6 +66,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         object_closure: str = None,
         entity: str = None,
         between: str = None,
+        association_label: AssociationLabel = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -98,6 +99,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             object_closure=object_closure,
             entity=entity,
             between=between,
+            association_label=association_label,
             offset=offset,
             limit=limit,
         )
@@ -374,6 +376,19 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         )
 
         return hp
+
+    def get_association_counts(self, entity: str) -> List[FacetValue]:
+
+        query = self._populate_association_query(entity=entity)
+        query.facet_queries = [alq.value for alq in AssociationLabel]
+
+        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
+        query_result = solr.query(query)
+        facet_values: List[FacetValue] = []
+        for k, v in query_result.facet_counts.facet_queries.items():
+            if v > 0:
+                facet_values.append(FacetValue(label=AssociationLabel(k).name, count=v))
+        return facet_values
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
         """
