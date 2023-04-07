@@ -94,7 +94,7 @@ def associations(
         object: The object of the association
         entity: The subject or object of the association
         limit: The number of associations to return
-        direct: Whether to only return associations with subject/object as ancestors
+        direct: Whether to exclude associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved
         fmt: The format of the output (TSV, YAML, JSON)
         output: The path to the output file (stdout if not specified)

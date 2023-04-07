@@ -113,7 +113,7 @@ def associations(
         object (str, optional): The object of the association.
         entity (str, optional): The subject or object of the association.
         between (str, optional): Two comma-separated entities to get bi-directional associations.
-        direct (bool, optional): Return only associations with the specified subject and objects as ancestors. Default False
+        direct (bool, optional): Exclude associations with the specified subject and objects as ancestors. Default False
         limit (int, optional): The number of associations to return. Default 20
         offset (int, optional): The offset of the first association to be retrieved. Default 0
         update (bool, optional): Whether to re-download the Monarch KG. Default False
@@ -125,7 +125,7 @@ def associations(
     args.pop("fmt", None)
     args.pop("output", None)
 
-    if direct: 
+    if not direct: 
         args["subject_closure"] = args.pop("subject", None)
         args["object_closure"] = args.pop("object", None)
 
