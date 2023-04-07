@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from monarch_py.datamodels.model import SearchResults, FacetValue
+from monarch_py.datamodels.model import SearchResults, FacetValue, AssociationLabel
 
 
 class SearchInterface(ABC):
