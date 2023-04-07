@@ -71,11 +71,4 @@ def test_association_counts():
     assert response
     assert len(response) > 1
 
-def test_associations_by_label():
-    si = SolrImplementation()
-    response = si.get_associations(entity="MONDO:0007947", association_label=AssociationLabel.disease_phenotype)
-
-    assert response
-    assert response.total > 60
-    assert response.items[0].subject == "MONDO:0007947"
 

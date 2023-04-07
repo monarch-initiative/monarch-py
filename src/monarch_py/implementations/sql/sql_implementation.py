@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import Enum
 
 import pystow
 from loguru import logger
@@ -10,6 +11,18 @@ from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.utils.utils import SQL_DATA_URL, dict_factory
 
 monarchstow = pystow.module("monarch")
+
+class AssociationLabelQuery(Enum):
+    disease_phenotype = "category = \"biolink:DiseaseToPhenotypicFeatureAssociation\""
+    gene_phenotype = "category = \"biolink:GeneToPhenotypicFeatureAssociation\""
+    gene_interaction = "category = \"biolink:PairwiseGeneToGeneInteraction\""
+    gene_pathway = "category = \"biolink:GeneToPathwayAssociation\""
+    gene_expression = "category = \"biolink:GeneToExpressionSiteAssociation\""
+    gene_orthology = "category = \"biolink:GeneToGeneHomologyAssociation\""
+    chemical_pathway = "category = \"biolink:ChemicalToPathwayAssociation\""
+    gene_function = "category = \"biolink:MacromolecularMachineToMolecularActivityAssociation\""
+    gene_associated_with_disease = "category = \"biolink:GeneToDiseaseAssociation\" AND predicate = \"biolink:gene_associated_with_condition\""
+    gene_affects_risk_for_disease = "category = \"biolink:GeneToDiseaseAssociation\" AND predicate = \"biolink:affects_risk_for\""
 
 
 @dataclass
@@ -82,6 +95,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         object_closure: str = None,
         entity: str = None,
         between: str = None,
+        association_label: str = None,
         offset: int = 0,
         limit: int = 20,
         update: bool = False,
@@ -97,6 +111,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             object_closure (str, optional): Filter to only associations the specified term ID as an ancestor of the object. Defaults to None.
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
             between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
+            association_label (str, optional): Filter to only associations matching the specified association label. Defaults to None.
             offset (int, optional): Result offset, for pagination. Defaults to 0.
             limit (int, optional): Limit results to specified number. Defaults to 20.
 
@@ -127,6 +142,9 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             clauses.append(
                 f"subject = '{e1}' AND object = '{e2}' OR subject = '{e2}' AND object = '{e1}'"
             )
+        if association_label:
+            clauses.append(AssociationLabelQuery[association_label].value)
+
 
         query = f"SELECT * FROM denormalized_edges "
         if clauses:

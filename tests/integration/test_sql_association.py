@@ -1,3 +1,4 @@
+from monarch_py.datamodels.model import AssociationLabel
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
 
@@ -88,3 +89,11 @@ def test_between_reversed():
             association.subject == "MONDO:0007947"
             and association.object == "HP:0000098"
         )
+
+def test_associations_by_label():
+    data = SQLImplementation()
+    response = data.get_associations(entity="MONDO:0007947", association_label=AssociationLabel.disease_phenotype)
+
+    assert response
+    assert response.total > 60
+    assert response.items[0].subject == "MONDO:0007947"
