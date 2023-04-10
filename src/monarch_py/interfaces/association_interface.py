@@ -18,6 +18,7 @@ class AssociationInterface(ABC):
         object_closure: str = None,
         entity: str = None,
         between: Tuple[str, str] = None,
+        association_label: str = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -32,6 +33,7 @@ class AssociationInterface(ABC):
             object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
             between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
+            association_label (str, optional): Filter to only associations matching the specified association label. Defaults to None.
             offset (int, optional): Result offset, for pagination. Defaults to 0.
             limit (int, optional): Limit results to specified number. Defaults to 20.
 

@@ -63,3 +63,10 @@ def test_association_facet_query():
     assert response.facet_queries['object_closure:"HP:0000924"'].count > 20
     assert response.facet_queries['object_closure:"HP:0000707"'].count > 5
     assert response.facet_queries['object_closure:"HP:0000152"'].count > 20
+
+
+def test_association_counts():
+    si = SolrImplementation()
+    response = si.get_association_counts(entity="MONDO:0007947")
+    assert response
+    assert len(response) > 1
