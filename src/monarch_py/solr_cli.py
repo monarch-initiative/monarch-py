@@ -114,11 +114,8 @@ def associations(
         object (str, optional): The object of the association.
         entity (str, optional): The subject or object of the association.
         between (str, optional): Two comma-separated entities to get bi-directional associations.
-<<<<<<< HEAD
         direct (bool, optional): Exclude associations with the specified subject and objects as ancestors. Default False
-=======
         association_label (str, optional): The association label of the association
->>>>>>> main
         limit (int, optional): The number of associations to return. Default 20
         offset (int, optional): The offset of the first association to be retrieved. Default 0
         update (bool, optional): Whether to re-download the Monarch KG. Default False
