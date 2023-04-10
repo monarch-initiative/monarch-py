@@ -815,6 +815,8 @@
     subject: The subject of the association
     object: The object of the association
     entity: The subject or object of the association
+    between: The subject and object of the association
+    association_label: The label of the association
     limit: The number of associations to return
     offset: The offset of the first association to be retrieved
     fmt: The format of the output (TSV, YAML, JSON)
@@ -830,6 +832,7 @@
 <li><code>-o, --object TEXT</code></li>
 <li><code>-e, --entity TEXT</code></li>
 <li><code>--between TEXT</code></li>
+<li><code>--label TEXT</code></li>
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
@@ -958,6 +961,7 @@
     object (str, optional): The object of the association.
     entity (str, optional): The subject or object of the association.
     between (str, optional): Two comma-separated entities to get bi-directional associations.
+    association_label (str, optional): The association label of the association
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
     update (bool, optional): Whether to re-download the Monarch KG. Default False
@@ -974,6 +978,7 @@
 <li><code>--object TEXT</code></li>
 <li><code>--entity TEXT</code></li>
 <li><code>--between TEXT</code></li>
+<li><code>--label TEXT</code></li>
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
@@ -1118,6 +1123,7 @@
     object (str, optional): The object of the association.
     entity (str, optional): The subject or object of the association.
     between (str, optional): Two comma-separated entities to get bi-directional associations.
+    association_label (str, optional): The label of the association.
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
     update (bool, optional): Whether to re-download the Monarch KG. Default False
@@ -1134,6 +1140,7 @@
 <li><code>--object TEXT</code></li>
 <li><code>--entity TEXT</code></li>
 <li><code>--between TEXT</code></li>
+<li><code>--label TEXT</code></li>
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>--update</code></li>

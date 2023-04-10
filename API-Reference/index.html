@@ -502,6 +502,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_counts" class="md-nav__link">
+    get_association_counts()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_facets" class="md-nav__link">
     get_association_facets()
   </a>
@@ -707,6 +714,13 @@
           <li class="md-nav__item">
   <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.autocomplete" class="md-nav__link">
     autocomplete()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_counts" class="md-nav__link">
+    get_association_counts()
   </a>
   
 </li>
@@ -1078,6 +1092,7 @@
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">association_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1174,6 +1189,16 @@
                 <code><a class="autorefs autorefs-external" title="typing.Tuple" href="https://docs.python.org/3/library/typing.html#typing.Tuple">Tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
           </td>
           <td><p>Filter to bi-directional associations between two entities.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>association_label</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations matching the specified association label. Defaults to None.</p></td>
           <td>
                 <code>None</code>
           </td>
@@ -1390,6 +1415,68 @@
 
 
 
+<h4 id="src.monarch_py.interfaces.search_interface.SearchInterface.get_association_counts" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">get_association_counts</span>
+
+
+</h4>
+<div class="highlight"><pre><span></span><code><span class="n">get_association_counts</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Get counts of associations for a given entity</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>entity</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Entity to get association counts for</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-external" title="typing.List" href="https://docs.python.org/3/library/typing.html#typing.List">List</a>[<span title="monarch_py.datamodels.model.FacetValue">FacetValue</span>]</code>
+          </td>
+          <td><p>List[FacetValue]: List of FacetValue objects representing the counts of associations for the given entity</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
 <h4 id="src.monarch_py.interfaces.search_interface.SearchInterface.get_association_facets" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">get_association_facets</span>
 
@@ -1406,6 +1493,7 @@
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">association_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -1776,6 +1864,7 @@
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">association_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="p">)</span>
@@ -2120,6 +2209,7 @@
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">association_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -2217,6 +2307,16 @@
                 <code>Tuple[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
           </td>
           <td><p>Filter to bi-directional associations between two entities.</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>association_label</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Filter to only associations matching the specified association label. Defaults to None.</p></td>
           <td>
                 <code>None</code>
           </td>
