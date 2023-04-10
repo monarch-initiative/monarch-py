@@ -93,8 +93,8 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         category: str = None,
         predicate: str = None,
         subject: str = None,
-        subject_closure: str = None,
         object: str = None,
+        subject_closure: str = None,
         object_closure: str = None,
         entity: str = None,
         between: str = None,
@@ -109,8 +109,8 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             category (str, optional): Filter to only associations matching the specified category. Defaults to None.
             predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
             subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
-            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None.
             object (str, optional): Filter to only associations matching the specified object. Defaults to None.
+            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None.
             object_closure (str, optional): Filter to only associations the specified term ID as an ancestor of the object. Defaults to None.
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
             between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
@@ -129,10 +129,10 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             clauses.append(f"predicate = '{predicate}'")
         if subject:
             clauses.append(f"subject = '{subject}'")
-        if subject_closure:
-            clauses.append(f"subject_closure like '%{subject_closure}%'")
         if object:
             clauses.append(f"object = '{object}'")
+        if subject_closure:
+            clauses.append(f"subject_closure like '%{subject_closure}%'")
         if object_closure:
             clauses.append(f"object_closure like '%{object_closure}%'")
         if entity:

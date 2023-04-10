@@ -78,11 +78,12 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         category: str = None,
         predicate: str = None,
         subject: str = None,
-        subject_closure: str = None,
         object: str = None,
+        subject_closure: str = None,
         object_closure: str = None,
         entity: str = None,
         between: str = None,
+        direct: bool = None,
         association_label: AssociationLabel = None,
         offset: int = 0,
         limit: int = 20,
@@ -93,8 +94,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             category (str, optional): Filter to only associations matching the specified category. Defaults to None.
             predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
             subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
-            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
             object (str, optional): Filter to only associations matching the specified object. Defaults to None.
+            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
             object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
             between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
@@ -111,11 +112,12 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             category=category,
             predicate=predicate,
             subject=subject,
-            subject_closure=subject_closure,
             object=object,
+            subject_closure=subject_closure,
             object_closure=object_closure,
             entity=entity,
             between=between,
+            direct=direct,
             association_label=association_label,
             offset=offset,
             limit=limit,
@@ -144,44 +146,34 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         category: str = None,
         predicate: str = None,
         subject: str = None,
-        subject_closure: str = None,
         object: str = None,
+        subject_closure: str = None,
         object_closure: str = None,
         entity: str = None,
         between: str = None,
+        direct: bool = None,
         association_label: AssociationLabel = None,
         offset: int = 0,
         limit: int = 20,
     ) -> SolrQuery:
-        """
-        Populate a SolrQuery object with association filters
-        Args:
-            category (str, optional): Filter to only associations matching the specified category. Defaults to None.
-            predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
-            subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
-            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
-            object (str, optional): Filter to only associations matching the specified object. Defaults to None.
-            object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
-            entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
-            between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
-            offset (int, optional): Result offset, for pagination. Defaults to 0.
-            limit (int, optional): Limit results to specified number. Defaults to 20.
+        """Populate a SolrQuery object with association filters"""
 
-        Returns:
-            SolrQuery: A populated SolrQuery object
-        """
         query = SolrQuery(start=offset, rows=limit)
+
+        subject_field = "subject" if direct else "subject_closure"
+        object_field = "object" if direct else "object_closure"
+            
 
         if category:
             query.add_field_filter_query("category", category)
         if predicate:
             query.add_field_filter_query("predicate", predicate)
         if subject:
-            query.add_field_filter_query("subject", subject)
+            query.add_field_filter_query(subject_field, subject)
         if subject_closure:
             query.add_field_filter_query("subject_closure", subject_closure)
         if object:
-            query.add_field_filter_query("object", object)
+            query.add_field_filter_query(object_field, object)
         if object_closure:
             query.add_field_filter_query("object_closure", object_closure)
         if between:
@@ -190,11 +182,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             e1 = escape(b[0])
             e2 = escape(b[1])
             query.add_filter_query(
-                f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")'
+                f'({subject_field}:"{e1}" AND {object_field}:"{e2}") OR ({subject_field}:"{e2}" AND {object_field}:"{e1}")'
             )
         if entity:
             query.add_filter_query(
-                f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+                f'{subject_field}:"{escape(entity)}" OR {object_field}:"{escape(entity)}"'
             )
         if association_label:
             query.add_filter_query(AssociationLabelQuery[association_label].value)
