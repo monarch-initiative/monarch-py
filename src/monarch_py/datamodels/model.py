@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Dict, List, Optional
 
 from pydantic import BaseModel as BaseModel
@@ -22,6 +23,20 @@ class ConfiguredBaseModel(
     arbitrary_types_allowed=True,
 ):
     pass
+
+
+class AssociationLabel(str, Enum):
+
+    disease_phenotype = "disease_phenotype"
+    gene_phenotype = "gene_phenotype"
+    gene_interaction = "gene_interaction"
+    gene_pathway = "gene_pathway"
+    gene_expression = "gene_expression"
+    gene_orthology = "gene_orthology"
+    chemical_pathway = "chemical_pathway"
+    gene_function = "gene_function"
+    gene_associated_with_disease = "gene_associated_with_disease"
+    gene_affects_risk_for_disease = "gene_affects_risk_for_disease"
 
 
 class Association(ConfiguredBaseModel):

@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from enum import Enum
 from typing import Dict, List, Tuple
 
 from loguru import logger
@@ -8,6 +9,7 @@ from pydantic import ValidationError
 from monarch_py.datamodels.model import (
     Association,
     AssociationCount,
+    AssociationLabel,
     AssociationResults,
     Entity,
     FacetField,
@@ -22,6 +24,21 @@ from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
 from monarch_py.utils.utils import escape
+
+
+class AssociationLabelQuery(Enum):
+    disease_phenotype = 'category:"biolink:DiseaseToPhenotypicFeatureAssociation"'
+    gene_phenotype = 'category:"biolink:GeneToPhenotypicFeatureAssociation"'
+    gene_interaction = 'category:"biolink:PairwiseGeneToGeneInteraction"'
+    gene_pathway = 'category:"biolink:GeneToPathwayAssociation"'
+    gene_expression = 'category:"biolink:GeneToExpressionSiteAssociation"'
+    gene_orthology = 'category:"biolink:GeneToGeneHomologyAssociation"'
+    chemical_pathway = 'category:"biolink:ChemicalToPathwayAssociation"'
+    gene_function = (
+        'category:"biolink:MacromolecularMachineToMolecularActivityAssociation"'
+    )
+    gene_associated_with_disease = 'category:"biolink:GeneToDiseaseAssociation" AND predicate:"biolink:gene_associated_with_condition"'
+    gene_affects_risk_for_disease = 'category:"biolink:GeneToDiseaseAssociation" AND predicate:"biolink:affects_risk_for"'
 
 
 @dataclass
@@ -67,6 +84,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
+        association_label: AssociationLabel = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -100,6 +118,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             entity=entity,
             between=between,
             direct=direct,
+            association_label=association_label,
             offset=offset,
             limit=limit,
         )
@@ -133,6 +152,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
+        association_label: AssociationLabel = None,
         offset: int = 0,
         limit: int = 20,
     ) -> SolrQuery:
@@ -168,6 +188,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             query.add_filter_query(
                 f'{subject_field}:"{escape(entity)}" OR {object_field}:"{escape(entity)}"'
             )
+        if association_label:
+            query.add_filter_query(AssociationLabelQuery[association_label].value)
 
         return query
 
@@ -366,6 +388,21 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         )
 
         return hp
+
+    def get_association_counts(self, entity: str) -> List[FacetValue]:
+
+        query = self._populate_association_query(entity=entity)
+        query.facet_queries = [alq.value for alq in AssociationLabelQuery]
+
+        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
+        query_result = solr.query(query)
+        facet_values: List[FacetValue] = []
+        for k, v in query_result.facet_counts.facet_queries.items():
+            if v > 0:
+                facet_values.append(
+                    FacetValue(label=AssociationLabelQuery(k).name, count=v)
+                )
+        return facet_values
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
         """

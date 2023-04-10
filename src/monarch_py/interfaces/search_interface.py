@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from monarch_py.datamodels.model import SearchResults
+from monarch_py.datamodels.model import AssociationLabel, FacetValue, SearchResults
 
 
 class SearchInterface(ABC):
@@ -62,6 +62,7 @@ class SearchInterface(ABC):
         object_closure: str = None,
         entity: str = None,
         between: Tuple[str, str] = None,
+        association_label: AssociationLabel = None,
     ) -> SearchResults:
         """
         Get facet counts and facet query counts for associations
@@ -79,5 +80,15 @@ class SearchInterface(ABC):
         Returns:
             SearchResults: Dataclass representing results of a search, with zero rows returned but total count
             and faceting information populated
+        """
+        raise NotImplementedError
+
+    def get_association_counts(self, entity: str) -> List[FacetValue]:
+        """
+        Get counts of associations for a given entity
+        Args:
+            entity (str): Entity to get association counts for
+        Returns:
+            List[FacetValue]: List of FacetValue objects representing the counts of associations for the given entity
         """
         raise NotImplementedError
