@@ -41,6 +41,31 @@ class AssociationLabelQuery(Enum):
     gene_affects_risk_for_disease = 'category:"biolink:GeneToDiseaseAssociation" AND predicate:"biolink:affects_risk_for"'
 
 
+class AssociationSubjectLabel(Enum):
+    disease_phenotype = "Diseases"
+    gene_phenotype = "Genes"
+    gene_interaction = "Genes"
+    gene_pathway = "Genes"
+    gene_expression = "Genes"
+    gene_orthology = "Orthologs"
+    chemical_pathway = "Chemicals"
+    gene_function = "Genes"
+    gene_associated_with_disease = "Associated Genes"
+    gene_affects_risk_for_disease = "Risk Affecting Genes"
+
+class AssociationObjectLabel(Enum):
+    disease_phenotype = "Phenotypes"
+    gene_phenotype = "Phenotypes"
+    gene_interaction = "Interactions"
+    gene_pathway = "Pathways"
+    gene_expression = "Anatomy"
+    gene_orthology = "Orthologs"
+    chemical_pathway = "Pathways"
+    gene_function = "Molecular Functions"
+    gene_associated_with_disease = "Associated Diseases"
+    gene_affects_risk_for_disease = "Risk Affected Diseases"
+
+
 @dataclass
 class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface):
     """Implementation of Monarch Interfaces for Solr endpoint"""
@@ -391,16 +416,30 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def get_association_counts(self, entity: str) -> List[FacetValue]:
 
-        query = self._populate_association_query(entity=entity)
-        query.facet_queries = [alq.value for alq in AssociationLabelQuery]
 
+
+        query = self._populate_association_query(entity=entity)
+        facet_queries = []
+        for field in ['subject_closure', 'object_closure']:
+            facet_queries.extend([f'({alq.value}) AND {field}:\"{entity}\"' for alq in AssociationLabelQuery])
+        query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query_result = solr.query(query)
         facet_values: List[FacetValue] = []
         for k, v in query_result.facet_counts.facet_queries.items():
             if v > 0:
+                if k.endswith(f'AND subject_closure:"{entity}"'):
+                    original_query = k.replace(f' AND subject_closure:"{entity}"','').lstrip('(').rstrip(')')
+                    type = AssociationLabelQuery(original_query).name
+                    label = AssociationObjectLabel[type].value
+                elif k.endswith(f'AND object_closure:"{entity}"'):
+                    original_query = k.replace(f' AND object_closure:"{entity}"','').lstrip('(').rstrip(')')
+                    type = AssociationLabelQuery(original_query).name
+                    label = AssociationSubjectLabel[type].value
+                else:
+                    raise ValueError(f'Unexpected facet query when building association counts: {k}')
                 facet_values.append(
-                    FacetValue(label=AssociationLabelQuery(k).name, count=v)
+                    FacetValue(label=label, count=v)
                 )
         return facet_values
 
