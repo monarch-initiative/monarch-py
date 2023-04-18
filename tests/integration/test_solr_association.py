@@ -1,4 +1,4 @@
-from monarch_py.datamodels.model import AssociationLabel
+from monarch_py.datamodels.model import AssociationGroupKey
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
 
@@ -94,7 +94,7 @@ def test_between_reversed():
 def test_associations_by_label():
     si = SolrImplementation()
     response = si.get_associations(
-        entity="MONDO:0007947", association_label=AssociationLabel.disease_phenotype
+        entity="MONDO:0007947", association_label=AssociationGroupKey.disease_phenotype
     )
 
     assert response

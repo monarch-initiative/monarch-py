@@ -8,7 +8,7 @@ imports:
 - linkml:types
 default_range: string
 enums:
-  AssociationLabel:
+  AssociationGroupKey:
     description: >-
       A grouping label for associations, which are not necessarily 1:1 with
       biolink categories or predicates
@@ -160,14 +160,35 @@ classes:
     slot_usage:
       label:
         identifier: true
+  AssociationGroupMapping:
+    description: >-
+      A data class to hold the necessary information to produce association group lists for given 
+      entities with appropriate directional labels
+    slots:
+      - association_group_key
+      - subject_label
+      - object_label
+      - category
+      - predicate
+    slot_usage:
+      subject_label:
+        description: A label to describe the subjects of the group as a whole for use in the UI
+      object_label:
+        description: A label to describe the objects of the group as a whole for use in the UI
+      category:
+        description: The biolink category to use in queries for this association group
+        multivalued: false
+      preciate:
+        description: The biolink predicate to use in queries for this association group
+  AssociationGroup:
+    is_a: FacetValue
+    slots:
+      - association_group_key
 slots:
   aggregator_knowledge_source:
     multivalued: true
-  associations:
-    inlined: true
-    inlined_as_list: true
-    multivalued: true
-    range: Association
+  association_group_key:
+    range: AssociationGroupKey
   category:
     multivalued: true
   count:

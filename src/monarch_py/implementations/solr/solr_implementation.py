@@ -1,15 +1,18 @@
 import os
+import yaml
+
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Tuple
 
 from loguru import logger
-from pydantic import ValidationError
+from pydantic import ValidationError, parse_obj_as
 
 from monarch_py.datamodels.model import (
     Association,
     AssociationCount,
-    AssociationLabel,
+    AssociationGroupMapping,
+    AssociationGroupKey,
     AssociationResults,
     Entity,
     FacetField,
@@ -24,7 +27,7 @@ from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
 from monarch_py.utils.utils import escape
-
+from monarch_py.utils.association_group_utils import get_association_group_mapping, AssociationGroupMappings
 
 class AssociationLabelQuery(Enum):
     disease_phenotype = 'category:"biolink:DiseaseToPhenotypicFeatureAssociation"'
@@ -52,6 +55,7 @@ class AssociationSubjectLabel(Enum):
     gene_function = "Genes"
     gene_associated_with_disease = "Associated Genes"
     gene_affects_risk_for_disease = "Risk Affecting Genes"
+
 
 class AssociationObjectLabel(Enum):
     disease_phenotype = "Phenotypes"
@@ -109,7 +113,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_label: AssociationLabel = None,
+        association_label: AssociationGroupKey = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -177,7 +181,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_label: AssociationLabel = None,
+        association_label: AssociationGroupKey = None,
         offset: int = 0,
         limit: int = 20,
     ) -> SolrQuery:
@@ -187,7 +191,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         subject_field = "subject" if direct else "subject_closure"
         object_field = "object" if direct else "object_closure"
-            
 
         if category:
             query.add_field_filter_query("category", category)
@@ -415,32 +418,59 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         return hp
 
     def get_association_counts(self, entity: str) -> List[FacetValue]:
+        """
+        Get association counts for a given entity
 
+        This method uses chunks of solr query syntax mapped to the association type
+        Args:
+            entity:
 
+        Returns:
 
+        """
         query = self._populate_association_query(entity=entity)
         facet_queries = []
-        for field in ['subject_closure', 'object_closure']:
-            facet_queries.extend([f'({alq.value}) AND {field}:\"{entity}\"' for alq in AssociationLabelQuery])
+        subject_query = f'AND subject_closure:"{entity}"'
+        object_query = f'AND object_closure:"{entity}"'
+        # Run the same facet_queries constrained to matches against either the subject or object
+        # to know which kind of label will be needed in the UI to refer to the opposite side of the association
+        for field_query in [subject_query, object_query]:
+            for agm in AssociationGroupMappings.mappings():
+                category_query = f'category:"{agm.category}" '
+                predicate_query = (
+                    f'AND predicate:"{agm.predicate}" ' if agm.predicate else ""
+                )
+                association_group_query = (
+                    f"{category_query}{predicate_query}"
+                    if agm.predicate
+                    else category_query
+                )
+                facet_queries.append(
+                    f"({association_group_query}) {field_query}"
+                )
         query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query_result = solr.query(query)
         facet_values: List[FacetValue] = []
         for k, v in query_result.facet_counts.facet_queries.items():
             if v > 0:
-                if k.endswith(f'AND subject_closure:"{entity}"'):
-                    original_query = k.replace(f' AND subject_closure:"{entity}"','').lstrip('(').rstrip(')')
-                    type = AssociationLabelQuery(original_query).name
-                    label = AssociationObjectLabel[type].value
-                elif k.endswith(f'AND object_closure:"{entity}"'):
-                    original_query = k.replace(f' AND object_closure:"{entity}"','').lstrip('(').rstrip(')')
-                    type = AssociationLabelQuery(original_query).name
-                    label = AssociationSubjectLabel[type].value
+                if k.endswith(subject_query):
+                    original_query = (
+                        k.replace(f" {subject_query}", "").lstrip("(").rstrip(")")
+                    )
+                    agm = get_association_group_mapping(original_query)
+                    label = agm.object_label
+                elif k.endswith(object_query):
+                    original_query = (
+                        k.replace(f" {object_query}", "").lstrip("(").rstrip(")")
+                    )
+                    agm = get_association_group_mapping(original_query)
+                    label = agm.subject_label
                 else:
-                    raise ValueError(f'Unexpected facet query when building association counts: {k}')
-                facet_values.append(
-                    FacetValue(label=label, count=v)
-                )
+                    raise ValueError(
+                        f"Unexpected facet query when building association counts: {k}"
+                    )
+                facet_values.append(FacetValue(label=label, count=v))
         return facet_values
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:

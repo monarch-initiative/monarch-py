@@ -1,4 +1,4 @@
-from monarch_py.datamodels.model import AssociationLabel
+from monarch_py.datamodels.model import AssociationGroupKey
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
 
@@ -94,7 +94,7 @@ def test_between_reversed():
 def test_associations_by_label():
     data = SQLImplementation()
     response = data.get_associations(
-        entity="MONDO:0007947", association_label=AssociationLabel.disease_phenotype
+        entity="MONDO:0007947", association_label=AssociationGroupKey.disease_phenotype
     )
 
     assert response
