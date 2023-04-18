@@ -1,17 +1,20 @@
-from typing import Tuple, List
-import yaml
 import pkgutil
+from typing import List, Tuple
 
-from pydantic import BaseModel, parse_obj_as
+import yaml
+from pydantic import parse_obj_as
 
 from monarch_py.datamodels.model import AssociationGroupMapping
+
 
 class AssociationGroupMappings:
     __instance = None
 
     def __init__(self):
         if AssociationGroupMappings.__instance is not None:
-            raise Exception("AssociationGroupMappings is a singleton class, use getInstance() to get the instance.")
+            raise Exception(
+                "AssociationGroupMappings is a singleton class, use getInstance() to get the instance."
+            )
         else:
             AssociationGroupMappings.__instance = self
             self.mappings = None
@@ -24,7 +27,9 @@ class AssociationGroupMappings:
         return AssociationGroupMappings.__instance.mappings
 
     def load_mappings(self):
-        mapping_data = pkgutil.get_data(__package__, '../association_group_mappings.yaml')
+        mapping_data = pkgutil.get_data(
+            __package__, "../association_group_mappings.yaml"
+        )
         mapping_data = yaml.load(mapping_data, Loader=yaml.FullLoader)
         self.mappings = parse_obj_as(List[AssociationGroupMapping], mapping_data)
 
@@ -41,34 +46,43 @@ def get_association_group_mapping(query_string: str) -> AssociationGroupMapping:
 
     category, predicate = _parse_association_group_query_string(query_string)
 
-    matching_groups = [group for group in AssociationGroupMappings.mappings() if group.category == category and group.predicate == predicate]
+    matching_groups = [
+        group
+        for group in AssociationGroupMappings.mappings()
+        if group.category == category and group.predicate == predicate
+    ]
 
     if len(matching_groups) == 0:
-        raise ValueError(f'No matching association group found for query string: [{query_string}]')
+        raise ValueError(
+            f"No matching association group found for query string: [{query_string}]"
+        )
     elif len(matching_groups) > 1:
-        raise ValueError(f'Too many association groups found for query string: [{query_string}]')
+        raise ValueError(
+            f"Too many association groups found for query string: [{query_string}]"
+        )
     else:
         return matching_groups[0]
+
 
 def _parse_association_group_query_string(input_string: str) -> Tuple[str, str]:
     category = None
     predicate = None
 
     # Split the input string into individual fields
-    fields = input_string.split(' AND ')
+    fields = input_string.split(" AND ")
 
     for field in fields:
-        if 'category:' in field:
+        if "category:" in field:
             try:
-                category = ':'.join(field.split(':')[-2:]).replace('"', '').strip()
+                category = ":".join(field.split(":")[-2:]).replace('"', "").strip()
             except:
                 raise ValueError('Unable to parse "category" field')
-        elif 'predicate:' in field:
+        elif "predicate:" in field:
             try:
-                predicate = ':'.join(field.split(':')[-2:]).replace('"', '').strip()
+                predicate = ":".join(field.split(":")[-2:]).replace('"', "").strip()
             except:
                 raise ValueError('Unable to parse "predicate" field')
         else:
-            raise ValueError('Input string does not conform to expected format')
+            raise ValueError("Input string does not conform to expected format")
 
     return category, predicate

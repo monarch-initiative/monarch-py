@@ -1,17 +1,14 @@
 import os
-import yaml
-
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Tuple
 
 from loguru import logger
-from pydantic import ValidationError, parse_obj_as
+from pydantic import ValidationError
 
 from monarch_py.datamodels.model import (
     Association,
     AssociationCount,
-    AssociationGroupMapping,
     AssociationGroupKey,
     AssociationResults,
     Entity,
@@ -26,8 +23,12 @@ from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
+from monarch_py.utils.association_group_utils import (
+    AssociationGroupMappings,
+    get_association_group_mapping,
+)
 from monarch_py.utils.utils import escape
-from monarch_py.utils.association_group_utils import get_association_group_mapping, AssociationGroupMappings
+
 
 class AssociationLabelQuery(Enum):
     disease_phenotype = 'category:"biolink:DiseaseToPhenotypicFeatureAssociation"'
@@ -445,9 +446,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     if agm.predicate
                     else category_query
                 )
-                facet_queries.append(
-                    f"({association_group_query}) {field_query}"
-                )
+                facet_queries.append(f"({association_group_query}) {field_query}")
         query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query_result = solr.query(query)
