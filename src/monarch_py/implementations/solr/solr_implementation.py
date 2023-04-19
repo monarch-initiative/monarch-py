@@ -162,7 +162,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         subject_field = "subject" if direct else "subject_closure"
         object_field = "object" if direct else "object_closure"
-            
 
         if category:
             query.add_field_filter_query("category", category)
