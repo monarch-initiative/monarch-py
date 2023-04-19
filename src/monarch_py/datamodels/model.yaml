@@ -92,6 +92,9 @@ classes:
     is_a: FacetValue
     slots:
       - id
+    slot_usage:
+      label:
+        identifier: false
   AssociationResults:
     is_a: Results
     slots: 

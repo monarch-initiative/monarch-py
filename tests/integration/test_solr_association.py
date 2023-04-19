@@ -62,8 +62,8 @@ def test_entity():
     assert response.total > 50
     for association in response.items:
         assert (
-            association.subject == "MONDO:0007947"
-            or association.object == "MONDO:0007947"
+            "MONDO:0007947" in association.subject_closure
+            or "MONDO:0007947" in association.object_closure
         )
 
 
@@ -74,8 +74,8 @@ def test_between():
     assert response.total > 0
     for association in response.items:
         assert (
-            association.subject == "MONDO:0007947"
-            and association.object == "HP:0000098"
+            "MONDO:0007947" in association.subject_closure
+            and "HP:0000098" in association.object_closure
         )
 
 
@@ -86,8 +86,8 @@ def test_between_reversed():
     assert response.total > 0
     for association in response.items:
         assert (
-            association.subject == "MONDO:0007947"
-            and association.object == "HP:0000098"
+            "MONDO:0007947" in association.subject_closure
+            and "HP:0000098" in association.object_closure
         )
 
 
