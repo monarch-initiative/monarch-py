@@ -176,10 +176,11 @@ classes:
       object_label:
         description: A label to describe the objects of the group as a whole for use in the UI
       category:
-        description: The biolink category to use in queries for this association group
-        multivalued: false
-      preciate:
-        description: The biolink predicate to use in queries for this association group
+        description: The biolink categories to use in queries for this association group, assuming OR semantics
+        multivalued: true
+      predicate:
+        description: The biolink predicate to use in queries for this association group, assuming OR semantics
+        multivalued: true
   AssociationGroup:
     is_a: FacetValue
     slots:

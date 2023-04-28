@@ -41,9 +41,6 @@ def schema():
 @app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -75,9 +72,6 @@ def associations(
     association_label: str = typer.Option(None, "--label"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -159,9 +153,6 @@ def autocomplete(
 @app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),

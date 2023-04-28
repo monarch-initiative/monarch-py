@@ -1,3 +1,4 @@
+import docker
 import pystow
 import typer
 
@@ -19,7 +20,7 @@ monarchstow = pystow.module("monarch")
 @solr_app.command("start")
 def start(update: bool = False):
     """Starts a local Solr container."""
-    check_solr_permissions(update)
+    check_solr_permissions(update=False)
     start_solr()
 
 
@@ -36,15 +37,17 @@ def status():
     raise typer.Exit()
 
 
+@solr_app.command("download")
+def download():
+    get_solr(update=True)
+    raise typer.Exit()
+
 ### SOLR QUERY COMMANDS ###
 
 
 @solr_app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -59,7 +62,6 @@ def entity(
         id (str): The identifier of the entity to be retrieved
 
     Optional Args:
-        update (bool): = Whether to re-download the Monarch KG. Default False
         fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
         output (str): The path to the output file. Default stdout
     """
@@ -68,7 +70,7 @@ def entity(
         console.print("\n[bold red]Entity ID required.[/]\n")
         raise typer.Exit(1)
 
-    data = get_solr(update)
+    data = get_solr(update=False)
     response = data.get_entity(id)
 
     if fmt == "json":
@@ -94,9 +96,6 @@ def associations(
     association_label: str = typer.Option(None, "--label"),
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -118,7 +117,6 @@ def associations(
         association_label (str, optional): The association label of the association
         limit (int, optional): The number of associations to return. Default 20
         offset (int, optional): The offset of the first association to be retrieved. Default 0
-        update (bool, optional): Whether to re-download the Monarch KG. Default False
         fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
         output (str): The path to the output file. Default stdout
     """
@@ -127,7 +125,7 @@ def associations(
     args.pop("fmt", None)
     args.pop("output", None)
 
-    data = get_solr(update)
+    data = get_solr(update=False)
     response = data.get_associations(**args)
 
     if fmt == "json":
@@ -148,9 +146,6 @@ def search(
     taxon: str = typer.Option(None, "--taxon", "-t"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -170,7 +165,7 @@ def search(
         fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
         output (str): The path to the output file. Default stdout
     """
-    data = get_solr(update)
+    data = get_solr(update=False)
 
     response = data.search(
         q=q, category=category, taxon=taxon, limit=limit, offset=offset
@@ -207,7 +202,7 @@ def autocomplete(
 
     """
 
-    data = get_solr()
+    data = get_solr(update=False)
     response = data.autocomplete(q)
 
     if fmt == "json":
@@ -224,9 +219,6 @@ def autocomplete(
 @solr_app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -250,7 +242,7 @@ def histopheno(
         console.print("\n[bold red]Subject ID required.[/]\n")
         raise typer.Exit(1)
 
-    data = get_solr(update)
+    data = get_solr(update=False)
     response = data.get_histopheno(subject)
 
     if fmt == "json":

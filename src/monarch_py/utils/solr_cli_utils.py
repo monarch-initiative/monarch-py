@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 import time
 
@@ -13,9 +14,14 @@ monarchstow = pystow.module("monarch")
 
 def check_solr_permissions(update: bool = False) -> None:
     """Checks that the solr data directory has the correct permissions."""
+    data_path = monarchstow.base / "solr" / "data"
+    # When untarred solr won't necessarily use the same file names for index segments etc
+    # so the untarred path needs to be removed before updating
+    if update:
+        shutil.rmtree(data_path)
     monarchstow.ensure_untar(url=SOLR_DATA_URL, force=update)
     if sys.platform in ["linux", "linux2", "darwin"]:
-        stat_info = os.stat(monarchstow.base / "solr" / "data")
+        stat_info = os.stat(data_path)
         if stat_info.st_gid != 8983:
             console.print(
                 f"""
@@ -37,7 +43,8 @@ def check_for_solr(dc: docker.DockerClient, quiet: bool = False):
 
 def get_solr(update: bool = False):
     """Checks for Solr data and container, and returns a SolrImplementation."""
-    check_solr_permissions(update)
+    if update:
+        check_solr_permissions(update)
     if check_for_solr(dc=docker.from_env(), quiet=True):
         return SolrImplementation()
     else:
@@ -92,7 +99,7 @@ def stop_solr():
 
 
 def solr_status():
-    c = check_for_solr()
+    c = check_for_solr(dc=docker.from_env())
     if not c:
         console.print(
             """

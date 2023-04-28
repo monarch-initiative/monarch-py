@@ -196,11 +196,14 @@ class AssociationGroupMapping(ConfiguredBaseModel):
         None,
         description="""A label to describe the objects of the group as a whole for use in the UI""",
     )
-    category: Optional[str] = Field(
-        None,
-        description="""The biolink category to use in queries for this association group""",
+    category: Optional[List[str]] = Field(
+        default_factory=list,
+        description="""The biolink categories to use in queries for this association group, assuming OR semantics""",
     )
-    predicate: Optional[str] = Field(None)
+    predicate: Optional[List[str]] = Field(
+        default_factory=list,
+        description="""The biolink predicate to use in queries for this association group, assuming OR semantics""",
+    )
 
 
 class AssociationGroup(FacetValue):
