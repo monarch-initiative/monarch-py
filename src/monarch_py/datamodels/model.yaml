@@ -45,14 +45,13 @@ enums:
           description: >-
               Any association between a gene and molecular activity
           meaning: biolink:MacromolecularMachineToMolecularActivityAssociation
-      gene_associated_with_disease:
+      correlated_gene:
         description: >-
-          Association between a gene and a disease that is not known to affect risk
-        meaning: biolink:gene_associated_with_disease
-      gene_affects_risk_for_disease:
+          Association between a gene and a disease that has not been established to be causal
+      causal_gene:
           description: >-
-              Association between a gene and a disease that is known to affect risk
-          meaning: biolink:affects_risk_for
+              Association between a gene and a disease that is known to be causal
+          meaning: biolink:causal
 
 classes:
   Association:

@@ -64,6 +64,37 @@ def get_association_group_mapping(query_string: str) -> AssociationGroupMapping:
         return matching_groups[0]
 
 
+def get_solr_query_fragment(agm: AssociationGroupMapping) -> str:
+    query_string = ""
+    if len(agm.category) == 1:
+        query_string = query_string + f'category:"{agm.category[0]}"'
+    elif len(agm.category) > 1:
+        query_string = (
+            query_string + "("
+            " OR ".join([f'category:"{cat}"' for cat in agm.category]) + ")"
+        )
+
+    if len(agm.category) > 0 and len(agm.predicate) > 0:
+        query_string = query_string + " AND "
+
+    if len(agm.predicate) == 1:
+        query_string = query_string + f'predicate:"{agm.predicate[0]}"'
+    elif len(agm.predicate) > 1:
+        query_string = (
+            query_string
+            + "("
+            + " OR ".join([f'predicate:"{pred}"' for pred in agm.predicate])
+            + ")"
+        )
+
+    return query_string
+
+
+def get_sql_query_fragment(agm: AssociationGroupMapping) -> str:
+    # Maybe this is too brittle? but why repeat all of that logic for just that tiny difference
+    return get_solr_query_fragment(agm).replace(':"', ' = "')
+
+
 def _parse_association_group_query_string(input_string: str) -> Tuple[str, str]:
     category = None
     predicate = None

@@ -35,7 +35,7 @@
   object_label: Causal Diseases
   category: ["biolink:GeneToDiseaseAssociation"]
   predicate: ["biolink:causes"]
-- association_group_key: "correlated_gene"
+- association_group_key: correlated_gene
   subject_label: "Correlated Genes"
   object_label: "Correlated Diseases"
   category: ["biolink:GeneToDiseaseAssociation"]

@@ -1,6 +1,5 @@
 import os
 from dataclasses import dataclass
-from enum import Enum
 from typing import Dict, List, Tuple
 
 from loguru import logger
@@ -26,49 +25,9 @@ from monarch_py.service.solr_service import SolrService
 from monarch_py.utils.association_group_utils import (
     AssociationGroupMappings,
     get_association_group_mapping,
+    get_solr_query_fragment,
 )
 from monarch_py.utils.utils import escape
-
-
-class AssociationLabelQuery(Enum):
-    disease_phenotype = 'category:"biolink:DiseaseToPhenotypicFeatureAssociation"'
-    gene_phenotype = 'category:"biolink:GeneToPhenotypicFeatureAssociation"'
-    gene_interaction = 'category:"biolink:PairwiseGeneToGeneInteraction"'
-    gene_pathway = 'category:"biolink:GeneToPathwayAssociation"'
-    gene_expression = 'category:"biolink:GeneToExpressionSiteAssociation"'
-    gene_orthology = 'category:"biolink:GeneToGeneHomologyAssociation"'
-    chemical_pathway = 'category:"biolink:ChemicalToPathwayAssociation"'
-    gene_function = (
-        'category:"biolink:MacromolecularMachineToMolecularActivityAssociation"'
-    )
-    gene_associated_with_disease = 'category:"biolink:GeneToDiseaseAssociation" AND predicate:"biolink:gene_associated_with_condition"'
-    gene_affects_risk_for_disease = 'category:"biolink:GeneToDiseaseAssociation" AND predicate:"biolink:affects_risk_for"'
-
-
-class AssociationSubjectLabel(Enum):
-    disease_phenotype = "Diseases"
-    gene_phenotype = "Genes"
-    gene_interaction = "Genes"
-    gene_pathway = "Genes"
-    gene_expression = "Genes"
-    gene_orthology = "Orthologs"
-    chemical_pathway = "Chemicals"
-    gene_function = "Genes"
-    gene_associated_with_disease = "Associated Genes"
-    gene_affects_risk_for_disease = "Risk Affecting Genes"
-
-
-class AssociationObjectLabel(Enum):
-    disease_phenotype = "Phenotypes"
-    gene_phenotype = "Phenotypes"
-    gene_interaction = "Interactions"
-    gene_pathway = "Pathways"
-    gene_expression = "Anatomy"
-    gene_orthology = "Orthologs"
-    chemical_pathway = "Pathways"
-    gene_function = "Molecular Functions"
-    gene_associated_with_disease = "Associated Diseases"
-    gene_affects_risk_for_disease = "Risk Affected Diseases"
 
 
 @dataclass
@@ -148,7 +107,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             entity=entity,
             between=between,
             direct=direct,
-            association_label=association_label,
+            association_group_key=association_label,
             offset=offset,
             limit=limit,
         )
@@ -182,7 +141,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_label: AssociationGroupKey = None,
+        association_group_key: AssociationGroupKey = None,
         offset: int = 0,
         limit: int = 20,
     ) -> SolrQuery:
@@ -217,8 +176,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             query.add_filter_query(
                 f'{subject_field}:"{escape(entity)}" OR {object_field}:"{escape(entity)}"'
             )
-        if association_label:
-            query.add_filter_query(AssociationLabelQuery[association_label].value)
+        if association_group_key:
+            query.add_filter_query(get_solr_query_fragment(association_group_key))
 
         return query
 
@@ -437,15 +396,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         # to know which kind of label will be needed in the UI to refer to the opposite side of the association
         for field_query in [subject_query, object_query]:
             for agm in AssociationGroupMappings.mappings():
-                category_query = f'category:"{agm.category}" '
-                predicate_query = (
-                    f'AND predicate:"{agm.predicate}" ' if agm.predicate else ""
-                )
-                association_group_query = (
-                    f"{category_query}{predicate_query}"
-                    if agm.predicate
-                    else category_query
-                )
+                association_group_query = get_solr_query_fragment(agm)
                 facet_queries.append(f"({association_group_query}) {field_query}")
         query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)

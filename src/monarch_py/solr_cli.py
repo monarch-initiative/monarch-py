@@ -1,4 +1,3 @@
-import docker
 import pystow
 import typer
 
@@ -41,6 +40,7 @@ def status():
 def download():
     get_solr(update=True)
     raise typer.Exit()
+
 
 ### SOLR QUERY COMMANDS ###
 

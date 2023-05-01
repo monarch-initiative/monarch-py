@@ -35,8 +35,8 @@ class AssociationGroupKey(str, Enum):
     gene_orthology = "gene_orthology"
     chemical_pathway = "chemical_pathway"
     gene_function = "gene_function"
-    gene_associated_with_disease = "gene_associated_with_disease"
-    gene_affects_risk_for_disease = "gene_affects_risk_for_disease"
+    correlated_gene = "correlated_gene"
+    causal_gene = "causal_gene"
 
 
 class Association(ConfiguredBaseModel):
