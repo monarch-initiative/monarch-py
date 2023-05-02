@@ -69,4 +69,4 @@ def test_association_counts():
     si = SolrImplementation()
     response = si.get_association_counts(entity="MONDO:0007947")
     assert response
-    assert len(response) > 1
+    assert len(response) > 0

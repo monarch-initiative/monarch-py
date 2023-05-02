@@ -1,7 +1,7 @@
 import pkgutil
-from typing import List, Tuple
-
 import yaml
+import re
+from typing import List, Tuple
 from pydantic import parse_obj_as
 
 from monarch_py.datamodels.model import AssociationTypeMapping, AssociationTypeEnum
@@ -49,13 +49,12 @@ def get_association_type_mapping_by_query_string(query_string: str) -> Associati
     Raises: ValueError if no match is found
     """
 
-    category, predicate = _parse_association_type_query_string(query_string)
+    categories, predicates = parse_association_type_query_string(query_string)
 
-    # TODO: handle lists of categories and predicates
     matching_types = [
-        type
-        for type in AssociationTypeMappings.mappings()
-        if type.category == category and type.predicate == predicate
+        a_type
+        for a_type in AssociationTypeMappings.mappings()
+        if set(a_type.category) == set(categories) and set(a_type.predicate) == set(predicates)
     ]
 
     if len(matching_types) == 0:
@@ -101,25 +100,20 @@ def get_sql_query_fragment(agm: AssociationTypeMapping) -> str:
     return get_solr_query_fragment(agm).replace(':"', ' = "')
 
 
-def _parse_association_type_query_string(input_string: str) -> Tuple[str, str]:
-    category = None
-    predicate = None
+def parse_association_type_query_string(query_string: str) -> Tuple[List[str], List[str]]:
+    categories = []
+    predicates = []
 
-    # Split the input string into individual fields
-    fields = input_string.split(" AND ")
+    pattern = re.compile(r'(category|predicate):\s*"?([\w:]+)"?')
+    for match in re.findall(pattern, query_string):
+        if match[0] == 'category':
+            categories.append(match[1])
+        elif match[0] == 'predicate':
+            predicates.append(match[1])
 
-    for field in fields:
-        if "category:" in field:
-            try:
-                category = ":".join(field.split(":")[-2:]).replace('"', "").strip()
-            except:
-                raise ValueError('Unable to parse "category" field')
-        elif "predicate:" in field:
-            try:
-                predicate = ":".join(field.split(":")[-2:]).replace('"', "").strip()
-            except:
-                raise ValueError('Unable to parse "predicate" field')
-        else:
-            raise ValueError("Input string does not conform to expected format")
+    # Check if both categories and predicates were found
+    if not categories and not predicates:
+        raise ValueError("No categories or predicates found in query string")
 
-    return category, predicate
+    return categories, predicates
+

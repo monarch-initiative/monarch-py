@@ -5,7 +5,7 @@
 - association_type_key: gene_phenotype
   subject_label: Genes
   object_label: Phenotypes
-  category: "biolink:GeneToPhenotypicFeatureAssociation"
+  category: ["biolink:GeneToPhenotypicFeatureAssociation"]
 - association_type_key: gene_interaction
   subject_label: Genes
   object_label: Interactions
