@@ -25,7 +25,7 @@ class ConfiguredBaseModel(
     pass
 
 
-class AssociationGroupKey(str, Enum):
+class AssociationTypeEnum(str, Enum):
 
     disease_phenotype = "disease_phenotype"
     gene_phenotype = "gene_phenotype"
@@ -167,48 +167,39 @@ class FacetValue(ConfiguredBaseModel):
     )
 
 
-class AssociationCount(FacetValue):
-
-    id: Optional[str] = Field(None)
-    label: Optional[str] = Field(None)
-    count: Optional[int] = Field(
-        None, description="""number of items a this facet value"""
-    )
-
-
 class FacetField(ConfiguredBaseModel):
 
     label: Optional[str] = Field(None)
     facet_values: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
 
 
-class AssociationGroupMapping(ConfiguredBaseModel):
+class AssociationTypeMapping(ConfiguredBaseModel):
     """
-    A data class to hold the necessary information to produce association group lists for given  entities with appropriate directional labels
+    A data class to hold the necessary information to produce association type counts for given  entities with appropriate directional labels
     """
 
-    association_group_key: Optional[AssociationGroupKey] = Field(None)
+    association_type_key: Optional[AssociationTypeEnum] = Field(None)
     subject_label: Optional[str] = Field(
         None,
-        description="""A label to describe the subjects of the group as a whole for use in the UI""",
+        description="""A label to describe the subjects of the association type as a whole for use in the UI""",
     )
     object_label: Optional[str] = Field(
         None,
-        description="""A label to describe the objects of the group as a whole for use in the UI""",
+        description="""A label to describe the objects of the association type as a whole for use in the UI""",
     )
     category: Optional[List[str]] = Field(
         default_factory=list,
-        description="""The biolink categories to use in queries for this association group, assuming OR semantics""",
+        description="""The biolink categories to use in queries for this association type, assuming OR semantics""",
     )
     predicate: Optional[List[str]] = Field(
         default_factory=list,
-        description="""The biolink predicate to use in queries for this association group, assuming OR semantics""",
+        description="""The biolink predicate to use in queries for this association type, assuming OR semantics""",
     )
 
 
-class AssociationGroup(FacetValue):
+class AssociationCount(FacetValue):
 
-    association_group_key: Optional[AssociationGroupKey] = Field(None)
+    association_type_key: Optional[AssociationTypeEnum] = Field(None)
     label: Optional[str] = Field(None)
     count: Optional[int] = Field(
         None, description="""number of items a this facet value"""
@@ -226,7 +217,6 @@ EntityResults.update_forward_refs()
 SearchResult.update_forward_refs()
 SearchResults.update_forward_refs()
 FacetValue.update_forward_refs()
-AssociationCount.update_forward_refs()
 FacetField.update_forward_refs()
-AssociationGroupMapping.update_forward_refs()
-AssociationGroup.update_forward_refs()
+AssociationTypeMapping.update_forward_refs()
+AssociationCount.update_forward_refs()

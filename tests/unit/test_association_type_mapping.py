@@ -1,7 +1,7 @@
 import pytest
 
-from monarch_py.datamodels.model import AssociationGroupMapping
-from monarch_py.utils.association_group_utils import (
+from monarch_py.datamodels.model import AssociationTypeMapping
+from monarch_py.utils.association_type_utils import (
     get_solr_query_fragment,
     get_sql_query_fragment,
 )
@@ -9,8 +9,8 @@ from monarch_py.utils.association_group_utils import (
 
 @pytest.fixture()
 def basic_mapping():
-    return AssociationGroupMapping(
-        association_group_key="gene_phenotype",
+    return AssociationTypeMapping(
+        association_type_key="gene_phenotype",
         subject_label="Genes",
         object_label="Phenotypes",
         category=["biolink:GeneToPhenotypeAssociation"],
@@ -20,8 +20,8 @@ def basic_mapping():
 
 @pytest.fixture()
 def double_predicate_mapping():
-    return AssociationGroupMapping(
-        association_group_key="correlated_gene",
+    return AssociationTypeMapping(
+        association_type_key="correlated_gene",
         subject_label="Genes",
         object_label="Correlated Diseases",
         category=["biolink:GeneToDiseaseAssociation"],

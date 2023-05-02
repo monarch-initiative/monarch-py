@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from monarch_py.datamodels.model import AssociationGroupKey, FacetValue, SearchResults
+from monarch_py.datamodels.model import AssociationTypeEnum, FacetValue, SearchResults
 
 
 class SearchInterface(ABC):
@@ -62,7 +62,7 @@ class SearchInterface(ABC):
         object_closure: str = None,
         entity: str = None,
         between: Tuple[str, str] = None,
-        association_label: AssociationGroupKey = None,
+        association_type: AssociationTypeEnum = None,
     ) -> SearchResults:
         """
         Get facet counts and facet query counts for associations

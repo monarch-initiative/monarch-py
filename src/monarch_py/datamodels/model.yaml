@@ -8,9 +8,9 @@ imports:
 - linkml:types
 default_range: string
 enums:
-  AssociationGroupKey:
+  AssociationTypeEnum:
     description: >-
-      A grouping label for associations, which are not necessarily 1:1 with
+      A grouping label for association types, which are not necessarily 1:1 with
       biolink categories or predicates
     permissible_values:
       disease_phenotype:
@@ -87,10 +87,6 @@ classes:
     - stage_qualifier
     - pathway
     - relation
-  AssociationCount:
-    is_a: FacetValue
-    slots:
-      - id
   AssociationResults:
     is_a: Results
     slots: 
@@ -159,36 +155,36 @@ classes:
     slot_usage:
       label:
         identifier: true
-  AssociationGroupMapping:
+  AssociationTypeMapping:
     description: >-
-      A data class to hold the necessary information to produce association group lists for given 
+      A data class to hold the necessary information to produce association type counts for given 
       entities with appropriate directional labels
     slots:
-      - association_group_key
+      - association_type_key
       - subject_label
       - object_label
       - category
       - predicate
     slot_usage:
       subject_label:
-        description: A label to describe the subjects of the group as a whole for use in the UI
+        description: A label to describe the subjects of the association type as a whole for use in the UI
       object_label:
-        description: A label to describe the objects of the group as a whole for use in the UI
+        description: A label to describe the objects of the association type as a whole for use in the UI
       category:
-        description: The biolink categories to use in queries for this association group, assuming OR semantics
+        description: The biolink categories to use in queries for this association type, assuming OR semantics
         multivalued: true
       predicate:
-        description: The biolink predicate to use in queries for this association group, assuming OR semantics
+        description: The biolink predicate to use in queries for this association type, assuming OR semantics
         multivalued: true
-  AssociationGroup:
+  AssociationCount:
     is_a: FacetValue
     slots:
-      - association_group_key
+      - association_type_key
 slots:
   aggregator_knowledge_source:
     multivalued: true
-  association_group_key:
-    range: AssociationGroupKey
+  association_type_key:
+    range: AssociationTypeEnum
   category:
     multivalued: true
   count:

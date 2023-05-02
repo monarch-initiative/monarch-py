@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from monarch_py.datamodels.model import (
     Association,
     AssociationCount,
-    AssociationGroupKey,
+    AssociationTypeEnum,
     AssociationResults,
     Entity,
     FacetField,
@@ -22,9 +22,9 @@ from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.interfaces.search_interface import SearchInterface
 from monarch_py.service.solr_service import SolrService
-from monarch_py.utils.association_group_utils import (
-    AssociationGroupMappings,
-    get_association_group_mapping,
+from monarch_py.utils.association_type_utils import (
+    AssociationTypeMappings,
+    get_association_type_mapping_by_query_string,
     get_solr_query_fragment,
 )
 from monarch_py.utils.utils import escape
@@ -73,7 +73,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_label: AssociationGroupKey = None,
+        association_type: AssociationTypeEnum = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -107,7 +107,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             entity=entity,
             between=between,
             direct=direct,
-            association_group_key=association_label,
+            association_type=association_type,
             offset=offset,
             limit=limit,
         )
@@ -141,7 +141,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_group_key: AssociationGroupKey = None,
+        association_type: AssociationTypeEnum = None,
         offset: int = 0,
         limit: int = 20,
     ) -> SolrQuery:
@@ -176,8 +176,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             query.add_filter_query(
                 f'{subject_field}:"{escape(entity)}" OR {object_field}:"{escape(entity)}"'
             )
-        if association_group_key:
-            query.add_filter_query(get_solr_query_fragment(association_group_key))
+        if association_type:
+            query.add_filter_query(get_solr_query_fragment(association_type))
 
         return query
 
@@ -395,9 +395,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         # Run the same facet_queries constrained to matches against either the subject or object
         # to know which kind of label will be needed in the UI to refer to the opposite side of the association
         for field_query in [subject_query, object_query]:
-            for agm in AssociationGroupMappings.mappings():
-                association_group_query = get_solr_query_fragment(agm)
-                facet_queries.append(f"({association_group_query}) {field_query}")
+            for agm in AssociationTypeMappings.mappings():
+                association_type_query = get_solr_query_fragment(agm)
+                facet_queries.append(f"({association_type_query}) {field_query}")
         query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query_result = solr.query(query)
@@ -408,13 +408,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     original_query = (
                         k.replace(f" {subject_query}", "").lstrip("(").rstrip(")")
                     )
-                    agm = get_association_group_mapping(original_query)
+                    agm = get_association_type_mapping_by_query_string(original_query)
                     label = agm.object_label
                 elif k.endswith(object_query):
                     original_query = (
                         k.replace(f" {object_query}", "").lstrip("(").rstrip(")")
                     )
-                    agm = get_association_group_mapping(original_query)
+                    agm = get_association_type_mapping_by_query_string(original_query)
                     label = agm.subject_label
                 else:
                     raise ValueError(
