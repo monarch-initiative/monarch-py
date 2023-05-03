@@ -17,17 +17,17 @@ class AssociationTypeMappings:
             )
         else:
             AssociationTypeMappings.__instance = self
-            self._mappings = None
+            self.mappings = None
             self.load_mappings()
 
     @staticmethod
-    def mappings():
+    def get_mappings():
         if AssociationTypeMappings.__instance is None:
             AssociationTypeMappings()
         return AssociationTypeMappings.__instance.mappings
 
-    def mapping(self, association_type: AssociationTypeEnum):
-        for mapping in self._mappings:
+    def get_mapping(self, association_type: AssociationTypeEnum):
+        for mapping in self.mappings:
             if mapping.association_type_key == association_type:
                 return mapping
 
@@ -36,7 +36,7 @@ class AssociationTypeMappings:
             __package__, "../association_type_mappings.yaml"
         )
         mapping_data = yaml.load(mapping_data, Loader=yaml.FullLoader)
-        self._mappings = parse_obj_as(List[AssociationTypeMapping], mapping_data)
+        self.mappings = parse_obj_as(List[AssociationTypeMapping], mapping_data)
 
 
 def get_association_type_mapping_by_query_string(query_string: str) -> AssociationTypeMapping:
@@ -53,7 +53,7 @@ def get_association_type_mapping_by_query_string(query_string: str) -> Associati
 
     matching_types = [
         a_type
-        for a_type in AssociationTypeMappings.mappings()
+        for a_type in AssociationTypeMappings.get_mappings()
         if set(a_type.category) == set(categories) and set(a_type.predicate) == set(predicates)
     ]
 

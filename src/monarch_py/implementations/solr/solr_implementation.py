@@ -177,7 +177,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 f'{subject_field}:"{escape(entity)}" OR {object_field}:"{escape(entity)}"'
             )
         if association_type:
-            query.add_filter_query(get_solr_query_fragment(AssociationTypeMappings().mapping(association_type)))
+            query.add_filter_query(get_solr_query_fragment(AssociationTypeMappings().get_mapping(association_type)))
 
         return query
 
@@ -395,7 +395,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         # Run the same facet_queries constrained to matches against either the subject or object
         # to know which kind of label will be needed in the UI to refer to the opposite side of the association
         for field_query in [subject_query, object_query]:
-            for agm in AssociationTypeMappings.mappings():
+            for agm in AssociationTypeMappings.get_mappings():
                 association_type_query = get_solr_query_fragment(agm)
                 facet_queries.append(f"({association_type_query}) {field_query}")
         query.facet_queries = facet_queries
