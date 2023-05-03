@@ -85,15 +85,6 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
             rows = [list(item.dict().values()) for item in obj.items]
     else:
         raise TypeError(FMT_INPUT_ERROR_MSG)
-
-    # if file: # Write to file
-    #     fh = open(file, "w")
-    #     writer = csv.writer(fh, delimiter="\t")
-    #     writer.writerow(headers)
-    #     for row in rows:
-    #         writer.writerow(list(row))
-    #     fh.close()
-    #     console.print(f"\nOutput written to {file}\n")
     
     fh = open(file, "w") if file else sys.stdout
     writer = csv.writer(fh, delimiter="\t")
