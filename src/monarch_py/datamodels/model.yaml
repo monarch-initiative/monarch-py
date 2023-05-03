@@ -7,6 +7,7 @@ description: Data datamodels for the Monarch Initiative data access library
 imports:
 - linkml:types
 default_range: string
+
 enums:
   AssociationTypeEnum:
     description: >-

@@ -14,6 +14,7 @@ from monarch_py.datamodels.model import (
     FacetField,
     FacetValue,
     HistoPheno,
+    HistoBin,
     SearchResult,
     SearchResults,
 )
@@ -380,22 +381,14 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.facet_queries = [f'object_closure:"{i}"' for i in hpkeys]
         query_result = solr.query(query)
 
-        association_counts = []
+        bins = []
         for k, v in query_result.facet_counts.facet_queries.items():
             id = f"{k.split(':')[1]}:{k.split(':')[2]}".replace('"', "")
             label = HistoPhenoKeys(id).name
-            association_counts.append(AssociationCount(id=id, label=label, count=v))
-
-        association_counts = sorted(
-            association_counts, key=lambda x: x.count, reverse=True
-        )
-
-        hp = HistoPheno(
-            id=subject_closure,
-            items=association_counts,
-        )
-
-        return hp
+            bins.append(HistoBin(id=id, label=label, count=v))
+        bins = sorted(bins, key=lambda x: x.count, reverse=True)
+        
+        return HistoPheno(id=subject_closure, items=bins)
 
     def get_association_counts(self, entity: str) -> List[AssociationCount]:
         """
