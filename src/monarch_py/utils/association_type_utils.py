@@ -17,7 +17,7 @@ class AssociationTypeMappings:
             )
         else:
             AssociationTypeMappings.__instance = self
-            self.mappings = None
+            self._mappings = None
             self.load_mappings()
 
     @staticmethod
@@ -27,8 +27,8 @@ class AssociationTypeMappings:
         return AssociationTypeMappings.__instance.mappings
 
     def mapping(self, association_type: AssociationTypeEnum):
-        for mapping in self.mappings():
-            if mapping.type == association_type:
+        for mapping in self._mappings:
+            if mapping.association_type_key == association_type:
                 return mapping
 
     def load_mappings(self):
@@ -36,7 +36,7 @@ class AssociationTypeMappings:
             __package__, "../association_type_mappings.yaml"
         )
         mapping_data = yaml.load(mapping_data, Loader=yaml.FullLoader)
-        self.mappings = parse_obj_as(List[AssociationTypeMapping], mapping_data)
+        self._mappings = parse_obj_as(List[AssociationTypeMapping], mapping_data)
 
 
 def get_association_type_mapping_by_query_string(query_string: str) -> AssociationTypeMapping:

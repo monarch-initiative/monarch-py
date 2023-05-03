@@ -99,4 +99,4 @@ def test_associations_by_type():
 
     assert response
     assert response.total > 60
-    assert response.items[0].subject == "MONDO:0007947"
+    assert "MONDO:0007947" in response.items[0].subject_closure

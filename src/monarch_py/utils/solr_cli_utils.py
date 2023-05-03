@@ -87,7 +87,7 @@ def start_solr():
 
 def stop_solr():
     """Stops the local Solr container."""
-    c = check_for_solr(quiet=True)
+    c = check_for_solr(dc=docker.from_env(), quiet=True)
     if c:
         try:
             console.print(f"Stopping {c.name}...")

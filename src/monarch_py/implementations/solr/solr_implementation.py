@@ -177,7 +177,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 f'{subject_field}:"{escape(entity)}" OR {object_field}:"{escape(entity)}"'
             )
         if association_type:
-            query.add_filter_query(get_solr_query_fragment(association_type))
+            query.add_filter_query(get_solr_query_fragment(AssociationTypeMappings().mapping(association_type)))
 
         return query
 
