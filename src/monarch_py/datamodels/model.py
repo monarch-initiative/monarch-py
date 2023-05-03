@@ -206,6 +206,17 @@ class AssociationCount(FacetValue):
     )
 
 
+class AssociationCountList(ConfiguredBaseModel):
+    """
+    Container class for a list of association counts
+    """
+
+    items: Optional[List[AssociationCount]] = Field(
+        default_factory=list,
+        description="""A collection of items, with the type to be overriden by slot_usage""",
+    )
+
+
 # Update forward refs
 # see https://pydantic-docs.helpmanual.io/usage/postponed_annotations/
 Association.update_forward_refs()
@@ -220,3 +231,4 @@ FacetValue.update_forward_refs()
 FacetField.update_forward_refs()
 AssociationTypeMapping.update_forward_refs()
 AssociationCount.update_forward_refs()
+AssociationCountList.update_forward_refs()

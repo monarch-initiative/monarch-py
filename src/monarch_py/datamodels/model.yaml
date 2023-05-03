@@ -180,6 +180,13 @@ classes:
     is_a: FacetValue
     slots:
       - association_type
+  AssociationCountList:
+    description: Container class for a list of association counts
+    slots:
+      - items
+    slot_usage:
+      items:
+        range: AssociationCount
 slots:
   aggregator_knowledge_source:
     multivalued: true

@@ -424,7 +424,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     raise ValueError(
                         f"Unexpected facet query when building association counts: {k}"
                     )
-                association_counts.append(AssociationCount(label=label, count=v, association_type=agm.association_type))
+                association_counts.append(
+                    AssociationCount(
+                        label=label, count=v, association_type=agm.association_type
+                    )
+                )
         return association_counts
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:

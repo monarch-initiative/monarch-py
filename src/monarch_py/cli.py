@@ -173,5 +173,29 @@ def histopheno(
     solr_cli.histopheno(**locals())
 
 
+@app.command("association-counts")
+def association_counts(
+    entity: str = typer.Argument(None, help="The entity to get association counts for"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
+    """
+    Retrieve association counts for an entity by ID
+
+    Args:
+        entity: The entity to get association counts for
+        fmt: The format of the output (TSV, YAML, JSON). Default JSON
+        output: The path to the output file. Default stdout
+
+    Returns:
+        A list of association counts for the given entity containing association type, label and count
+    """
+    solr_cli.association_counts(**locals())
+
+
 if __name__ == "__main__":
     app()

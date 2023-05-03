@@ -1,6 +1,7 @@
 import pystow
 import typer
 
+from monarch_py.datamodels.model import AssociationCountList
 from monarch_py.utils.solr_cli_utils import (
     check_solr_permissions,
     get_solr,
@@ -251,6 +252,46 @@ def histopheno(
         to_tsv(response, output)
     elif fmt == "yaml":
         to_yaml(response, output)
+    else:
+        console.print(f"\n[bold red[Format '{fmt}' not supported.[/]\n")
+    raise typer.Exit()
+
+
+@solr_app.command("association-counts")
+def association_counts(
+    entity: str = typer.Argument(None, help="The entity to get association counts for"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
+    """
+    Retrieve the association counts for a given entity
+
+    Args:
+        entity (str): The entity to get association counts for
+
+    Optional Args:
+        update (bool): Whether to re-download the Monarch KG. Default False
+        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        output (str): The path to the output file. Default stdout
+    """
+
+    if not entity:
+        console.print("\n[bold red]Entity ID required.[/]\n")
+        raise typer.Exit(1)
+
+    data = get_solr(update=False)
+    response = data.get_association_counts(entity)
+    counts = AssociationCountList(items=response)
+    if fmt == "json":
+        to_json(counts, output)
+    elif fmt == "tsv":
+        to_tsv(counts, output)
+    elif fmt == "yaml":
+        to_yaml(counts, output)
     else:
         console.print(f"\n[bold red[Format '{fmt}' not supported.[/]\n")
     raise typer.Exit()

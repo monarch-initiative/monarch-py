@@ -71,20 +71,29 @@ def test_association_counts_for_disease():
     assert association_counts
     assert len(association_counts) > 0
 
-    causal_genes = [ac for ac in association_counts if ac.association_type == "causal_gene"][0]
+    causal_genes = [
+        ac for ac in association_counts if ac.association_type == "causal_gene"
+    ][0]
     assert causal_genes.label == "Causal Genes"
 
-    disease_phenotype = [ac for ac in association_counts if ac.association_type == "disease_phenotype"][0]
+    disease_phenotype = [
+        ac for ac in association_counts if ac.association_type == "disease_phenotype"
+    ][0]
     assert disease_phenotype.label == "Phenotypes"
+
 
 def test_association_counts_for_phenotype():
     si = SolrImplementation()
-    association_counts = si.get_association_counts(entity="HP:0000707") # HP:0025096 ?
+    association_counts = si.get_association_counts(entity="HP:0000707")  # HP:0025096 ?
     assert association_counts
     assert len(association_counts) > 0
 
-    disease_phenotype = [ac for ac in association_counts if ac.association_type == "disease_phenotype"][0]
+    disease_phenotype = [
+        ac for ac in association_counts if ac.association_type == "disease_phenotype"
+    ][0]
     assert disease_phenotype.label == "Diseases"
 
-    gene_phenotype = [ac for ac in association_counts if ac.association_type == "gene_phenotype"][0]
+    gene_phenotype = [
+        ac for ac in association_counts if ac.association_type == "gene_phenotype"
+    ][0]
     assert gene_phenotype.label == "Genes"
