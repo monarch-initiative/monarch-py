@@ -23,7 +23,7 @@ SQL_DATA_URL = (
 console = Console(
     color_system="truecolor",
     stderr=True,
-    style="blue1",
+    style="pink1",
 )
 
 
@@ -51,6 +51,15 @@ def dict_factory(cursor, row):
 FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, AssociationCountList, or Results objects."
 
 
+def get_headers_from_obj(obj: ConfiguredBaseModel) -> list:
+    # example = list(type(obj).schema()['definitions'][type(obj).schema()['properties']['items']['items']['$ref'].split('/')[-1]]['properties'].keys())
+    schema = type(obj).schema()
+    definitions = schema['definitions']
+    this_ref = schema['properties']['items']['items']['$ref'].split('/')[-1]
+    headers = definitions[this_ref]['properties'].keys()
+    return list(headers)
+
+
 def to_json(obj: ConfiguredBaseModel, file: str):
     """Converts a pydantic model to a JSON string."""
     if file:
@@ -68,22 +77,17 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
     if isinstance(obj, Entity):
         headers = obj.dict().keys()
         rows = [list(obj.dict().values())]
-    elif (
-        isinstance(obj, Results)
-        or isinstance(obj, HistoPheno)
-        or isinstance(obj, AssociationCountList)
-    ):
-        headers = obj.items[0].dict().keys()
-        rows = [list(item.dict().values()) for item in obj.items]
+    elif isinstance(obj, (AssociationCountList, HistoPheno, Results)):
+        if not obj.items:
+            headers = get_headers_from_obj(obj)
+            rows = []
+        else:
+            headers = obj.items[0].dict().keys()
+            rows = [list(item.dict().values()) for item in obj.items]
     else:
         raise TypeError(FMT_INPUT_ERROR_MSG)
 
-    # console.print(f"\n{obj.__class__.__name__}\n")
-    # console.print(f"Headers ({type(headers)}): {headers}\n")
-    # console.print(f"Rows ({type(rows)}):")
-    # for row in rows: console.print(row)
-
-    if file:
+    if file: # Write to file
         fh = open(file, "w")
         writer = csv.writer(fh, delimiter="\t")
         writer.writerow(headers)
@@ -92,8 +96,7 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
         fh.close()
         console.print(f"\nOutput written to {file}\n")
 
-    else:
-        # Convert all to strings
+    else: # Print to console
         for row in rows:
             for i, value in enumerate(row):
                 if isinstance(value, list):
@@ -115,27 +118,6 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
         for row in rows:
             table.add_row(*row)
         console.print(table)
-
-    # fh = open(file, "w") if file else sys.stdout
-    # writer = csv.writer(fh, delimiter="\t")
-
-    # if isinstance(obj, Entity):
-    #     headers = obj.dict().keys()
-    #     writer.writerow(headers)
-    #     writer.writerow(obj.dict().values())
-    # elif (isinstance(obj, Results) or isinstance(obj, HistoPheno)):
-    #     headers = obj.items[0].dict().keys()
-    #     writer.writerow(headers)
-    #     for item in obj.items:
-    #         writer.writerow(item.dict().values())
-    # else:
-    #     raise TypeError(FMT_INPUR_ERROR_MSG)
-
-    # if file:
-    #     fh.close()
-    #     console.print(f"\nOutput written to {file}\n")
-
-    # return
 
 
 def to_yaml(obj: ConfiguredBaseModel, file: str):
