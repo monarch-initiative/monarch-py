@@ -13,7 +13,7 @@
     
     
       
-        <title>Slot: associations - Welcome to monarch-py</title>
+        <title>Enum: AssociationTypeEnum - Welcome to monarch-py</title>
       
     
     
@@ -68,7 +68,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#slot-associations" class="md-skip">
+        <a href="#enum-associationtypeenum" class="md-skip">
           Skip to content
         </a>
       
@@ -102,7 +102,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Slot: associations
+              Enum: AssociationTypeEnum
             
           </span>
         </div>
@@ -452,8 +452,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#properties" class="md-nav__link">
-    Properties
+  <a href="#permissible-values" class="md-nav__link">
+    Permissible Values
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slots" class="md-nav__link">
+    Slots
   </a>
   
 </li>
@@ -499,21 +506,92 @@
                 
                   
 
-  <a href="https://github.com/monarch-initiative/monarch-py/edit/master/docs/Data-Model/associations.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/monarch-initiative/monarch-py/edit/master/docs/Data-Model/AssociationTypeEnum.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="slot-associations">Slot: associations</h1>
-<p>URI: <a href="https://w3id.org/monarch/monarch-py/:associations">https://w3id.org/monarch/monarch-py/:associations</a></p>
-<!-- no inheritance hierarchy -->
-
-<h2 id="properties">Properties</h2>
-<ul>
-<li>Range: <a href="../Association/">Association</a></li>
-<li>Multivalued: True</li>
-</ul>
+<h1 id="enum-associationtypeenum">Enum: AssociationTypeEnum</h1>
+<p><em>A grouping label for association types, which are not necessarily 1:1 with biolink categories or predicates</em></p>
+<p>URI: <a href="AssociationTypeEnum">AssociationTypeEnum</a></p>
+<h2 id="permissible-values">Permissible Values</h2>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>disease_phenotype</td>
+<td>biolink:GeneToDiseaseAssociation</td>
+<td>Any association between a disease and a phenotype</td>
+</tr>
+<tr>
+<td>gene_phenotype</td>
+<td>biolink:GeneToPhenotypicFeatureAssociation</td>
+<td>Any association between a gene and a phenotype</td>
+</tr>
+<tr>
+<td>gene_interaction</td>
+<td>biolink:PairwiseGeneToGeneInteraction</td>
+<td>Any association between two genes</td>
+</tr>
+<tr>
+<td>gene_pathway</td>
+<td>biolink:GeneToPathwayAssociation</td>
+<td>Any association between a gene and a pathway</td>
+</tr>
+<tr>
+<td>gene_expression</td>
+<td>biolink:GeneToExpressionSiteAssociation</td>
+<td>Expression association between a gene and an expression site</td>
+</tr>
+<tr>
+<td>gene_orthology</td>
+<td>biolink:PairwiseGeneToGeneOrthologyAssociation</td>
+<td>Any association between two genes based on orthology</td>
+</tr>
+<tr>
+<td>chemical_pathway</td>
+<td>biolink:ChemicalToPathwayAssociation</td>
+<td>Any association between a chemical and a pathway</td>
+</tr>
+<tr>
+<td>gene_function</td>
+<td>biolink:MacromolecularMachineToMolecularActivityAssociation</td>
+<td>Any association between a gene and molecular activity</td>
+</tr>
+<tr>
+<td>correlated_gene</td>
+<td>None</td>
+<td>Association between a gene and a disease that has not been established to be ...</td>
+</tr>
+<tr>
+<td>causal_gene</td>
+<td>biolink:causal</td>
+<td>Association between a gene and a disease that is known to be causal</td>
+</tr>
+</tbody>
+</table>
+<h2 id="slots">Slots</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../association_type/">association_type</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <h2 id="identifier-and-mapping-information">Identifier and Mapping Information</h2>
 <h3 id="schema-source">Schema Source</h3>
 <ul>
@@ -521,14 +599,52 @@
 </ul>
 <h2 id="linkml-source">LinkML Source</h2>
 <details>
-<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">associations</span>
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AssociationTypeEnum</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A grouping label for association types, which are not necessarily 1:1</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">with biolink categories or predicates</span>
 <span class="nt">from_schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://w3id.org/monarch/monarch-py</span>
 <span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
-<span class="nt">multivalued</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">associations</span>
-<span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Association</span>
-<span class="nt">inlined</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="nt">inlined_as_list</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">permissible_values</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">disease_phenotype</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">disease_phenotype</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any association between a disease and a phenotype</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:GeneToDiseaseAssociation</span>
+<span class="w">  </span><span class="nt">gene_phenotype</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gene_phenotype</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any association between a gene and a phenotype</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:GeneToPhenotypicFeatureAssociation</span>
+<span class="w">  </span><span class="nt">gene_interaction</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gene_interaction</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any association between two genes</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:PairwiseGeneToGeneInteraction</span>
+<span class="w">  </span><span class="nt">gene_pathway</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gene_pathway</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any association between a gene and a pathway</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:GeneToPathwayAssociation</span>
+<span class="w">  </span><span class="nt">gene_expression</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gene_expression</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Expression association between a gene and an expression site</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:GeneToExpressionSiteAssociation</span>
+<span class="w">  </span><span class="nt">gene_orthology</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gene_orthology</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any association between two genes based on orthology</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:PairwiseGeneToGeneOrthologyAssociation</span>
+<span class="w">  </span><span class="nt">chemical_pathway</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chemical_pathway</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any association between a chemical and a pathway</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:ChemicalToPathwayAssociation</span>
+<span class="w">  </span><span class="nt">gene_function</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gene_function</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Any association between a gene and molecular activity</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:MacromolecularMachineToMolecularActivityAssociation</span>
+<span class="w">  </span><span class="nt">correlated_gene</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">correlated_gene</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Association between a gene and a disease that has not been established</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">to be causal</span>
+<span class="w">  </span><span class="nt">causal_gene</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">causal_gene</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Association between a gene and a disease that is known to be causal</span>
+<span class="w">    </span><span class="nt">meaning</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biolink:causal</span>
 </code></pre></div>
 </details>
 

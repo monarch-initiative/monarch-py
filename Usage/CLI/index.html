@@ -391,6 +391,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#monarch-association-counts" class="md-nav__link">
+    monarch association-counts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#monarch-associations" class="md-nav__link">
     monarch associations
   </a>
@@ -441,6 +448,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#monarch-solr-association-counts" class="md-nav__link">
+    monarch solr association-counts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#monarch-solr-associations" class="md-nav__link">
     monarch solr associations
   </a>
@@ -450,6 +464,13 @@
           <li class="md-nav__item">
   <a href="#monarch-solr-autocomplete" class="md-nav__link">
     monarch solr autocomplete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monarch-solr-download" class="md-nav__link">
+    monarch solr download
   </a>
   
 </li>
@@ -628,6 +649,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#monarch-association-counts" class="md-nav__link">
+    monarch association-counts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#monarch-associations" class="md-nav__link">
     monarch associations
   </a>
@@ -678,6 +706,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#monarch-solr-association-counts" class="md-nav__link">
+    monarch solr association-counts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#monarch-solr-associations" class="md-nav__link">
     monarch solr associations
   </a>
@@ -687,6 +722,13 @@
           <li class="md-nav__item">
   <a href="#monarch-solr-autocomplete" class="md-nav__link">
     monarch solr autocomplete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monarch-solr-download" class="md-nav__link">
+    monarch solr download
   </a>
   
 </li>
@@ -798,6 +840,7 @@
 </ul>
 <p><strong>Commands</strong>:</p>
 <ul>
+<li><code>association-counts</code>: Retrieve association counts for an entity...</li>
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>autocomplete</code>: Return entity autcomplete matches for a...</li>
 <li><code>entity</code>: Retrieve an entity by ID</li>
@@ -806,6 +849,27 @@
 <li><code>search</code>: Search for entities</li>
 <li><code>solr</code></li>
 <li><code>sql</code></li>
+</ul>
+<h2 id="monarch-association-counts"><code>monarch association-counts</code></h2>
+<p>Retrieve association counts for an entity by ID</p>
+<p>Args:
+    entity: The entity to get association counts for
+    fmt: The format of the output (TSV, YAML, JSON). Default JSON
+    output: The path to the output file. Default stdout</p>
+<p>Returns:
+    A list of association counts for the given entity containing association type, label and count</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>association-counts<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ENTITY<span class="o">]</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[ENTITY]</code>: The entity to get association counts for</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
+<li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="monarch-associations"><code>monarch associations</code></h2>
 <p>Paginate through associations</p>
@@ -816,7 +880,7 @@
     object: The object of the association
     entity: The subject or object of the association
     between: The subject and object of the association
-    association_label: The label of the association
+    association_type: The label of the association
     limit: The number of associations to return
     direct: Whether to exclude associations with subject/object as ancestors
     offset: The offset of the first association to be retrieved
@@ -837,7 +901,6 @@
 <li><code>--label TEXT</code></li>
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -876,7 +939,6 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -897,7 +959,6 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -945,14 +1006,37 @@
 </ul>
 <p><strong>Commands</strong>:</p>
 <ul>
+<li><code>association-counts</code>: Retrieve the association counts for a...</li>
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>autocomplete</code>: Return entity autcomplete matches for a...</li>
+<li><code>download</code></li>
 <li><code>entity</code>: Retrieve an entity by ID</li>
 <li><code>histopheno</code>: Retrieve the histopheno associations for a...</li>
 <li><code>search</code>: Search for entities</li>
 <li><code>start</code>: Starts a local Solr container.</li>
 <li><code>status</code></li>
 <li><code>stop</code>: Stops the local Solr container.</li>
+</ul>
+<h3 id="monarch-solr-association-counts"><code>monarch solr association-counts</code></h3>
+<p>Retrieve the association counts for a given entity</p>
+<p>Args:
+    entity (str): The entity to get association counts for</p>
+<p>Optional Args:
+    update (bool): Whether to re-download the Monarch KG. Default False
+    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    output (str): The path to the output file. Default stdout</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>association-counts<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ENTITY<span class="o">]</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[ENTITY]</code>: The entity to get association counts for</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
+<li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="monarch-solr-associations"><code>monarch solr associations</code></h3>
 <p>Paginate through associations</p>
@@ -964,10 +1048,9 @@
     entity (str, optional): The subject or object of the association.
     between (str, optional): Two comma-separated entities to get bi-directional associations.
     direct (bool, optional): Exclude associations with the specified subject and objects as ancestors. Default False
-    association_label (str, optional): The association label of the association
+    association_type (str, optional): The association label of the association
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
-    update (bool, optional): Whether to re-download the Monarch KG. Default False
     fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
@@ -985,7 +1068,6 @@
 <li><code>--label TEXT</code></li>
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1009,12 +1091,19 @@
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
+<h3 id="monarch-solr-download"><code>monarch solr download</code></h3>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>download<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
 <h3 id="monarch-solr-entity"><code>monarch solr entity</code></h3>
 <p>Retrieve an entity by ID</p>
 <p>Args:
     id (str): The identifier of the entity to be retrieved</p>
 <p>Optional Args:
-    update (bool): = Whether to re-download the Monarch KG. Default False
     fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
@@ -1026,7 +1115,6 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1048,7 +1136,6 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1073,7 +1160,6 @@
 <li><code>-t, --taxon TEXT</code></li>
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1127,7 +1213,7 @@
     object (str, optional): The object of the association.
     entity (str, optional): The subject or object of the association.
     between (str, optional): Two comma-separated entities to get bi-directional associations.
-    association_label (str, optional): The label of the association.
+    association_type (str, optional): The label of the association.
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
     update (bool, optional): Whether to re-download the Monarch KG. Default False
