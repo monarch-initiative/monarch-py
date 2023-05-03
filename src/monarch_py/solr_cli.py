@@ -9,13 +9,14 @@ from monarch_py.utils.solr_cli_utils import (
     start_solr,
     stop_solr,
 )
-from monarch_py.utils.utils import console, to_json, to_tsv, to_yaml
+from monarch_py.utils.utils import console, format_output
 
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
 
+############################
 ### SOLR DOCKER COMMANDS ###
-
+############################
 
 @solr_app.command("start")
 def start(update: bool = False):
@@ -33,24 +34,27 @@ def stop():
 
 @solr_app.command("status")
 def status():
+    """Checks the status of the local Solr container."""
     solr_status()
     raise typer.Exit()
 
 
 @solr_app.command("download")
 def download():
+    """Download the Monarch Solr KG."""
     get_solr(update=True)
     raise typer.Exit()
 
 
+###########################
 ### SOLR QUERY COMMANDS ###
-
+###########################
 
 @solr_app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -63,7 +67,7 @@ def entity(
         id (str): The identifier of the entity to be retrieved
 
     Optional Args:
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
 
@@ -73,16 +77,7 @@ def entity(
 
     data = get_solr(update=False)
     response = data.get_entity(id)
-
-    if fmt == "json":
-        to_json(response, output)
-    elif fmt == "tsv":
-        to_tsv(response, output)
-    elif fmt == "yaml":
-        to_yaml(response, output)
-    else:
-        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
-    raise typer.Exit()
+    format_output(fmt, response, output)
 
 
 @solr_app.command("associations")
@@ -98,7 +93,7 @@ def associations(
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -118,7 +113,7 @@ def associations(
         association_type (str, optional): The association label of the association
         limit (int, optional): The number of associations to return. Default 20
         offset (int, optional): The offset of the first association to be retrieved. Default 0
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
     args = locals()
@@ -128,16 +123,7 @@ def associations(
 
     data = get_solr(update=False)
     response = data.get_associations(**args)
-
-    if fmt == "json":
-        to_json(response, output)
-    elif fmt == "tsv":
-        to_tsv(response, output)
-    elif fmt == "yaml":
-        to_yaml(response, output)
-    else:
-        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
-    raise typer.Exit()
+    format_output(fmt, response, output)
 
 
 @solr_app.command("search")
@@ -148,7 +134,7 @@ def search(
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -163,31 +149,21 @@ def search(
         taxon: The taxon of the entity
         limit: The number of entities to return
         offset: The offset of the first entity to be retrieved
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
     data = get_solr(update=False)
-
     response = data.search(
         q=q, category=category, taxon=taxon, limit=limit, offset=offset
     )
-
-    if fmt == "json":
-        to_json(response, output)
-    elif fmt == "tsv":
-        to_tsv(response, output)
-    elif fmt == "yaml":
-        to_yaml(response, output)
-    else:
-        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
-    raise typer.Exit()
+    format_output(fmt, response, output)
 
 
 @solr_app.command("autocomplete")
 def autocomplete(
     q: str = typer.Argument(None, help="Query string to autocomplete against"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -198,30 +174,20 @@ def autocomplete(
 
     Args:
         q: The query string to autocomplete against
-        fmt: The format of the output (TSV, YAML, JSON)
+        fmt: The format of the output (json, yaml, tsv, table)
         output: The path to the output file (stdout if not specified)
 
     """
-
     data = get_solr(update=False)
     response = data.autocomplete(q)
-
-    if fmt == "json":
-        to_json(response, output)
-    elif fmt == "tsv":
-        to_tsv(response, output)
-    elif fmt == "yaml":
-        to_yaml(response, output)
-    else:
-        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
-    raise typer.Exit()
+    format_output(fmt, response, output)
 
 
 @solr_app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -235,7 +201,7 @@ def histopheno(
 
     Optional Args:
         update (bool): Whether to re-download the Monarch KG. Default False
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
 
@@ -245,23 +211,14 @@ def histopheno(
 
     data = get_solr(update=False)
     response = data.get_histopheno(subject)
-
-    if fmt == "json":
-        to_json(response, output)
-    elif fmt == "tsv":
-        to_tsv(response, output)
-    elif fmt == "yaml":
-        to_yaml(response, output)
-    else:
-        console.print(f"\n[bold red[Format '{fmt}' not supported.[/]\n")
-    raise typer.Exit()
+    format_output(fmt, response, output)
 
 
 @solr_app.command("association-counts")
 def association_counts(
     entity: str = typer.Argument(None, help="The entity to get association counts for"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -275,23 +232,13 @@ def association_counts(
 
     Optional Args:
         update (bool): Whether to re-download the Monarch KG. Default False
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
-
     if not entity:
         console.print("\n[bold red]Entity ID required.[/]\n")
         raise typer.Exit(1)
-
     data = get_solr(update=False)
     response = data.get_association_counts(entity)
     counts = AssociationCountList(items=response)
-    if fmt == "json":
-        to_json(counts, output)
-    elif fmt == "tsv":
-        to_tsv(counts, output)
-    elif fmt == "yaml":
-        to_yaml(counts, output)
-    else:
-        console.print(f"\n[bold red[Format '{fmt}' not supported.[/]\n")
-    raise typer.Exit()
+    format_output(fmt, counts, output)

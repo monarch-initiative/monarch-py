@@ -15,7 +15,6 @@ app.add_typer(sql_cli.sql_app, name="sql")
 def callback(version: Optional[bool] = typer.Option(None, "--version", is_eager=True)):
     if version:
         from monarch_py import __version__
-
         typer.echo(f"monarch_py version: {__version__}")
         raise typer.Exit()
 
@@ -42,7 +41,7 @@ def schema():
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -53,7 +52,7 @@ def entity(
 
     Args:
         id: The identifier of the entity to be retrieved
-        fmt: The format of the output (TSV, YAML, JSON)
+        fmt: The format of the output (json, yaml, tsv, table)
         output: The path to the output file (stdout if not specified)
 
     """
@@ -73,7 +72,7 @@ def associations(
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -93,7 +92,7 @@ def associations(
         limit: The number of associations to return
         direct: Whether to exclude associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved
-        fmt: The format of the output (TSV, YAML, JSON)
+        fmt: The format of the output (json, yaml, tsv, table)
         output: The path to the output file (stdout if not specified)
     """
     solr_cli.associations(**locals())
@@ -107,7 +106,7 @@ def search(
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -122,7 +121,7 @@ def search(
         taxon: The taxon of the entity
         limit: The number of entities to return
         offset: The offset of the first entity to be retrieved
-        fmt: The format of the output (TSV, YAML, JSON)
+        fmt: The format of the output (json, yaml, tsv, table)
         output: The path to the output file (stdout if not specified)
     """
     solr_cli.search(**locals())
@@ -132,7 +131,7 @@ def search(
 def autocomplete(
     q: str = typer.Argument(None, help="Query string to autocomplete against"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -143,7 +142,7 @@ def autocomplete(
 
     Args:
         q: The query string to autocomplete against
-        fmt: The format of the output (TSV, YAML, JSON)
+        fmt: The format of the output (json, yaml, tsv, table)
         output: The path to the output file (stdout if not specified)
 
     """
@@ -154,7 +153,7 @@ def autocomplete(
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -167,7 +166,7 @@ def histopheno(
         subject: The subject of the association
 
     Optional Args:
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
     solr_cli.histopheno(**locals())
@@ -177,7 +176,7 @@ def histopheno(
 def association_counts(
     entity: str = typer.Argument(None, help="The entity to get association counts for"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -188,7 +187,7 @@ def association_counts(
 
     Args:
         entity: The entity to get association counts for
-        fmt: The format of the output (TSV, YAML, JSON). Default JSON
+        fmt: The format of the output (json, yaml, tsv, table). Default JSON
         output: The path to the output file. Default stdout
 
     Returns:

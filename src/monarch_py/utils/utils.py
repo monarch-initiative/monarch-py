@@ -5,6 +5,7 @@ import yaml
 from rich import print_json
 from rich.console import Console
 from rich.table import Table
+import typer
 
 from monarch_py.datamodels.model import (
     AssociationCountList,
@@ -15,9 +16,7 @@ from monarch_py.datamodels.model import (
 )
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
-SQL_DATA_URL = (
-    "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
-)
+SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
 
 
 console = Console(
@@ -87,37 +86,64 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
     else:
         raise TypeError(FMT_INPUT_ERROR_MSG)
 
-    if file: # Write to file
-        fh = open(file, "w")
-        writer = csv.writer(fh, delimiter="\t")
-        writer.writerow(headers)
-        for row in rows:
-            writer.writerow(list(row))
+    # if file: # Write to file
+    #     fh = open(file, "w")
+    #     writer = csv.writer(fh, delimiter="\t")
+    #     writer.writerow(headers)
+    #     for row in rows:
+    #         writer.writerow(list(row))
+    #     fh.close()
+    #     console.print(f"\nOutput written to {file}\n")
+    
+    fh = open(file, "w") if file else sys.stdout
+    writer = csv.writer(fh, delimiter="\t")
+    writer.writerow(headers)
+    for row in rows:
+        writer.writerow(list(row))
+    if file:
         fh.close()
         console.print(f"\nOutput written to {file}\n")
 
-    else: # Print to console
-        for row in rows:
-            for i, value in enumerate(row):
-                if isinstance(value, list):
-                    row[i] = ", ".join(value)
-                elif not isinstance(value, str):
-                    row[i] = str(value)
-        title = (
-            f"{obj.__class__.__name__}: {obj.id}"
-            if hasattr(obj, "id")
-            else obj.__class__.__name__
-        )
-        table = Table(
-            title=console.rule(title),
-            show_header=True,
-            header_style="bold cyan",
-        )
-        for header in headers:
-            table.add_column(header)
-        for row in rows:
-            table.add_row(*row)
-        console.print(table)
+    return
+
+def to_table(obj: ConfiguredBaseModel):
+
+    # Extract headers and rows from object
+    if isinstance(obj, Entity):
+        headers = obj.dict().keys()
+        rows = [list(obj.dict().values())]
+    elif isinstance(obj, (AssociationCountList, HistoPheno, Results)):
+        if not obj.items:
+            headers = get_headers_from_obj(obj)
+            rows = []
+        else:
+            headers = obj.items[0].dict().keys()
+            rows = [list(item.dict().values()) for item in obj.items]
+    else:
+        raise TypeError(FMT_INPUT_ERROR_MSG)
+    
+    for row in rows:
+        for i, value in enumerate(row):
+            if isinstance(value, list):
+                row[i] = ", ".join(value)
+            elif not isinstance(value, str):
+                row[i] = str(value)
+    title = (
+        f"{obj.__class__.__name__}: {obj.id}"
+        if hasattr(obj, "id")
+        else obj.__class__.__name__
+    )
+    table = Table(
+        title=console.rule(title),
+        show_header=True,
+        header_style="bold cyan",
+    )
+    for header in headers:
+        table.add_column(header)
+    for row in rows:
+        table.add_row(*row)
+    console.print(table)
+    return
 
 
 def to_yaml(obj: ConfiguredBaseModel, file: str):
@@ -141,3 +167,18 @@ def to_yaml(obj: ConfiguredBaseModel, file: str):
         fh.close()
 
     return
+
+
+def format_output(fmt: str, response: ConfiguredBaseModel, output: str):
+    if fmt.lower() == "json":
+        to_json(response, output)
+    elif fmt.lower() == "tsv":
+        to_tsv(response, output)
+    elif fmt.lower() == "yaml":
+        to_yaml(response, output)
+    elif fmt.lower() == "table":
+        to_table(response)
+    else:
+        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
+        raise typer.Exit(1)
+    raise typer.Exit()
