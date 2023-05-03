@@ -157,11 +157,17 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         if predicate:
             query.add_field_filter_query("predicate", predicate)
         if subject:
-            query.add_field_filter_query(subject_field, subject)
+            if direct:
+                query.add_field_filter_query("subject", subject)
+            else:
+                query.add_filter_query(f'subject:"{subject}" OR subject_closure:"{subject}"')
         if subject_closure:
             query.add_field_filter_query("subject_closure", subject_closure)
         if object:
-            query.add_field_filter_query(object_field, object)
+            if direct:
+                query.add_field_filter_query("object", object)
+            else:
+                query.add_filter_query(f'object:"{object}" OR object_closure:"{object}"')
         if object_closure:
             query.add_field_filter_query("object_closure", object_closure)
         if between:
@@ -169,13 +175,23 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             b = between.split(",")
             e1 = escape(b[0])
             e2 = escape(b[1])
-            query.add_filter_query(
-                f'({subject_field}:"{e1}" AND {object_field}:"{e2}") OR ({subject_field}:"{e2}" AND {object_field}:"{e1}")'
-            )
+            if direct:
+                query.add_filter_query(
+                    f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")'
+                )
+            else:
+                query.add_filter_query(
+                    f'((subject:"{e1}" OR subject_closure:"{e1}") AND (object:"{e2}" OR object_closure:"{e2}")) OR ((subject:"{e2}" OR subject_closure:"{e2}") AND (object:"{e1}" OR object_closure:"{e1}"))'
+                )
         if entity:
-            query.add_filter_query(
-                f'{subject_field}:"{escape(entity)}" OR {object_field}:"{escape(entity)}"'
-            )
+            if direct:
+                query.add_filter_query(
+                    f'subject:"{escape(entity)}" OR subject_closure:"{escape(entity)}" OR object:"{escape(entity)}" OR object_closure:"{escape(entity)}"'
+                )
+            else:
+                query.add_filter_query(
+                    f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+                )
         if association_type:
             query.add_filter_query(
                 get_solr_query_fragment(
@@ -394,8 +410,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         """
         query = self._populate_association_query(entity=entity)
         facet_queries = []
-        subject_query = f'AND subject_closure:"{entity}"'
-        object_query = f'AND object_closure:"{entity}"'
+        subject_query = f'AND (subject:"{entity}" OR subject_closure:"{entity}")'
+        object_query = f'AND (object:"{entity}" OR object_closure:"{entity}")'
         # Run the same facet_queries constrained to matches against either the subject or object
         # to know which kind of label will be needed in the UI to refer to the opposite side of the association
         for field_query in [subject_query, object_query]:
