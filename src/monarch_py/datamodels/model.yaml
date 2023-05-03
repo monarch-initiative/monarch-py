@@ -120,7 +120,14 @@ classes:
       - items
     slot_usage:
       items:
-        range: AssociationCount
+        range: HistoBin
+  HistoBin:
+    is_a: FacetValue
+    slots:
+      - id
+    slot_usage:
+      label:
+        identifier: false
   Results:
     abstract: true
     slots:
@@ -187,6 +194,7 @@ classes:
     slot_usage:
       items:
         range: AssociationCount
+
 slots:
   aggregator_knowledge_source:
     multivalued: true
