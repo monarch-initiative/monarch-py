@@ -51,7 +51,7 @@ FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, A
 
 
 def get_headers_from_obj(obj: ConfiguredBaseModel) -> list:
-    # example = list(type(obj).schema()['definitions'][type(obj).schema()['properties']['items']['items']['$ref'].split('/')[-1]]['properties'].keys())
+    """Return a list of headers from a pydantic model."""
     schema = type(obj).schema()
     definitions = schema['definitions']
     this_ref = schema['properties']['items']['items']['$ref'].split('/')[-1]
