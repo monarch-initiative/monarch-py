@@ -1,0 +1,44 @@
+- association_type: disease_phenotype
+  subject_label: Diseases
+  object_label: Phenotypes
+  category: ["biolink:DiseaseToPhenotypicFeatureAssociation"]
+- association_type: gene_phenotype
+  subject_label: Genes
+  object_label: Phenotypes
+  category: ["biolink:GeneToPhenotypicFeatureAssociation"]
+- association_type: gene_interaction
+  subject_label: Genes
+  object_label: Interactions
+  category: ["biolink:PairwiseGeneToGeneInteraction"]
+- association_type: gene_pathway
+  subject_label: Genes
+  object_label: Pathways
+  category: ["biolink:GeneToPathwayAssociation"]
+- association_type: gene_expression
+  subject_label: Genes
+  object_label: Anatomy
+  category: ["biolink:GeneToExpressionSiteAssociation"]
+- association_type: gene_orthology
+  subject_label: Orthologs
+  object_label: Orthologs
+  category: ["biolink:GeneToGeneHomologyAssociation"]
+- association_type: chemical_pathway
+  subject_label: Chemicals
+  object_label: Pathways
+  category: ["biolink:ChemicalToPathwayAssociation"]
+- association_type: gene_function
+  subject_label: Genes
+  object_label: Molecular Functions
+  category: ["biolink:MacromolecularMachineToMolecularActivityAssociation"]
+- association_type: causal_gene
+  subject_label: Causal Genes
+  object_label: Causal Diseases
+  category: ["biolink:GeneToDiseaseAssociation"]
+  predicate: ["biolink:causes"]
+- association_type: correlated_gene
+  subject_label: "Correlated Genes"
+  object_label: "Correlated Diseases"
+  category: ["biolink:GeneToDiseaseAssociation"]
+  predicate:
+    - "biolink:gene_associated_with_condition"
+    - "biolink:contributes_to"

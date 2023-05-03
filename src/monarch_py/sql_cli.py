@@ -59,7 +59,7 @@ def associations(
     object: str = typer.Option(None, "--object"),
     entity: str = typer.Option(None, "--entity"),
     between: str = typer.Option(None, "--between"),
-    association_label: str = typer.Option(None, "--label"),
+    association_type: str = typer.Option(None, "--label"),
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
     update: bool = typer.Option(False, "--update"),
@@ -79,7 +79,7 @@ def associations(
         object (str, optional): The object of the association.
         entity (str, optional): The subject or object of the association.
         between (str, optional): Two comma-separated entities to get bi-directional associations.
-        association_label (str, optional): The label of the association.
+        association_type (str, optional): The label of the association.
         limit (int, optional): The number of associations to return. Default 20
         offset (int, optional): The offset of the first association to be retrieved. Default 0
         update (bool, optional): Whether to re-download the Monarch KG. Default False

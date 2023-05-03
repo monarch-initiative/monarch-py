@@ -41,9 +41,6 @@ def schema():
 @app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -72,12 +69,9 @@ def associations(
     entity: str = typer.Option(None, "--entity", "-e"),
     between: str = typer.Option(None, "--between"),
     direct: bool = typer.Option(False, "--direct"),
-    association_label: str = typer.Option(None, "--label"),
+    association_type: str = typer.Option(None, "--label"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -95,7 +89,7 @@ def associations(
         object: The object of the association
         entity: The subject or object of the association
         between: The subject and object of the association
-        association_label: The label of the association
+        association_type: The label of the association
         limit: The number of associations to return
         direct: Whether to exclude associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved
@@ -159,9 +153,6 @@ def autocomplete(
 @app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
-    update: bool = typer.Option(
-        False, "--update", "-u", help="Whether to re-download the Monarch KG"
-    ),
     fmt: str = typer.Option(
         "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
     ),
@@ -180,6 +171,30 @@ def histopheno(
         output (str): The path to the output file. Default stdout
     """
     solr_cli.histopheno(**locals())
+
+
+@app.command("association-counts")
+def association_counts(
+    entity: str = typer.Argument(None, help="The entity to get association counts for"),
+    fmt: str = typer.Option(
+        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
+    """
+    Retrieve association counts for an entity by ID
+
+    Args:
+        entity: The entity to get association counts for
+        fmt: The format of the output (TSV, YAML, JSON). Default JSON
+        output: The path to the output file. Default stdout
+
+    Returns:
+        A list of association counts for the given entity containing association type, label and count
+    """
+    solr_cli.association_counts(**locals())
 
 
 if __name__ == "__main__":

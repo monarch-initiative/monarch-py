@@ -6,7 +6,13 @@ from rich import print_json
 from rich.console import Console
 from rich.table import Table
 
-from monarch_py.datamodels.model import ConfiguredBaseModel, Entity, HistoPheno, Results
+from monarch_py.datamodels.model import (
+    AssociationCountList,
+    ConfiguredBaseModel,
+    Entity,
+    HistoPheno,
+    Results,
+)
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
 SQL_DATA_URL = (
@@ -42,9 +48,7 @@ def dict_factory(cursor, row):
 
 ### Output conversion methods ###
 
-FMT_INPUR_ERROR_MSG = (
-    "Text conversion method only accepts Entity, HistoPheno, or Results objects."
-)
+FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, AssociationCountList, or Results objects."
 
 
 def to_json(obj: ConfiguredBaseModel, file: str):
@@ -64,11 +68,15 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
     if isinstance(obj, Entity):
         headers = obj.dict().keys()
         rows = [list(obj.dict().values())]
-    elif isinstance(obj, Results) or isinstance(obj, HistoPheno):
+    elif (
+        isinstance(obj, Results)
+        or isinstance(obj, HistoPheno)
+        or isinstance(obj, AssociationCountList)
+    ):
         headers = obj.items[0].dict().keys()
         rows = [list(item.dict().values()) for item in obj.items]
     else:
-        raise TypeError(FMT_INPUR_ERROR_MSG)
+        raise TypeError(FMT_INPUT_ERROR_MSG)
 
     # console.print(f"\n{obj.__class__.__name__}\n")
     # console.print(f"Headers ({type(headers)}): {headers}\n")
@@ -137,10 +145,14 @@ def to_yaml(obj: ConfiguredBaseModel, file: str):
 
     if isinstance(obj, Entity):
         yaml.dump(obj.dict(), fh, indent=4)
-    elif isinstance(obj, Results) or isinstance(obj, HistoPheno):
+    elif (
+        isinstance(obj, Results)
+        or isinstance(obj, HistoPheno)
+        or isinstance(obj, AssociationCountList)
+    ):
         yaml.dump([item.dict() for item in obj.items], fh, indent=4)
     else:
-        raise TypeError(FMT_INPUR_ERROR_MSG)
+        raise TypeError(FMT_INPUT_ERROR_MSG)
 
     if file:
         console.print(f"\nOutput written to {file}\n")

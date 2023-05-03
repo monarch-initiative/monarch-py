@@ -1,4 +1,4 @@
-from monarch_py.datamodels.model import AssociationLabel
+from monarch_py.datamodels.model import AssociationTypeEnum
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
 
@@ -34,7 +34,7 @@ def test_association_predicate():
 
 def test_subject():
     si = SolrImplementation()
-    response = si.get_associations(subject="MONDO:0007947")
+    response = si.get_associations(subject="MONDO:0007947", direct=True)
     assert response
     assert response.total > 50
     assert response.items[0].subject == "MONDO:0007947"
@@ -42,15 +42,15 @@ def test_subject():
 
 def test_object():
     si = SolrImplementation()
-    response = si.get_associations(object="MONDO:0007947")
+    response = si.get_associations(object="MONDO:0007947", direct=True)
     assert response
-    assert response.total > 1
+    assert response.total > 0
     assert response.items[0].object == "MONDO:0007947"
 
 
 def test_object_closure():
     si = SolrImplementation()
-    response = si.get_associations(object_closure="HP:0000240")
+    response = si.get_associations(object="HP:0000240")
     assert response
     assert response.total in range(200, 10000)
 
@@ -91,12 +91,12 @@ def test_between_reversed():
         )
 
 
-def test_associations_by_label():
+def test_associations_by_type():
     si = SolrImplementation()
     response = si.get_associations(
-        entity="MONDO:0007947", association_label=AssociationLabel.disease_phenotype
+        entity="MONDO:0007947", association_type=AssociationTypeEnum.disease_phenotype
     )
 
     assert response
     assert response.total > 60
-    assert response.items[0].subject == "MONDO:0007947"
+    assert "MONDO:0007947" in response.items[0].subject_closure

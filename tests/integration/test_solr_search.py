@@ -65,8 +65,35 @@ def test_association_facet_query():
     assert response.facet_queries['object_closure:"HP:0000152"'].count > 20
 
 
-def test_association_counts():
+def test_association_counts_for_disease():
     si = SolrImplementation()
-    response = si.get_association_counts(entity="MONDO:0007947")
-    assert response
-    assert len(response) > 1
+    association_counts = si.get_association_counts(entity="MONDO:0007947")
+    assert association_counts
+    assert len(association_counts) > 0
+
+    causal_genes = [
+        ac for ac in association_counts if ac.association_type == "causal_gene"
+    ][0]
+    assert causal_genes.label == "Causal Genes"
+
+    disease_phenotype = [
+        ac for ac in association_counts if ac.association_type == "disease_phenotype"
+    ][0]
+    assert disease_phenotype.label == "Phenotypes"
+
+
+def test_association_counts_for_phenotype():
+    si = SolrImplementation()
+    association_counts = si.get_association_counts(entity="HP:0000707")  # HP:0025096 ?
+    assert association_counts
+    assert len(association_counts) > 0
+
+    disease_phenotype = [
+        ac for ac in association_counts if ac.association_type == "disease_phenotype"
+    ][0]
+    assert disease_phenotype.label == "Diseases"
+
+    gene_phenotype = [
+        ac for ac in association_counts if ac.association_type == "gene_phenotype"
+    ][0]
+    assert gene_phenotype.label == "Genes"
