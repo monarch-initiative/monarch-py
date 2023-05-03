@@ -1,7 +1,7 @@
 import typer
 
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
-from monarch_py.utils.utils import console, to_json, to_tsv, to_yaml
+from monarch_py.utils.utils import console, format_output
 
 sql_app = typer.Typer()
 
@@ -13,7 +13,7 @@ def entity(
         False, "--update", "-u", help="Whether to re-download the Monarch KG"
     ),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -24,31 +24,20 @@ def entity(
     Args:
         id (str): The identifier of the entity to be retrieved
         update (bool): = Whether to re-download the Monarch KG. Default False
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
-
     if not id:
         console.print("\n[bold red]Entity ID required.[/]\n")
         raise typer.Exit(1)
-
+    
     data = SQLImplementation()
     response = data.get_entity(id, update)
 
     if not response:
         console.print(f"\nEntity '{id}' not found.\n")
         raise typer.Exit(1)
-
-    if fmt == "json":
-        to_json(response, output)
-    elif fmt == "tsv":
-        to_tsv(response, output)
-    elif fmt == "yaml":
-        to_yaml(response, output)
-    else:
-        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
-        raise typer.Exit(1)
-    raise typer.Exit()
+    format_output(fmt, response, output)
 
 
 @sql_app.command()
@@ -64,7 +53,7 @@ def associations(
     offset: int = typer.Option(0, "--offset"),
     update: bool = typer.Option(False, "--update"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (TSV, YAML, JSON)"
+        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -83,7 +72,7 @@ def associations(
         limit (int, optional): The number of associations to return. Default 20
         offset (int, optional): The offset of the first association to be retrieved. Default 0
         update (bool, optional): Whether to re-download the Monarch KG. Default False
-        fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
     args = locals()
@@ -92,14 +81,4 @@ def associations(
 
     data = SQLImplementation()
     response = data.get_associations(**args)
-
-    if fmt == "json":
-        to_json(response, output)
-    elif fmt == "tsv":
-        to_tsv(response, output)
-    elif fmt == "yaml":
-        to_yaml(response, output)
-    else:
-        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
-        raise typer.Exit(1)
-    raise typer.Exit()
+    format_output(fmt, response, output)

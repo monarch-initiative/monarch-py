@@ -5,6 +5,7 @@ import yaml
 from rich import print_json
 from rich.console import Console
 from rich.table import Table
+import typer
 
 from monarch_py.datamodels.model import (
     AssociationCountList,
@@ -15,15 +16,13 @@ from monarch_py.datamodels.model import (
 )
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
-SQL_DATA_URL = (
-    "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
-)
+SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
 
 
 console = Console(
     color_system="truecolor",
     stderr=True,
-    style="blue1",
+    style="pink1",
 )
 
 
@@ -51,6 +50,15 @@ def dict_factory(cursor, row):
 FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, AssociationCountList, or Results objects."
 
 
+def get_headers_from_obj(obj: ConfiguredBaseModel) -> list:
+    """Return a list of headers from a pydantic model."""
+    schema = type(obj).schema()
+    definitions = schema['definitions']
+    this_ref = schema['properties']['items']['items']['$ref'].split('/')[-1]
+    headers = definitions[this_ref]['properties'].keys()
+    return list(headers)
+
+
 def to_json(obj: ConfiguredBaseModel, file: str):
     """Converts a pydantic model to a JSON string."""
     if file:
@@ -68,74 +76,65 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
     if isinstance(obj, Entity):
         headers = obj.dict().keys()
         rows = [list(obj.dict().values())]
-    elif (
-        isinstance(obj, Results)
-        or isinstance(obj, HistoPheno)
-        or isinstance(obj, AssociationCountList)
-    ):
-        headers = obj.items[0].dict().keys()
-        rows = [list(item.dict().values()) for item in obj.items]
+    elif isinstance(obj, (AssociationCountList, HistoPheno, Results)):
+        if not obj.items:
+            headers = get_headers_from_obj(obj)
+            rows = []
+        else:
+            headers = obj.items[0].dict().keys()
+            rows = [list(item.dict().values()) for item in obj.items]
     else:
         raise TypeError(FMT_INPUT_ERROR_MSG)
-
-    # console.print(f"\n{obj.__class__.__name__}\n")
-    # console.print(f"Headers ({type(headers)}): {headers}\n")
-    # console.print(f"Rows ({type(rows)}):")
-    # for row in rows: console.print(row)
-
+    
+    fh = open(file, "w") if file else sys.stdout
+    writer = csv.writer(fh, delimiter="\t")
+    writer.writerow(headers)
+    for row in rows:
+        writer.writerow(list(row))
     if file:
-        fh = open(file, "w")
-        writer = csv.writer(fh, delimiter="\t")
-        writer.writerow(headers)
-        for row in rows:
-            writer.writerow(list(row))
         fh.close()
         console.print(f"\nOutput written to {file}\n")
 
+    return
+
+def to_table(obj: ConfiguredBaseModel):
+
+    # Extract headers and rows from object
+    if isinstance(obj, Entity):
+        headers = obj.dict().keys()
+        rows = [list(obj.dict().values())]
+    elif isinstance(obj, (AssociationCountList, HistoPheno, Results)):
+        if not obj.items:
+            headers = get_headers_from_obj(obj)
+            rows = []
+        else:
+            headers = obj.items[0].dict().keys()
+            rows = [list(item.dict().values()) for item in obj.items]
     else:
-        # Convert all to strings
-        for row in rows:
-            for i, value in enumerate(row):
-                if isinstance(value, list):
-                    row[i] = ", ".join(value)
-                elif not isinstance(value, str):
-                    row[i] = str(value)
-        title = (
-            f"{obj.__class__.__name__}: {obj.id}"
-            if hasattr(obj, "id")
-            else obj.__class__.__name__
-        )
-        table = Table(
-            title=console.rule(title),
-            show_header=True,
-            header_style="bold cyan",
-        )
-        for header in headers:
-            table.add_column(header)
-        for row in rows:
-            table.add_row(*row)
-        console.print(table)
-
-    # fh = open(file, "w") if file else sys.stdout
-    # writer = csv.writer(fh, delimiter="\t")
-
-    # if isinstance(obj, Entity):
-    #     headers = obj.dict().keys()
-    #     writer.writerow(headers)
-    #     writer.writerow(obj.dict().values())
-    # elif (isinstance(obj, Results) or isinstance(obj, HistoPheno)):
-    #     headers = obj.items[0].dict().keys()
-    #     writer.writerow(headers)
-    #     for item in obj.items:
-    #         writer.writerow(item.dict().values())
-    # else:
-    #     raise TypeError(FMT_INPUR_ERROR_MSG)
-
-    # if file:
-    #     fh.close()
-    #     console.print(f"\nOutput written to {file}\n")
-
-    # return
+        raise TypeError(FMT_INPUT_ERROR_MSG)
+    
+    for row in rows:
+        for i, value in enumerate(row):
+            if isinstance(value, list):
+                row[i] = ", ".join(value)
+            elif not isinstance(value, str):
+                row[i] = str(value)
+    title = (
+        f"{obj.__class__.__name__}: {obj.id}"
+        if hasattr(obj, "id")
+        else obj.__class__.__name__
+    )
+    table = Table(
+        title=console.rule(title),
+        show_header=True,
+        header_style="bold cyan",
+    )
+    for header in headers:
+        table.add_column(header)
+    for row in rows:
+        table.add_row(*row)
+    console.print(table)
+    return
 
 
 def to_yaml(obj: ConfiguredBaseModel, file: str):
@@ -159,3 +158,18 @@ def to_yaml(obj: ConfiguredBaseModel, file: str):
         fh.close()
 
     return
+
+
+def format_output(fmt: str, response: ConfiguredBaseModel, output: str):
+    if fmt.lower() == "json":
+        to_json(response, output)
+    elif fmt.lower() == "tsv":
+        to_tsv(response, output)
+    elif fmt.lower() == "yaml":
+        to_yaml(response, output)
+    elif fmt.lower() == "table":
+        to_table(response)
+    else:
+        console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
+        raise typer.Exit(1)
+    raise typer.Exit()
