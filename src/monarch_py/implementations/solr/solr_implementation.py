@@ -150,9 +150,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         query = SolrQuery(start=offset, rows=limit)
 
-        subject_field = "subject" if direct else "subject_closure"
-        object_field = "object" if direct else "object_closure"
-
         if category:
             query.add_field_filter_query("category", category)
         if predicate:
@@ -161,14 +158,18 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             if direct:
                 query.add_field_filter_query("subject", subject)
             else:
-                query.add_filter_query(f'subject:"{subject}" OR subject_closure:"{subject}"')
+                query.add_filter_query(
+                    f'subject:"{subject}" OR subject_closure:"{subject}"'
+                )
         if subject_closure:
             query.add_field_filter_query("subject_closure", subject_closure)
         if object:
             if direct:
                 query.add_field_filter_query("object", object)
             else:
-                query.add_filter_query(f'object:"{object}" OR object_closure:"{object}"')
+                query.add_filter_query(
+                    f'object:"{object}" OR object_closure:"{object}"'
+                )
         if object_closure:
             query.add_field_filter_query("object_closure", object_closure)
         if between:

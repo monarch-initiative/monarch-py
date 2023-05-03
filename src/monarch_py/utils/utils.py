@@ -1,11 +1,11 @@
 import csv
 import sys
 
+import typer
 import yaml
 from rich import print_json
 from rich.console import Console
 from rich.table import Table
-import typer
 
 from monarch_py.datamodels.model import (
     AssociationCountList,
@@ -16,7 +16,9 @@ from monarch_py.datamodels.model import (
 )
 
 SOLR_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/solr.tar.gz"
-SQL_DATA_URL = "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
+SQL_DATA_URL = (
+    "https://data.monarchinitiative.org/monarch-kg-dev/latest/monarch-kg.db.gz"
+)
 
 
 console = Console(
@@ -53,9 +55,9 @@ FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, A
 def get_headers_from_obj(obj: ConfiguredBaseModel) -> list:
     """Return a list of headers from a pydantic model."""
     schema = type(obj).schema()
-    definitions = schema['definitions']
-    this_ref = schema['properties']['items']['items']['$ref'].split('/')[-1]
-    headers = definitions[this_ref]['properties'].keys()
+    definitions = schema["definitions"]
+    this_ref = schema["properties"]["items"]["items"]["$ref"].split("/")[-1]
+    headers = definitions[this_ref]["properties"].keys()
     return list(headers)
 
 
@@ -85,7 +87,7 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
             rows = [list(item.dict().values()) for item in obj.items]
     else:
         raise TypeError(FMT_INPUT_ERROR_MSG)
-    
+
     fh = open(file, "w") if file else sys.stdout
     writer = csv.writer(fh, delimiter="\t")
     writer.writerow(headers)
@@ -96,6 +98,7 @@ def to_tsv(obj: ConfiguredBaseModel, file: str) -> str:
         console.print(f"\nOutput written to {file}\n")
 
     return
+
 
 def to_table(obj: ConfiguredBaseModel):
 
@@ -112,7 +115,7 @@ def to_table(obj: ConfiguredBaseModel):
             rows = [list(item.dict().values()) for item in obj.items]
     else:
         raise TypeError(FMT_INPUT_ERROR_MSG)
-    
+
     for row in rows:
         for i, value in enumerate(row):
             if isinstance(value, list):

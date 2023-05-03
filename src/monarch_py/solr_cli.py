@@ -18,6 +18,7 @@ monarchstow = pystow.module("monarch")
 ### SOLR DOCKER COMMANDS ###
 ############################
 
+
 @solr_app.command("start")
 def start(update: bool = False):
     """Starts a local Solr container."""
@@ -50,11 +51,15 @@ def download():
 ### SOLR QUERY COMMANDS ###
 ###########################
 
+
 @solr_app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -93,7 +98,10 @@ def associations(
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -134,7 +142,10 @@ def search(
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -163,7 +174,10 @@ def search(
 def autocomplete(
     q: str = typer.Argument(None, help="Query string to autocomplete against"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -187,7 +201,10 @@ def autocomplete(
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -218,7 +235,10 @@ def histopheno(
 def association_counts(
     entity: str = typer.Argument(None, help="The entity to get association counts for"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
