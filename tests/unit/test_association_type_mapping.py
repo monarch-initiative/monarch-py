@@ -1,5 +1,5 @@
 import pytest
-from typing import Tuple
+
 from monarch_py.datamodels.model import AssociationTypeMapping
 from monarch_py.utils.association_type_utils import (
     get_solr_query_fragment,
@@ -11,7 +11,7 @@ from monarch_py.utils.association_type_utils import (
 @pytest.fixture()
 def basic_mapping():
     return AssociationTypeMapping(
-        association_type_key="gene_phenotype",
+        association_type="gene_phenotype",
         subject_label="Genes",
         object_label="Phenotypes",
         category=["biolink:GeneToPhenotypeAssociation"],
@@ -22,7 +22,7 @@ def basic_mapping():
 @pytest.fixture()
 def double_predicate_mapping():
     return AssociationTypeMapping(
-        association_type_key="correlated_gene",
+        association_type="correlated_gene",
         subject_label="Genes",
         object_label="Correlated Diseases",
         category=["biolink:GeneToDiseaseAssociation"],
@@ -61,11 +61,13 @@ def test_sql_double_predicate_mapping(double_predicate_mapping):
         == 'category = "biolink:GeneToDiseaseAssociation" AND (predicate = "biolink:gene_associated_with_condition" OR predicate = "biolink:contributes_to")'
     )
 
+
 def test_parse_association_type_query_string_single_category():
     query_string = 'category:"biolink:GeneToPhenotypeAssociation"'
     categories, predicates = parse_association_type_query_string(query_string)
     assert categories == ["biolink:GeneToPhenotypeAssociation"]
     assert predicates == []
+
 
 def test_parse_association_type_query_string_single_category_and_predicate():
     query_string = 'category:"biolink:GeneToPhenotypeAssociation" AND predicate:"biolink:has_phenotype"'
@@ -73,14 +75,25 @@ def test_parse_association_type_query_string_single_category_and_predicate():
     assert categories == ["biolink:GeneToPhenotypeAssociation"]
     assert predicates == ["biolink:has_phenotype"]
 
+
 def test_parse_association_type_query_string_multiple_categories_and_predicates():
     query_string = 'category:"biolink:GeneToDiseaseAssociation" AND (predicate:"biolink:gene_associated_with_condition" OR predicate:"biolink:contributes_to")'
     categories, predicates = parse_association_type_query_string(query_string)
     assert categories == ["biolink:GeneToDiseaseAssociation"]
-    assert predicates == ["biolink:gene_associated_with_condition", "biolink:contributes_to"]
+    assert predicates == [
+        "biolink:gene_associated_with_condition",
+        "biolink:contributes_to",
+    ]
+
 
 def test_parse_association_type_query_string_multiple_categories_and_predicates_with_or_operator():
     query_string = '(category:"biolink:GeneToPhenotypeAssociation" OR category:"biolink:GeneToDiseaseAssociation") AND (predicate:"biolink:gene_associated_with_condition" OR predicate:"biolink:contributes_to")'
     categories, predicates = parse_association_type_query_string(query_string)
-    assert categories == ["biolink:GeneToPhenotypeAssociation", "biolink:GeneToDiseaseAssociation"]
-    assert predicates == ["biolink:gene_associated_with_condition", "biolink:contributes_to"]
+    assert categories == [
+        "biolink:GeneToPhenotypeAssociation",
+        "biolink:GeneToDiseaseAssociation",
+    ]
+    assert predicates == [
+        "biolink:gene_associated_with_condition",
+        "biolink:contributes_to",
+    ]

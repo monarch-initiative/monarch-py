@@ -178,7 +178,7 @@ class AssociationTypeMapping(ConfiguredBaseModel):
     A data class to hold the necessary information to produce association type counts for given  entities with appropriate directional labels
     """
 
-    association_type_key: Optional[AssociationTypeEnum] = Field(None)
+    association_type: Optional[AssociationTypeEnum] = Field(None)
     subject_label: Optional[str] = Field(
         None,
         description="""A label to describe the subjects of the association type as a whole for use in the UI""",
@@ -199,7 +199,7 @@ class AssociationTypeMapping(ConfiguredBaseModel):
 
 class AssociationCount(FacetValue):
 
-    association_type_key: Optional[AssociationTypeEnum] = Field(None)
+    association_type: Optional[AssociationTypeEnum] = Field(None)
     label: Optional[str] = Field(None)
     count: Optional[int] = Field(
         None, description="""number of items a this facet value"""

@@ -160,7 +160,7 @@ classes:
       A data class to hold the necessary information to produce association type counts for given 
       entities with appropriate directional labels
     slots:
-      - association_type_key
+      - association_type
       - subject_label
       - object_label
       - category
@@ -179,11 +179,11 @@ classes:
   AssociationCount:
     is_a: FacetValue
     slots:
-      - association_type_key
+      - association_type
 slots:
   aggregator_knowledge_source:
     multivalued: true
-  association_type_key:
+  association_type:
     range: AssociationTypeEnum
   category:
     multivalued: true

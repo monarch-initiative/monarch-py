@@ -1,10 +1,11 @@
 import pkgutil
-import yaml
 import re
 from typing import List, Tuple
+
+import yaml
 from pydantic import parse_obj_as
 
-from monarch_py.datamodels.model import AssociationTypeMapping, AssociationTypeEnum
+from monarch_py.datamodels.model import AssociationTypeEnum, AssociationTypeMapping
 
 
 class AssociationTypeMappings:
@@ -28,7 +29,7 @@ class AssociationTypeMappings:
 
     def get_mapping(self, association_type: AssociationTypeEnum):
         for mapping in self.mappings:
-            if mapping.association_type_key == association_type:
+            if mapping.association_type == association_type:
                 return mapping
 
     def load_mappings(self):
@@ -39,7 +40,9 @@ class AssociationTypeMappings:
         self.mappings = parse_obj_as(List[AssociationTypeMapping], mapping_data)
 
 
-def get_association_type_mapping_by_query_string(query_string: str) -> AssociationTypeMapping:
+def get_association_type_mapping_by_query_string(
+    query_string: str,
+) -> AssociationTypeMapping:
     """
     Get the association type mapping for a given query string, splitting the category and predicate components apart
     Args:
@@ -54,7 +57,8 @@ def get_association_type_mapping_by_query_string(query_string: str) -> Associati
     matching_types = [
         a_type
         for a_type in AssociationTypeMappings.get_mappings()
-        if set(a_type.category) == set(categories) and set(a_type.predicate) == set(predicates)
+        if set(a_type.category) == set(categories)
+        and set(a_type.predicate) == set(predicates)
     ]
 
     if len(matching_types) == 0:
@@ -67,6 +71,7 @@ def get_association_type_mapping_by_query_string(query_string: str) -> Associati
         )
     else:
         return matching_types[0]
+
 
 def get_solr_query_fragment(agm: AssociationTypeMapping) -> str:
 
@@ -100,15 +105,17 @@ def get_sql_query_fragment(agm: AssociationTypeMapping) -> str:
     return get_solr_query_fragment(agm).replace(':"', ' = "')
 
 
-def parse_association_type_query_string(query_string: str) -> Tuple[List[str], List[str]]:
+def parse_association_type_query_string(
+    query_string: str,
+) -> Tuple[List[str], List[str]]:
     categories = []
     predicates = []
 
     pattern = re.compile(r'(category|predicate):\s*"?([\w:]+)"?')
     for match in re.findall(pattern, query_string):
-        if match[0] == 'category':
+        if match[0] == "category":
             categories.append(match[1])
-        elif match[0] == 'predicate':
+        elif match[0] == "predicate":
             predicates.append(match[1])
 
     # Check if both categories and predicates were found
@@ -116,4 +123,3 @@ def parse_association_type_query_string(query_string: str) -> Tuple[List[str], L
         raise ValueError("No categories or predicates found in query string")
 
     return categories, predicates
-
