@@ -854,7 +854,7 @@
 <p>Retrieve association counts for an entity by ID</p>
 <p>Args:
     entity: The entity to get association counts for
-    fmt: The format of the output (TSV, YAML, JSON). Default JSON
+    fmt: The format of the output (json, yaml, tsv, table). Default JSON
     output: The path to the output file. Default stdout</p>
 <p>Returns:
     A list of association counts for the given entity containing association type, label and count</p>
@@ -867,7 +867,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -884,7 +884,7 @@
     limit: The number of associations to return
     direct: Whether to exclude associations with subject/object as ancestors
     offset: The offset of the first association to be retrieved
-    fmt: The format of the output (TSV, YAML, JSON)
+    fmt: The format of the output (json, yaml, tsv, table)
     output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>associations<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
@@ -901,7 +901,7 @@
 <li><code>--label TEXT</code></li>
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -909,7 +909,7 @@
 <p>Return entity autcomplete matches for a query string</p>
 <p>Args:
     q: The query string to autocomplete against
-    fmt: The format of the output (TSV, YAML, JSON)
+    fmt: The format of the output (json, yaml, tsv, table)
     output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>autocomplete<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>Q<span class="o">]</span>
@@ -920,7 +920,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -928,7 +928,7 @@
 <p>Retrieve an entity by ID</p>
 <p>Args:
     id: The identifier of the entity to be retrieved
-    fmt: The format of the output (TSV, YAML, JSON)
+    fmt: The format of the output (json, yaml, tsv, table)
     output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ID<span class="o">]</span>
@@ -939,7 +939,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -948,7 +948,7 @@
 <p>Args:
     subject: The subject of the association</p>
 <p>Optional Args:
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>histopheno<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>SUBJECT<span class="o">]</span>
@@ -959,7 +959,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -980,7 +980,7 @@
     taxon: The taxon of the entity
     limit: The number of entities to return
     offset: The offset of the first entity to be retrieved
-    fmt: The format of the output (TSV, YAML, JSON)
+    fmt: The format of the output (json, yaml, tsv, table)
     output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>search<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
@@ -992,7 +992,7 @@
 <li><code>--taxon TEXT</code></li>
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1009,12 +1009,12 @@
 <li><code>association-counts</code>: Retrieve the association counts for a...</li>
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>autocomplete</code>: Return entity autcomplete matches for a...</li>
-<li><code>download</code></li>
+<li><code>download</code>: Download the Monarch Solr KG.</li>
 <li><code>entity</code>: Retrieve an entity by ID</li>
 <li><code>histopheno</code>: Retrieve the histopheno associations for a...</li>
 <li><code>search</code>: Search for entities</li>
 <li><code>start</code>: Starts a local Solr container.</li>
-<li><code>status</code></li>
+<li><code>status</code>: Checks the status of the local Solr...</li>
 <li><code>stop</code>: Stops the local Solr container.</li>
 </ul>
 <h3 id="monarch-solr-association-counts"><code>monarch solr association-counts</code></h3>
@@ -1023,7 +1023,7 @@
     entity (str): The entity to get association counts for</p>
 <p>Optional Args:
     update (bool): Whether to re-download the Monarch KG. Default False
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>association-counts<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ENTITY<span class="o">]</span>
@@ -1034,7 +1034,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1051,7 +1051,7 @@
     association_type (str, optional): The association label of the association
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>associations<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
@@ -1068,7 +1068,7 @@
 <li><code>--label TEXT</code></li>
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1076,7 +1076,7 @@
 <p>Return entity autcomplete matches for a query string</p>
 <p>Args:
     q: The query string to autocomplete against
-    fmt: The format of the output (TSV, YAML, JSON)
+    fmt: The format of the output (json, yaml, tsv, table)
     output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>autocomplete<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>Q<span class="o">]</span>
@@ -1087,11 +1087,12 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="monarch-solr-download"><code>monarch solr download</code></h3>
+<p>Download the Monarch Solr KG.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>download<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -1104,7 +1105,7 @@
 <p>Args:
     id (str): The identifier of the entity to be retrieved</p>
 <p>Optional Args:
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ID<span class="o">]</span>
@@ -1115,7 +1116,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1125,7 +1126,7 @@
     subject (str): The subject of the association</p>
 <p>Optional Args:
     update (bool): Whether to re-download the Monarch KG. Default False
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>histopheno<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>SUBJECT<span class="o">]</span>
@@ -1136,7 +1137,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1148,7 +1149,7 @@
     taxon: The taxon of the entity
     limit: The number of entities to return
     offset: The offset of the first entity to be retrieved
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>search<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
@@ -1160,7 +1161,7 @@
 <li><code>-t, --taxon TEXT</code></li>
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1175,6 +1176,7 @@
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h3 id="monarch-solr-status"><code>monarch solr status</code></h3>
+<p>Checks the status of the local Solr container.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
@@ -1217,7 +1219,7 @@
     limit (int, optional): The number of associations to return. Default 20
     offset (int, optional): The offset of the first association to be retrieved. Default 0
     update (bool, optional): Whether to re-download the Monarch KG. Default False
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>sql<span class="w"> </span>associations<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
@@ -1234,7 +1236,7 @@
 <li><code>--limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>--update</code></li>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1243,7 +1245,7 @@
 <p>Args:
     id (str): The identifier of the entity to be retrieved
     update (bool): = Whether to re-download the Monarch KG. Default False
-    fmt (str): The format of the output (TSV, YAML, JSON). Default JSON
+    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
     output (str): The path to the output file. Default stdout</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>sql<span class="w"> </span>entity<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>ID<span class="o">]</span>
@@ -1255,7 +1257,7 @@
 <p><strong>Options</strong>:</p>
 <ul>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
-<li><code>-f, --format TEXT</code>: The format of the output (TSV, YAML, JSON)  [default: json]</li>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
