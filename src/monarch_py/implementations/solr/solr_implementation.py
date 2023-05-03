@@ -381,7 +381,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         return hp
 
-    def get_association_counts(self, entity: str) -> List[FacetValue]:
+    def get_association_counts(self, entity: str) -> List[AssociationCount]:
         """
         Get association counts for a given entity
 
@@ -405,7 +405,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query_result = solr.query(query)
-        facet_values: List[FacetValue] = []
+        association_counts: List[AssociationCount] = []
         for k, v in query_result.facet_counts.facet_queries.items():
             if v > 0:
                 if k.endswith(subject_query):
@@ -424,8 +424,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     raise ValueError(
                         f"Unexpected facet query when building association counts: {k}"
                     )
-                facet_values.append(FacetValue(label=label, count=v))
-        return facet_values
+                association_counts.append(AssociationCount(label=label, count=v, association_type=agm.association_type))
+        return association_counts
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
         """
