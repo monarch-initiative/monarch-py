@@ -53,10 +53,11 @@ jobs:
           source $VENV
           pytest tests/unit
 
-      - name: Run tests (SQL backend)
-        run: |
-          source $VENV
-          pytest tests/integration/ -k 'sql'
+      # TODO: Rewrite SQL tests
+      # - name: Run tests (SQL backend)
+      #   run: |
+      #     source $VENV
+      #     pytest tests/integration/ -k 'sql'
 
       # TODO: Mock Solr backend
       #

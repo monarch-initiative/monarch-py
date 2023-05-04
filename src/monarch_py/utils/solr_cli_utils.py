@@ -18,7 +18,7 @@ def check_solr_permissions(update: bool = False) -> None:
     # When untarred solr won't necessarily use the same file names for index segments etc
     # so the untarred path needs to be removed before updating
     if update:
-        shutil.rmtree(data_path)
+        shutil.rmtree(data_path, ignore_errors=True)
     monarchstow.ensure_untar(url=SOLR_DATA_URL, force=update)
     if sys.platform in ["linux", "linux2", "darwin"]:
         stat_info = os.stat(data_path)
@@ -27,7 +27,7 @@ def check_solr_permissions(update: bool = False) -> None:
                 f"""
 Solr container requires write access to {monarchstow.base}.
 Please run the following command to set permissions:
-    [grey84 on black]sudo chgrp -R 8983 {monarchstow.base} && \[/]
+    [grey84 on black]sudo chgrp -R 8983 {monarchstow.base} && \ [/]
     [grey84 on black]sudo chmod -R g+w {monarchstow.base}[/]
             """
             )

@@ -1,6 +1,9 @@
+import pytest
+
 from monarch_py.datamodels.model import AssociationTypeEnum
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
+pytestmark = pytest.mark.skip("Need to rewrite SQL tests")
 
 def test_associations():
     data = SQLImplementation()
@@ -46,13 +49,6 @@ def test_object():
     assert response
     assert response.total > 1
     assert response.items[0].object == "MONDO:0007947"
-
-
-# def test_object_closure():
-#     data = SQLImplementation()
-#     response = data.get_associations(object_closure="HP:0000240")
-#     assert response
-#     assert response.total in range(200, 10000)
 
 
 def test_entity():

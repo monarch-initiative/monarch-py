@@ -2,6 +2,19 @@ import pytest
 
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
+# def check_solr_available():
+#     import requests
+#     try:
+#         response = requests.get("https://monarchinitiative.org/v3/api")
+#         return response.status_code == 200
+#     except Exception as e:
+#         return False
+# pytestmark = pytest.mark.skipif(
+#     condition = not check_solr_available(),
+#     reason = "Solr is not available",
+# )
+
+pytestmark = pytest.mark.skip(reason = "Solr backend not yet available")
 
 @pytest.mark.parametrize(
     "query",
