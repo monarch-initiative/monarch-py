@@ -13,8 +13,8 @@ from monarch_py.datamodels.model import (
     Entity,
     FacetField,
     FacetValue,
-    HistoPheno,
     HistoBin,
+    HistoPheno,
     SearchResult,
     SearchResults,
 )
@@ -388,7 +388,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             label = HistoPhenoKeys(id).name
             bins.append(HistoBin(id=id, label=label, count=v))
         bins = sorted(bins, key=lambda x: x.count, reverse=True)
-        
+
         return HistoPheno(id=subject_closure, items=bins)
 
     def get_association_counts(self, entity: str) -> List[AssociationCount]:
