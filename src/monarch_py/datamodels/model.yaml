@@ -1,11 +1,11 @@
 id: https://w3id.org/monarch/monarch-py
 name: monarch-py
+description: Data datamodels for the Monarch Initiative data access library
 prefixes:
   linkml: https://w3id.org/linkml/
   biolink: https://w3id.org/biolink/
-description: Data datamodels for the Monarch Initiative data access library
 imports:
-- linkml:types
+  - linkml:types
 default_range: string
 
 enums:
