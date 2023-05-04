@@ -13,7 +13,10 @@ def entity(
         False, "--update", "-u", help="Whether to re-download the Monarch KG"
     ),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
@@ -30,7 +33,7 @@ def entity(
     if not id:
         console.print("\n[bold red]Entity ID required.[/]\n")
         raise typer.Exit(1)
-    
+
     data = SQLImplementation()
     response = data.get_entity(id, update)
 
@@ -53,7 +56,10 @@ def associations(
     offset: int = typer.Option(0, "--offset"),
     update: bool = typer.Option(False, "--update"),
     fmt: str = typer.Option(
-        "json", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
     ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
