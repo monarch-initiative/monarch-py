@@ -38,7 +38,7 @@ class AssociationTypeEnum(str, Enum):
 class Association(ConfiguredBaseModel):
     
     aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)
-    id: Optional[str] = Field(None)
+    id: str = Field(None)
     subject: Optional[str] = Field(None)
     original_subject: Optional[str] = Field(None)
     subject_namespace: Optional[str] = Field(None)
@@ -73,7 +73,7 @@ class Association(ConfiguredBaseModel):
 
 class Entity(ConfiguredBaseModel):
     
-    id: Optional[str] = Field(None)
+    id: str = Field(None)
     category: Optional[List[str]] = Field(default_factory=list)
     name: Optional[str] = Field(None)
     description: Optional[str] = Field(None)
@@ -89,34 +89,34 @@ class Entity(ConfiguredBaseModel):
 
 class HistoPheno(ConfiguredBaseModel):
     
-    id: Optional[str] = Field(None)
-    items: Optional[List[HistoBin]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+    id: str = Field(None)
+    items: List[HistoBin] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     
 
 
 class Results(ConfiguredBaseModel):
     
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
+    limit: int = Field(None, description="""number of items to return in a response""")
+    offset: int = Field(None, description="""offset into the total number of items""")
+    total: int = Field(None, description="""total number of items matching a query""")
     
 
 
 class AssociationResults(Results):
     
-    items: Optional[List[Association]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
+    items: List[Association] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+    limit: int = Field(None, description="""number of items to return in a response""")
+    offset: int = Field(None, description="""offset into the total number of items""")
+    total: int = Field(None, description="""total number of items matching a query""")
     
 
 
 class EntityResults(Results):
     
-    items: Optional[List[Entity]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
+    items: List[Entity] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+    limit: int = Field(None, description="""number of items to return in a response""")
+    offset: int = Field(None, description="""offset into the total number of items""")
+    total: int = Field(None, description="""total number of items matching a query""")
     
 
 
@@ -124,9 +124,9 @@ class SearchResult(Entity):
     
     highlight: Optional[str] = Field(None, description="""matching text snippet containing html tags""")
     score: Optional[float] = Field(None)
-    id: Optional[str] = Field(None)
-    category: Optional[List[str]] = Field(default_factory=list)
-    name: Optional[str] = Field(None)
+    id: str = Field(None)
+    category: List[str] = Field(default_factory=list)
+    name: str = Field(None)
     description: Optional[str] = Field(None)
     xref: Optional[List[str]] = Field(default_factory=list)
     provided_by: Optional[str] = Field(None)
@@ -140,33 +140,33 @@ class SearchResult(Entity):
 
 class SearchResults(Results):
     
-    items: Optional[List[SearchResult]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
-    facet_fields: Optional[Dict[str, FacetField]] = Field(default_factory=dict)
-    facet_queries: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
-    limit: Optional[int] = Field(None)
-    offset: Optional[int] = Field(None)
-    total: Optional[int] = Field(None)
+    items: List[SearchResult] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+    facet_fields: Optional[Dict[str, FacetField]] = Field(default_factory=dict, description="""Collection of facet field responses with the field values and counts""")
+    facet_queries: Optional[Dict[str, FacetValue]] = Field(default_factory=dict, description="""Collection of facet query responses with the query string values and counts""")
+    limit: int = Field(None, description="""number of items to return in a response""")
+    offset: int = Field(None, description="""offset into the total number of items""")
+    total: int = Field(None, description="""total number of items matching a query""")
     
 
 
 class FacetValue(ConfiguredBaseModel):
     
-    label: Optional[str] = Field(None)
-    count: Optional[int] = Field(None, description="""number of items a this facet value""")
+    label: str = Field(None)
+    count: Optional[int] = Field(None, description="""count of documents""")
     
 
 
 class HistoBin(FacetValue):
     
-    id: Optional[str] = Field(None)
-    label: Optional[str] = Field(None)
-    count: Optional[int] = Field(None, description="""number of items a this facet value""")
+    id: str = Field(None)
+    label: str = Field(None)
+    count: Optional[int] = Field(None, description="""count of documents""")
     
 
 
 class FacetField(ConfiguredBaseModel):
     
-    label: Optional[str] = Field(None)
+    label: str = Field(None)
     facet_values: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
     
 
@@ -186,8 +186,8 @@ class AssociationTypeMapping(ConfiguredBaseModel):
 class AssociationCount(FacetValue):
     
     association_type: Optional[AssociationTypeEnum] = Field(None)
-    label: Optional[str] = Field(None)
-    count: Optional[int] = Field(None, description="""number of items a this facet value""")
+    label: str = Field(None)
+    count: Optional[int] = Field(None, description="""count of documents""")
     
 
 
@@ -195,7 +195,7 @@ class AssociationCountList(ConfiguredBaseModel):
     """
     Container class for a list of association counts
     """
-    items: Optional[List[AssociationCount]] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+    items: List[AssociationCount] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
     
 
 
