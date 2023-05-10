@@ -213,7 +213,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         sort: str = "desc",
         offset: int = 0,
         limit: int = 20,
-        category: str = None,
+        category: List[str] = None,
         taxon: str = None,
         facet_fields: List[str] = None,
         facet_queries: List[str] = None,
@@ -231,7 +231,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.boost = self._entity_boost()
 
         if category:
-            query.add_field_filter_query("category", category)
+            for c in category: 
+                query.add_field_filter_query("category", c)
         if taxon:
             query.add_field_filter_query("in_taxon", taxon)
         if facet_fields:
