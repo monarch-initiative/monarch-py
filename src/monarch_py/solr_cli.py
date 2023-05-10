@@ -1,3 +1,5 @@
+from typing import List
+
 import pystow
 import typer
 
@@ -17,7 +19,6 @@ monarchstow = pystow.module("monarch")
 ############################
 ### SOLR DOCKER COMMANDS ###
 ############################
-
 
 @solr_app.command("start")
 def start(update: bool = False):
@@ -137,7 +138,7 @@ def associations(
 @solr_app.command("search")
 def search(
     q: str = typer.Option(None, "--query", "-q"),
-    category: str = typer.Option(None, "--category", "-c"),
+    category: List[str] = typer.Option(None, "--category", "-c"),
     taxon: str = typer.Option(None, "--taxon", "-t"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
@@ -150,6 +151,7 @@ def search(
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
     ),
+    # sort: str = typer.Option(None, "--sort", "-s"),
 ):
     """
     Search for entities
@@ -163,10 +165,12 @@ def search(
         fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
         output (str): The path to the output file. Default stdout
     """
+    params = locals()
+    params.pop("fmt", None)
+    params.pop("output", None)
+
     data = get_solr(update=False)
-    response = data.search(
-        q=q, category=category, taxon=taxon, limit=limit, offset=offset
-    )
+    response = data.search(**params)
     format_output(fmt, response, output)
 
 

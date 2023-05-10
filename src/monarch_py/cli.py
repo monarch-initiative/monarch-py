@@ -1,6 +1,6 @@
 import importlib
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 import typer
 
@@ -108,9 +108,9 @@ def associations(
 @app.command("search")
 def search(
     q: str = typer.Option(None, "--query", "-q"),
-    category: str = typer.Option(None, "--category"),
-    taxon: str = typer.Option(None, "--taxon"),
-    limit: int = typer.Option(20, "--limit"),
+    category: List[str] = typer.Option(None, "--category", "-c"),
+    taxon: str = typer.Option(None, "--taxon", "-t"),
+    limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
         "json",
@@ -121,6 +121,7 @@ def search(
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
     ),
+    # sort: str = typer.Option(None, "--sort", "-s"),
 ):
     """
     Search for entities
