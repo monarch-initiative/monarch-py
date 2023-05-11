@@ -9,6 +9,18 @@ imports:
 default_range: string
 
 enums:
+  AssociationDirectionEnum:
+    description: >-
+      The directionality of an association as it should be displayed within association rows an association table
+      that roots the entity being viewed as the left column.
+    permissible_values:
+      forward:
+        description: >-
+          Association should be displayed with arrows pointing from the subject to the object
+      backward:
+        description: >-
+          Association should be displayed from object to subject with arrows pointing towards the left
+          to show the true directionality of the statement
   AssociationTypeEnum:
     description: >-
       A grouping label for association types, which are not necessarily 1:1 with
@@ -193,6 +205,7 @@ classes:
     is_a: FacetValue
     slots:
       - association_type
+      - direction
   AssociationCountList:
     description: Container class for a list of association counts
     slots:
@@ -213,6 +226,13 @@ slots:
     range: integer
   description:
     range: string
+  direction:
+    description: >-
+      The directionality of the association relative to a given entity for an association_count.
+      If the entity is the subject or in the subject closure, the direction is forwards, if it is
+      the object or in the object closure, the direction is backwards.
+    range: AssociationDirectionEnum
+    required: true
   facet_fields:
     description: Collection of facet field responses with the field values and counts
     inlined: true
