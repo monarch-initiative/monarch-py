@@ -20,6 +20,13 @@ class ConfiguredBaseModel(WeakRefShimBaseModel,
     pass                    
 
 
+class AssociationDirectionEnum(str, Enum):
+    
+    forward = "forward"
+    backward = "backward"
+    
+    
+
 class AssociationTypeEnum(str, Enum):
     
     disease_phenotype = "disease_phenotype"
@@ -39,15 +46,15 @@ class Association(ConfiguredBaseModel):
     
     aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)
     id: str = Field(None)
-    subject: Optional[str] = Field(None)
+    subject: str = Field(None)
     original_subject: Optional[str] = Field(None)
     subject_namespace: Optional[str] = Field(None)
     subject_category: Optional[List[str]] = Field(default_factory=list)
     subject_closure: Optional[List[str]] = Field(default_factory=list)
     subject_label: Optional[str] = Field(None)
     subject_closure_label: Optional[List[str]] = Field(default_factory=list)
-    predicate: Optional[str] = Field(None)
-    object: Optional[str] = Field(None)
+    predicate: str = Field(None)
+    object: str = Field(None)
     original_object: Optional[str] = Field(None)
     object_namespace: Optional[str] = Field(None)
     object_category: Optional[List[str]] = Field(default_factory=list)
@@ -178,14 +185,16 @@ class AssociationTypeMapping(ConfiguredBaseModel):
     association_type: Optional[AssociationTypeEnum] = Field(None)
     subject_label: Optional[str] = Field(None, description="""A label to describe the subjects of the association type as a whole for use in the UI""")
     object_label: Optional[str] = Field(None, description="""A label to describe the objects of the association type as a whole for use in the UI""")
+    symmetric: bool = Field(False, description="""Whether the association type is symmetric, meaning that the subject and object labels should be interchangeable""")
     category: Optional[List[str]] = Field(default_factory=list, description="""The biolink categories to use in queries for this association type, assuming OR semantics""")
-    predicate: Optional[List[str]] = Field(default_factory=list, description="""The biolink predicate to use in queries for this association type, assuming OR semantics""")
+    predicate: List[str] = Field(default_factory=list, description="""The biolink predicate to use in queries for this association type, assuming OR semantics""")
     
 
 
 class AssociationCount(FacetValue):
     
     association_type: Optional[AssociationTypeEnum] = Field(None)
+    direction: AssociationDirectionEnum = Field(None, description="""The directionality of the association relative to a given entity for an association_count. If the entity is the subject or in the subject closure, the direction is forwards, if it is the object or in the object closure, the direction is backwards.""")
     label: str = Field(None)
     count: Optional[int] = Field(None, description="""count of documents""")
     

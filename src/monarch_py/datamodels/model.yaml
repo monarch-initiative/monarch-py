@@ -188,6 +188,7 @@ classes:
       - association_type
       - subject_label
       - object_label
+      - symmetric
       - category
       - predicate
     slot_usage:
@@ -195,6 +196,12 @@ classes:
         description: A label to describe the subjects of the association type as a whole for use in the UI
       object_label:
         description: A label to describe the objects of the association type as a whole for use in the UI
+      symmetric:
+        description: >-
+          Whether the association type is symmetric, meaning that the subject and object labels should be
+          interchangeable
+        ifabsent: false
+        required: true
       category:
         description: The biolink categories to use in queries for this association type, assuming OR semantics
         multivalued: true
@@ -342,6 +349,10 @@ slots:
     range: string
   symbol:
     range: string
+  symmetric:
+    description: >-
+      Whether the association type is symmetric, i.e. the subject and object labels are interchangeable.
+    range: boolean
   synonym:
     multivalued: true
   total:

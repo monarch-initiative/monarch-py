@@ -5,6 +5,7 @@ from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
 pytestmark = pytest.mark.skip("Need to rewrite SQL tests")
 
+
 def test_associations():
     data = SQLImplementation()
     response = data.get_associations()

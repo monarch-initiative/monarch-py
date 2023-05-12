@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from monarch_py.datamodels.model import (
     Association,
     AssociationCount,
+    AssociationDirectionEnum,
     AssociationResults,
     AssociationTypeEnum,
     Entity,
@@ -424,19 +425,25 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     )
                     agm = get_association_type_mapping_by_query_string(original_query)
                     label = agm.object_label
+                    direction = AssociationDirectionEnum.forward
                 elif k.endswith(object_query):
                     original_query = (
                         k.replace(f" {object_query}", "").lstrip("(").rstrip(")")
                     )
                     agm = get_association_type_mapping_by_query_string(original_query)
                     label = agm.subject_label
+                    # always use forward for symmetric association types
+                    direction = AssociationDirectionEnum.backward if not agm.symmetric else AssociationDirectionEnum.forward
                 else:
                     raise ValueError(
                         f"Unexpected facet query when building association counts: {k}"
                     )
                 association_counts.append(
                     AssociationCount(
-                        label=label, count=v, association_type=agm.association_type
+                        label=label,
+                        count=v,
+                        association_type=agm.association_type,
+                        direction=direction,
                     )
                 )
         return association_counts

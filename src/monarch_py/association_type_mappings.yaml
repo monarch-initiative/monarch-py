@@ -7,8 +7,9 @@
   object_label: Phenotypes
   category: ["biolink:GeneToPhenotypicFeatureAssociation"]
 - association_type: gene_interaction
-  subject_label: Genes
+  subject_label: Interactions
   object_label: Interactions
+  symmetric: true
   category: ["biolink:PairwiseGeneToGeneInteraction"]
 - association_type: gene_pathway
   subject_label: Genes
@@ -21,6 +22,7 @@
 - association_type: gene_orthology
   subject_label: Orthologs
   object_label: Orthologs
+  symmetric: true
   category: ["biolink:GeneToGeneHomologyAssociation"]
 - association_type: chemical_pathway
   subject_label: Chemicals
