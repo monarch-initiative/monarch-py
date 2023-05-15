@@ -416,7 +416,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query_result = solr.query(query)
-        association_counts: List[AssociationCount] = []
+        association_count_dict: Dict[str, AssociationCount] = {}
+
         for k, v in query_result.facet_counts.facet_queries.items():
             if v > 0:
                 if k.endswith(subject_query):
@@ -438,14 +439,19 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     raise ValueError(
                         f"Unexpected facet query when building association counts: {k}"
                     )
-                association_counts.append(
-                    AssociationCount(
+                # Symmetric associations need to be summed together, since both directions will be returned
+                # when searching for associations by type
+                if label in association_count_dict and agm.symmetric:
+                    association_count_dict[label].count += v
+                else:
+                    association_count_dict[label] = AssociationCount(
                         label=label,
                         count=v,
                         association_type=agm.association_type,
                         direction=direction,
                     )
-                )
+
+        association_counts: List[AssociationCount] = list(association_count_dict.values())
         return association_counts
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
