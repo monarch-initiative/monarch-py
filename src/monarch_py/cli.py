@@ -5,6 +5,7 @@ from typing import Optional
 import typer
 
 from monarch_py import solr_cli, sql_cli
+from monarch_py.datamodels.model import AssociationTypeEnum
 
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
@@ -213,6 +214,25 @@ def association_counts(
         A list of association counts for the given entity containing association type, label and count
     """
     solr_cli.association_counts(**locals())
+
+
+@app.command("association-table")
+def association_table(
+    entity: str = typer.Argument(..., help="The entity to get associations for"),
+    association_type: AssociationTypeEnum = typer.Argument(
+        ..., help="The association type to get associations for"
+    ),
+    fmt: str = typer.Option(
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
+    solr_cli.association_table(**locals())
 
 
 if __name__ == "__main__":

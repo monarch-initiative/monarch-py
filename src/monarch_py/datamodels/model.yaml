@@ -11,16 +11,15 @@ default_range: string
 enums:
   AssociationDirectionEnum:
     description: >-
-      The directionality of an association as it should be displayed within association rows an association table
-      that roots the entity being viewed as the left column.
+      The directionality of an association as it relates to a specified entity, with edges being categorized
+      as incoming or outgoing
     permissible_values:
-      forward:
+      incoming:
         description: >-
-          Association should be displayed with arrows pointing from the subject to the object
-      backward:
+          An association for which a specified entity is the object or part of the object closure
+      outgoing:
         description: >-
-          Association should be displayed from object to subject with arrows pointing towards the left
-          to show the true directionality of the statement
+          An association for which a specified entity is the subject or part of the subject closure
   AssociationTypeEnum:
     description: >-
       A grouping label for association types, which are not necessarily 1:1 with
@@ -100,6 +99,12 @@ classes:
     - stage_qualifier
     - pathway
     - relation
+  DirectionalAssociation:
+    is_a: Association
+    description: >-
+      An association that gives it's direction relative to a specified entity
+    slots:
+      - direction
   AssociationResults:
     is_a: Results
     slots: 
@@ -107,6 +112,13 @@ classes:
     slot_usage:
       items:
         range: Association
+  AssociationTableResults:
+    is_a: Results
+    slots:
+      - items
+    slot_usage:
+      items:
+        range: DirectionalAssociation
   Entity:
     slots:
     - id
@@ -212,7 +224,6 @@ classes:
     is_a: FacetValue
     slots:
       - association_type
-      - direction
   AssociationCountList:
     description: Container class for a list of association counts
     slots:

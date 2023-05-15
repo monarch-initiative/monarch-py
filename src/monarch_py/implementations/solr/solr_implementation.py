@@ -11,6 +11,8 @@ from monarch_py.datamodels.model import (
     AssociationDirectionEnum,
     AssociationResults,
     AssociationTypeEnum,
+    AssociationTableResults,
+    DirectionalAssociation,
     Entity,
     FacetField,
     FacetValue,
@@ -144,6 +146,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         between: str = None,
         direct: bool = None,
         association_type: AssociationTypeEnum = None,
+        q: str = None,
         offset: int = 0,
         limit: int = 20,
     ) -> SolrQuery:
@@ -426,7 +429,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     )
                     agm = get_association_type_mapping_by_query_string(original_query)
                     label = agm.object_label
-                    direction = AssociationDirectionEnum.forward
                 elif k.endswith(object_query):
                     original_query = (
                         k.replace(f" {object_query}", "").lstrip("(").rstrip(")")
@@ -434,7 +436,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     agm = get_association_type_mapping_by_query_string(original_query)
                     label = agm.subject_label
                     # always use forward for symmetric association types
-                    direction = AssociationDirectionEnum.backward if not agm.symmetric else AssociationDirectionEnum.forward
                 else:
                     raise ValueError(
                         f"Unexpected facet query when building association counts: {k}"
@@ -448,11 +449,62 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                         label=label,
                         count=v,
                         association_type=agm.association_type,
-                        direction=direction,
                     )
 
-        association_counts: List[AssociationCount] = list(association_count_dict.values())
+        association_counts: List[AssociationCount] = list(
+            association_count_dict.values()
+        )
         return association_counts
+
+    def get_association_table(
+        self,
+        entity: str,
+        association_type: AssociationTypeEnum,
+        q=None,
+        sort=None,
+        offset=0,
+        limit=5,
+    ) -> AssociationTableResults:
+        if sort:
+            raise NotImplementedError("Sorting is not yet implemented")
+        query = self._populate_association_query(
+            entity=entity,
+            association_type=association_type,
+            q=q,
+            offset=offset,
+            limit=limit,
+        )
+        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
+        query_result = solr.query(query)
+        total = query_result.response.num_found
+        associations: List[DirectionalAssociation] = []
+        for doc in query_result.response.docs:
+            try:
+                direction = self._get_association_direction(entity, doc)
+                association = DirectionalAssociation(**doc, direction=direction)
+                associations.append(association)
+            except ValidationError:
+                logger.error(f"Validation error for {doc}")
+                raise
+
+        results = AssociationResults(
+            items=associations, limit=limit, offset=offset, total=total
+        )
+
+        return results
+
+    def _get_association_direction(
+            self,
+            entity: str,
+            document: Dict
+    ) -> AssociationDirectionEnum:
+        if document["subject"] == entity or entity in document["subject_closure"]:
+            direction = AssociationDirectionEnum.outgoing
+        elif document["object"] == entity or entity in document["object_closure"]:
+            direction = AssociationDirectionEnum.incoming
+        else:
+            raise ValueError(f"Entity {entity} not found in association {document}")
+        return direction
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
         """

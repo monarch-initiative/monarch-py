@@ -1,7 +1,7 @@
 import pystow
 import typer
 
-from monarch_py.datamodels.model import AssociationCountList
+from monarch_py.datamodels.model import AssociationCountList, AssociationTypeEnum
 from monarch_py.utils.solr_cli_utils import (
     check_solr_permissions,
     get_solr,
@@ -262,3 +262,24 @@ def association_counts(
     response = data.get_association_counts(entity)
     counts = AssociationCountList(items=response)
     format_output(fmt, counts, output)
+
+
+@solr_app.command("association-table")
+def association_table(
+    entity: str = typer.Argument(..., help="The entity to get associations for"),
+    association_type: AssociationTypeEnum = typer.Argument(
+        ..., help="The association type to get associations for"
+    ),
+    fmt: str = typer.Option(
+        "json",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
+):
+    data = get_solr(update=False)
+    response = data.get_association_table(entity, association_type)
+    format_output(fmt, response, output)
