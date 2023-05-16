@@ -270,6 +270,9 @@ def association_table(
     association_type: AssociationTypeEnum = typer.Argument(
         ..., help="The association type to get associations for"
     ),
+    q: str = typer.Option(None, "--query", "-q"),
+    limit: int = typer.Option(5, "--limit", "-l"),
+    offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -281,5 +284,7 @@ def association_table(
     ),
 ):
     data = get_solr(update=False)
-    response = data.get_association_table(entity, association_type)
+    response = data.get_association_table(
+        entity, association_type, q=q, limit=limit, offset=offset
+    )
     format_output(fmt, response, output)

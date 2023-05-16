@@ -204,6 +204,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     AssociationTypeMappings().get_mapping(association_type)
                 )
             )
+        if q:
+            # We don't yet have tokenization strategies for the association index, initially we'll limit searching to
+            # the visible fields in an association table plus their ID equivalents and use a wildcard query for substring matching
+            query.q = f"*{q}*"
+            query.query_fields = "subject subject_label predicate object object_label"
 
         return query
 
