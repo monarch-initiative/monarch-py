@@ -10,8 +10,8 @@ from monarch_py.datamodels.model import (
     AssociationCount,
     AssociationDirectionEnum,
     AssociationResults,
-    AssociationTypeEnum,
     AssociationTableResults,
+    AssociationTypeEnum,
     DirectionalAssociation,
     Entity,
     FacetField,
@@ -494,9 +494,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         return results
 
     def _get_association_direction(
-            self,
-            entity: str,
-            document: Dict
+        self, entity: str, document: Dict
     ) -> AssociationDirectionEnum:
         if document["subject"] == entity or entity in document["subject_closure"]:
             direction = AssociationDirectionEnum.outgoing
