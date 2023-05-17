@@ -1,5 +1,6 @@
 import pytest
 
+from monarch_py.datamodels.model import AssociationDirectionEnum, AssociationTypeEnum
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
 # def check_solr_available():
@@ -14,7 +15,8 @@ from monarch_py.implementations.solr.solr_implementation import SolrImplementati
 #     reason = "Solr is not available",
 # )
 
-pytestmark = pytest.mark.skip(reason = "Solr backend not yet available")
+pytestmark = pytest.mark.skip(reason="Solr backend not yet available")
+
 
 @pytest.mark.parametrize(
     "query",
@@ -110,3 +112,13 @@ def test_association_counts_for_phenotype():
         ac for ac in association_counts if ac.association_type == "gene_phenotype"
     ][0]
     assert gene_phenotype.label == "Genes"
+
+
+def test_association_table():
+    si = SolrImplementation()
+    association_results = si.get_association_table(
+        "MONDO:0007947", AssociationTypeEnum.disease_phenotype
+    )
+    assert association_results
+    assert association_results.total > 5
+    assert association_results.items[0].direction == AssociationDirectionEnum.outgoing
