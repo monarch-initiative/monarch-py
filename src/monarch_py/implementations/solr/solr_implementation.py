@@ -8,8 +8,11 @@ from pydantic import ValidationError
 from monarch_py.datamodels.model import (
     Association,
     AssociationCount,
+    AssociationDirectionEnum,
     AssociationResults,
+    AssociationTableResults,
     AssociationTypeEnum,
+    DirectionalAssociation,
     Entity,
     FacetField,
     FacetValue,
@@ -143,6 +146,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         between: str = None,
         direct: bool = None,
         association_type: AssociationTypeEnum = None,
+        q: str = None,
         offset: int = 0,
         limit: int = 20,
     ) -> SolrQuery:
@@ -200,6 +204,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     AssociationTypeMappings().get_mapping(association_type)
                 )
             )
+        if q:
+            # We don't yet have tokenization strategies for the association index, initially we'll limit searching to
+            # the visible fields in an association table plus their ID equivalents and use a wildcard query for substring matching
+            query.q = f"*{q}*"
+            query.query_fields = "subject subject_label predicate object object_label"
 
         return query
 
@@ -415,7 +424,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.facet_queries = facet_queries
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         query_result = solr.query(query)
-        association_counts: List[AssociationCount] = []
+        association_count_dict: Dict[str, AssociationCount] = {}
+
         for k, v in query_result.facet_counts.facet_queries.items():
             if v > 0:
                 if k.endswith(subject_query):
@@ -430,16 +440,74 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     )
                     agm = get_association_type_mapping_by_query_string(original_query)
                     label = agm.subject_label
+                    # always use forward for symmetric association types
                 else:
                     raise ValueError(
                         f"Unexpected facet query when building association counts: {k}"
                     )
-                association_counts.append(
-                    AssociationCount(
-                        label=label, count=v, association_type=agm.association_type
+                # Symmetric associations need to be summed together, since both directions will be returned
+                # when searching for associations by type
+                if label in association_count_dict and agm.symmetric:
+                    association_count_dict[label].count += v
+                else:
+                    association_count_dict[label] = AssociationCount(
+                        label=label,
+                        count=v,
+                        association_type=agm.association_type,
                     )
-                )
+
+        association_counts: List[AssociationCount] = list(
+            association_count_dict.values()
+        )
         return association_counts
+
+    def get_association_table(
+        self,
+        entity: str,
+        association_type: AssociationTypeEnum,
+        q=None,
+        sort=None,
+        offset=0,
+        limit=5,
+    ) -> AssociationTableResults:
+        if sort:
+            raise NotImplementedError("Sorting is not yet implemented")
+        query = self._populate_association_query(
+            entity=entity,
+            association_type=association_type,
+            q=q,
+            offset=offset,
+            limit=limit,
+        )
+        solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
+        query_result = solr.query(query)
+        total = query_result.response.num_found
+        associations: List[DirectionalAssociation] = []
+        for doc in query_result.response.docs:
+            try:
+                direction = self._get_association_direction(entity, doc)
+                association = DirectionalAssociation(**doc, direction=direction)
+                associations.append(association)
+            except ValidationError:
+                logger.error(f"Validation error for {doc}")
+                raise
+
+        results = AssociationResults(
+            items=associations, limit=limit, offset=offset, total=total
+        )
+
+        return results
+
+    def _get_association_direction(
+        self, entity: str, document: Dict
+    ) -> AssociationDirectionEnum:
+        if document["subject"] == entity or entity in document["subject_closure"]:
+            direction = AssociationDirectionEnum.outgoing
+        elif document["object"] == entity or entity in document["object_closure"]:
+            direction = AssociationDirectionEnum.incoming
+        else:
+            raise ValueError(f"Entity {entity} not found in association {document}")
+        return direction
 
     def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
         """

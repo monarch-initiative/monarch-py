@@ -1,7 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from monarch_py.datamodels.model import AssociationTypeEnum, FacetValue, SearchResults
+from monarch_py.datamodels.model import (
+    AssociationTableResults,
+    AssociationTypeEnum,
+    FacetValue,
+    SearchResults,
+)
 
 
 class SearchInterface(ABC):
@@ -91,4 +96,30 @@ class SearchInterface(ABC):
         Returns:
             List[FacetValue]: List of FacetValue objects representing the counts of associations for the given entity
         """
+        raise NotImplementedError
+
+    def get_association_table(
+        self,
+        entity: str,
+        association_type: AssociationTypeEnum,
+        query=None,
+        sort=None,
+        offset=0,
+        limit=5,
+    ) -> AssociationTableResults:
+        """
+        Get associations for an entity matching a specified type, with optional search and sort parameters
+
+        Args:
+            entity (str): Entity to get associations for
+            association_type (AssociationTypeEnum): Association type to filter to
+            query (str): Query string to match against
+            sort (str): Sort order, defaults to None
+            offset (int): Offset of the first result to return, defaults to 0
+            limit (int): Limit the number of results to return, defaults to 20
+
+        Returns:
+            AssociationResults: Dataclass representing results of an association search.
+        """
+
         raise NotImplementedError
