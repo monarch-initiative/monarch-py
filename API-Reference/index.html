@@ -516,6 +516,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_table" class="md-nav__link">
+    get_association_table()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.search" class="md-nav__link">
     search()
   </a>
@@ -735,6 +742,13 @@
           <li class="md-nav__item">
   <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_facets" class="md-nav__link">
     get_association_facets()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.monarch_py.interfaces.search_interface.SearchInterface.get_association_table" class="md-nav__link">
+    get_association_table()
   </a>
   
 </li>
@@ -1649,6 +1663,125 @@
                 <code><span title="monarch_py.datamodels.model.SearchResults">SearchResults</span></code>
           </td>
           <td><p>and faceting information populated</p></td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="src.monarch_py.interfaces.search_interface.SearchInterface.get_association_table" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">get_association_table</span>
+
+
+</h4>
+<div class="highlight"><pre><span></span><code><span class="n">get_association_table</span><span class="p">(</span>
+    <span class="n">entity</span><span class="p">,</span>
+    <span class="n">association_type</span><span class="p">,</span>
+    <span class="n">query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sort</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Get associations for an entity matching a specified type, with optional search and sort parameters</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>entity</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Entity to get associations for</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>association_type</code></td>
+          <td>
+                <code><span title="monarch_py.datamodels.model.AssociationTypeEnum">AssociationTypeEnum</span></code>
+          </td>
+          <td><p>Association type to filter to</p></td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>query</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Query string to match against</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sort</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
+          </td>
+          <td><p>Sort order, defaults to None</p></td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>offset</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+          </td>
+          <td><p>Offset of the first result to return, defaults to 0</p></td>
+          <td>
+                <code>0</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>limit</code></td>
+          <td>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
+          </td>
+          <td><p>Limit the number of results to return, defaults to 20</p></td>
+          <td>
+                <code>5</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>AssociationResults</code></td>          <td>
+                <code><span title="monarch_py.datamodels.model.AssociationTableResults">AssociationTableResults</span></code>
+          </td>
+          <td><p>Dataclass representing results of an association search.</p></td>
         </tr>
     </tbody>
   </table>

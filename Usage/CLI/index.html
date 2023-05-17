@@ -398,6 +398,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#monarch-association-table" class="md-nav__link">
+    monarch association-table
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#monarch-associations" class="md-nav__link">
     monarch associations
   </a>
@@ -450,6 +457,13 @@
           <li class="md-nav__item">
   <a href="#monarch-solr-association-counts" class="md-nav__link">
     monarch solr association-counts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monarch-solr-association-table" class="md-nav__link">
+    monarch solr association-table
   </a>
   
 </li>
@@ -656,6 +670,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#monarch-association-table" class="md-nav__link">
+    monarch association-table
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#monarch-associations" class="md-nav__link">
     monarch associations
   </a>
@@ -708,6 +729,13 @@
           <li class="md-nav__item">
   <a href="#monarch-solr-association-counts" class="md-nav__link">
     monarch solr association-counts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monarch-solr-association-table" class="md-nav__link">
+    monarch solr association-table
   </a>
   
 </li>
@@ -841,6 +869,7 @@
 <p><strong>Commands</strong>:</p>
 <ul>
 <li><code>association-counts</code>: Retrieve association counts for an entity...</li>
+<li><code>association-table</code></li>
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>autocomplete</code>: Return entity autcomplete matches for a...</li>
 <li><code>entity</code>: Retrieve an entity by ID</li>
@@ -867,6 +896,24 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="monarch-association-table"><code>monarch association-table</code></h2>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>association-table<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>ENTITY<span class="w"> </span>ASSOCIATION_TYPE:<span class="o">{</span>disease_phenotype<span class="p">|</span>gene_phenotype<span class="p">|</span>gene_interaction<span class="p">|</span>gene_pathway<span class="p">|</span>gene_expression<span class="p">|</span>gene_orthology<span class="p">|</span>chemical_pathway<span class="p">|</span>gene_function<span class="p">|</span>correlated_gene<span class="p">|</span>causal_gene<span class="o">}</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ENTITY</code>: The entity to get associations for  [required]</li>
+<li><code>ASSOCIATION_TYPE:{disease_phenotype|gene_phenotype|gene_interaction|gene_pathway|gene_expression|gene_orthology|chemical_pathway|gene_function|correlated_gene|causal_gene}</code>: The association type to get associations for  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-q, --query TEXT</code></li>
+<li><code>-l, --limit INTEGER</code>: [default: 5]</li>
+<li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -898,7 +945,7 @@
 <li><code>-e, --entity TEXT</code></li>
 <li><code>--between TEXT</code></li>
 <li><code>--direct</code></li>
-<li><code>--label TEXT</code></li>
+<li><code>--association-type TEXT</code></li>
 <li><code>-l, --limit INTEGER</code>: [default: 20]</li>
 <li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
@@ -1007,6 +1054,7 @@
 <p><strong>Commands</strong>:</p>
 <ul>
 <li><code>association-counts</code>: Retrieve the association counts for a...</li>
+<li><code>association-table</code></li>
 <li><code>associations</code>: Paginate through associations</li>
 <li><code>autocomplete</code>: Return entity autcomplete matches for a...</li>
 <li><code>download</code>: Download the Monarch Solr KG.</li>
@@ -1034,6 +1082,24 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
+<li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
+<li><code>-o, --output TEXT</code>: The path to the output file</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h3 id="monarch-solr-association-table"><code>monarch solr association-table</code></h3>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>solr<span class="w"> </span>association-table<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>ENTITY<span class="w"> </span>ASSOCIATION_TYPE:<span class="o">{</span>disease_phenotype<span class="p">|</span>gene_phenotype<span class="p">|</span>gene_interaction<span class="p">|</span>gene_pathway<span class="p">|</span>gene_expression<span class="p">|</span>gene_orthology<span class="p">|</span>chemical_pathway<span class="p">|</span>gene_function<span class="p">|</span>correlated_gene<span class="p">|</span>causal_gene<span class="o">}</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>ENTITY</code>: The entity to get associations for  [required]</li>
+<li><code>ASSOCIATION_TYPE:{disease_phenotype|gene_phenotype|gene_interaction|gene_pathway|gene_expression|gene_orthology|chemical_pathway|gene_function|correlated_gene|causal_gene}</code>: The association type to get associations for  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-q, --query TEXT</code></li>
+<li><code>-l, --limit INTEGER</code>: [default: 5]</li>
+<li><code>--offset INTEGER</code>: [default: 0]</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
