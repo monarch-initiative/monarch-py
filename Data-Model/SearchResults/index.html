@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-8.5.10">
     
     
       
@@ -547,15 +547,15 @@
 
       SearchResults : facet_fields
 
-          SearchResults ..&gt; FacetField : facet_fields
+          SearchResults --|&gt; FacetField : facet_fields
 
       SearchResults : facet_queries
 
-          SearchResults ..&gt; FacetValue : facet_queries
+          SearchResults --|&gt; FacetValue : facet_queries
 
       SearchResults : items
 
-          SearchResults ..&gt; SearchResult : items
+          SearchResults --|&gt; SearchResult : items
 
       SearchResults : limit
 
@@ -583,7 +583,7 @@
 <tbody>
 <tr>
 <td><a href="../items/">items</a></td>
-<td>1..* <br/> <a href="../String/">String</a></td>
+<td>1..* <br/> <a href="../SearchResult/">SearchResult</a></td>
 <td>A collection of items, with the type to be overriden by slot_usage</td>
 <td>direct</td>
 </tr>

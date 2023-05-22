@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-8.5.10">
     
     
       
@@ -547,7 +547,7 @@
 
       AssociationResults : items
 
-          AssociationResults ..&gt; Association : items
+          AssociationResults --|&gt; Association : items
 
       AssociationResults : limit
 
@@ -575,7 +575,7 @@
 <tbody>
 <tr>
 <td><a href="../items/">items</a></td>
-<td>1..* <br/> <a href="../String/">String</a></td>
+<td>1..* <br/> <a href="../Association/">Association</a></td>
 <td>A collection of items, with the type to be overriden by slot_usage</td>
 <td>direct</td>
 </tr>

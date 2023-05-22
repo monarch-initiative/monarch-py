@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-8.5.10">
     
     
       
@@ -539,7 +539,7 @@
     class AssociationTypeMapping
       AssociationTypeMapping : association_type
 
-          AssociationTypeMapping ..&gt; AssociationTypeEnum : association_type
+          AssociationTypeMapping --|&gt; AssociationTypeEnum : association_type
 
       AssociationTypeMapping : category
 
@@ -573,31 +573,31 @@
 <tr>
 <td><a href="../subject_label/">subject_label</a></td>
 <td>0..1 <br/> <a href="../String/">String</a></td>
-<td></td>
+<td>A label to describe the subjects of the association type as a whole for use i...</td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../object_label/">object_label</a></td>
 <td>0..1 <br/> <a href="../String/">String</a></td>
-<td></td>
+<td>A label to describe the objects of the association type as a whole for use in...</td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../symmetric/">symmetric</a></td>
-<td>0..1 <br/> <a href="../Boolean/">Boolean</a></td>
-<td>Whether the association type is symmetric, i</td>
+<td>1..1 <br/> <a href="../Boolean/">Boolean</a></td>
+<td>Whether the association type is symmetric, meaning that the subject and objec...</td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../category/">category</a></td>
 <td>0..* <br/> <a href="../String/">String</a></td>
-<td></td>
+<td>The biolink categories to use in queries for this association type, assuming ...</td>
 <td>direct</td>
 </tr>
 <tr>
 <td><a href="../predicate/">predicate</a></td>
-<td>1..1 <br/> <a href="../String/">String</a></td>
-<td></td>
+<td>1..* <br/> <a href="../String/">String</a></td>
+<td>The biolink predicate to use in queries for this association type, assuming O...</td>
 <td>direct</td>
 </tr>
 </tbody>

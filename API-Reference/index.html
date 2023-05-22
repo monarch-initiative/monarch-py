@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-8.5.10">
     
     
       
@@ -1805,13 +1805,14 @@
 </h4>
 <div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span>
     <span class="n">q</span><span class="p">,</span>
-    <span class="n">category</span><span class="p">,</span>
-    <span class="n">taxon</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">in_taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">facet_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">filter_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">facet_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sort</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -1846,7 +1847,7 @@
           </td>
           <td><p>Limit results to only this category</p></td>
           <td>
-              <em>required</em>
+                <code>None</code>
           </td>
         </tr>
         <tr>
@@ -2296,13 +2297,14 @@
 </h4>
 <div class="highlight"><pre><span></span><code><span class="n">search</span><span class="p">(</span>
     <span class="n">q</span><span class="o">=</span><span class="s2">&quot;*:*&quot;</span><span class="p">,</span>
-    <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">in_taxon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">facet_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">filter_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">facet_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">filter_queries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">sort</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
