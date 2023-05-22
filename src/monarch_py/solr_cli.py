@@ -20,6 +20,7 @@ monarchstow = pystow.module("monarch")
 ### SOLR DOCKER COMMANDS ###
 ############################
 
+
 @solr_app.command("start")
 def start(update: bool = False):
     """Starts a local Solr container."""
