@@ -39,7 +39,6 @@ class SolrQuery(BaseModel):
     q: str = "*:*"
     rows: int = 20
     start: int = 1
-    sort: str = "desc"
     facet: bool = True
     facet_min_count = 1
     facet_fields: Optional[List[str]] = Field(default_factory=list)
@@ -48,7 +47,8 @@ class SolrQuery(BaseModel):
     query_fields: str = None
     def_type: str = "edismax"
     mm: str = "100%"  # All tokens in the query must be found in the doc, equivalent to q.op="AND"
-    boost: str = None
+    boost: str = None,
+    sort: str = None
 
     def add_field_filter_query(self, field, value):
         if field is not None and value is not None:

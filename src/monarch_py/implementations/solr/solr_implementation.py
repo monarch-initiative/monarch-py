@@ -219,7 +219,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     def search(
         self,
         q: str = "*:*",
-        sort: str = "desc",
         offset: int = 0,
         limit: int = 20,
         category: List[str] = None,
@@ -227,6 +226,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         facet_fields: List[str] = None,
         facet_queries: List[str] = None,
         filter_queries: List[str] = None,
+        sort: str = None,
     ) -> SearchResults:
         """Search for entities by label, with optional filters"""
 

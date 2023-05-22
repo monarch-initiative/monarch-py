@@ -23,6 +23,7 @@ class SearchInterface(ABC):
         facet_fields: List[str] = None,
         filter_queries: List[str] = None,
         facet_queries: List[str] = None,
+        sort: str = None
     ) -> SearchResults:
         """
 
