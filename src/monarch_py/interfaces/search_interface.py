@@ -16,10 +16,10 @@ class SearchInterface(ABC):
     def search(
         self,
         q: str,
-        category: str,
-        taxon: str,
         offset: int = 0,
         limit: int = 20,
+        category: List[str] = None,
+        in_taxon: List[str] = None,
         facet_fields: List[str] = None,
         filter_queries: List[str] = None,
         facet_queries: List[str] = None,
