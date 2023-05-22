@@ -219,19 +219,19 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     def search(
         self,
         q: str = "*:*",
-        category: str = None,
-        taxon: str = None,
         offset: int = 0,
         limit: int = 20,
-        # add a facet_fields params defaulting to an empty list
+        category: List[str] = None,
+        in_taxon: List[str] = None,
         facet_fields: List[str] = None,
-        filter_queries: List[str] = None,
         facet_queries: List[str] = None,
+        filter_queries: List[str] = None,
+        sort: str = None,
     ) -> SearchResults:
         """Search for entities by label, with optional filters"""
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
-        query = SolrQuery(start=offset, rows=limit)
+        query = SolrQuery(start=offset, rows=limit, sort=sort)
 
         query.q = q
 
@@ -239,15 +239,14 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.query_fields = self._entity_query_fields()
         query.boost = self._entity_boost()
 
+        if category:
+            query.add_filter_query(" OR ".join(f"category:{cat}" for cat in category))
+        if in_taxon:
+            query.add_filter_query(" OR ".join([f"in_taxon:{t}" for t in taxon]))
         if facet_fields:
             query.facet_fields = facet_fields
         if facet_queries:
             query.facet_queries = facet_queries
-
-        if category:
-            query.add_field_filter_query("category", category)
-        if taxon:
-            query.add_field_filter_query("in_taxon", taxon)
         if filter_queries:
             query.filter_queries.extend(filter_queries)
 

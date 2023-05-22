@@ -37,6 +37,14 @@ def test_search_query_has_some_results(query: str):
     assert response.total > 0
 
 
+def test_search_sort():
+    si = SolrImplementation()
+    response = si.search("marfan", sort="name desc")
+    assert response
+    assert response.total > 0
+    assert response.items[0].name > response.items[-1].name
+
+
 def test_facet_fields():
     si = SolrImplementation()
     response = si.search("syndrome", facet_fields=["category", "in_taxon"])
