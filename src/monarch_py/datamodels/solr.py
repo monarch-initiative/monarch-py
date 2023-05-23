@@ -48,6 +48,7 @@ class SolrQuery(BaseModel):
     def_type: str = "edismax"
     mm: str = "100%"  # All tokens in the query must be found in the doc, equivalent to q.op="AND"
     boost: str = None
+    sort: str = None
 
     def add_field_filter_query(self, field, value):
         if field is not None and value is not None:
