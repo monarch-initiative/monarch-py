@@ -501,11 +501,14 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     def _get_association_direction(
         self, entity: str, document: Dict
     ) -> AssociationDirectionEnum:
-        if document.get("subject") == entity \
-                or (document.get("subject_closure") and entity in document.get("subject_closure")):
+        if document.get("subject") == entity or (
+            document.get("subject_closure")
+            and entity in document.get("subject_closure")
+        ):
             direction = AssociationDirectionEnum.outgoing
-        elif document.get("object") == entity \
-                or (document.get("object_closure") and entity in document.get("object_closure")):
+        elif document.get("object") == entity or (
+            document.get("object_closure") and entity in document.get("object_closure")
+        ):
             direction = AssociationDirectionEnum.incoming
         else:
             raise ValueError(f"Entity {entity} not found in association {document}")
