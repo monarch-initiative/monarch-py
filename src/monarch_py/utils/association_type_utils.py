@@ -21,16 +21,18 @@ class AssociationTypeMappings:
             self.mappings = None
             self.load_mappings()
 
+
     @staticmethod
     def get_mappings():
         if AssociationTypeMappings.__instance is None:
             AssociationTypeMappings()
         return AssociationTypeMappings.__instance.mappings
 
-    def get_mapping(self, association_type: AssociationTypeEnum):
+    @staticmethod
+    def get_mapping(association_type: AssociationTypeEnum):
         if AssociationTypeMappings.__instance is None:
             AssociationTypeMappings()
-        for mapping in self.mappings:
+        for mapping in AssociationTypeMappings.__instance.mappings:
             if mapping.association_type == association_type:
                 return mapping
 

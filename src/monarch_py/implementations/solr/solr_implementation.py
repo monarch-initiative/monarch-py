@@ -201,7 +201,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         if association_type:
             query.add_filter_query(
                 get_solr_query_fragment(
-                    AssociationTypeMappings().get_mapping(association_type)
+                    AssociationTypeMappings.get_mapping(association_type)
                 )
             )
         if q:
