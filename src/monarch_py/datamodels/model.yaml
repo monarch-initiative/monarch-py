@@ -130,7 +130,6 @@ classes:
     - in_taxon
     - source
     - symbol
-    - type
     - synonym
   EntityResults:
     is_a: Results
@@ -370,8 +369,6 @@ slots:
     description: total number of items matching a query
     range: integer
     required: true
-  type:
-    range: string
   xref:
     multivalued: true
     range: string
