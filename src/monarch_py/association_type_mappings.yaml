@@ -35,12 +35,8 @@
 - association_type: causal_gene
   subject_label: Causal Genes
   object_label: Causal Diseases
-  category: ["biolink:GeneToDiseaseAssociation"]
-  predicate: ["biolink:causes"]
+  category: ["biolink:CausalGeneToDiseaseAssociation"]
 - association_type: correlated_gene
   subject_label: "Correlated Genes"
   object_label: "Correlated Diseases"
-  category: ["biolink:GeneToDiseaseAssociation"]
-  predicate:
-    - "biolink:gene_associated_with_condition"
-    - "biolink:contributes_to"
+  category: ["biolink:CorrelatedGeneToDiseaseAssociation"]
