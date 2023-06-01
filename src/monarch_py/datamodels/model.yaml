@@ -20,51 +20,6 @@ enums:
       outgoing:
         description: >-
           An association for which a specified entity is the subject or part of the subject closure
-  AssociationTypeEnum:
-    description: >-
-      A grouping label for association types, which are not necessarily 1:1 with
-      biolink categories or predicates
-    permissible_values:
-      disease_phenotype:
-        description: >-
-          Any association between a disease and a phenotype
-        meaning: biolink:GeneToDiseaseAssociation
-      gene_phenotype:
-          description: >-
-              Any association between a gene and a phenotype
-          meaning: biolink:GeneToPhenotypicFeatureAssociation
-      gene_interaction:
-          description: >-
-              Any association between two genes
-          meaning: biolink:PairwiseGeneToGeneInteraction
-      gene_pathway:
-          description: >-
-              Any association between a gene and a pathway
-          meaning: biolink:GeneToPathwayAssociation
-      gene_expression:
-          description: >-
-              Expression association between a gene and an expression site
-          meaning: biolink:GeneToExpressionSiteAssociation
-      gene_orthology:
-          description: >-
-              Any association between two genes based on orthology
-          meaning: biolink:PairwiseGeneToGeneOrthologyAssociation
-      chemical_pathway:
-          description: >-
-              Any association between a chemical and a pathway
-          meaning: biolink:ChemicalToPathwayAssociation
-      gene_function:
-          description: >-
-              Any association between a gene and molecular activity
-          meaning: biolink:MacromolecularMachineToMolecularActivityAssociation
-      correlated_gene:
-        description: >-
-          Association between a gene and a disease that has not been established to be causal
-        meaning: biolink:CorrelatedGeneToDiseaseAssociation
-      causal_gene:
-          description: >-
-              Association between a gene and a disease that is known to be causal
-          meaning: biolink:CausalGeneToDiseaseAssociation
 
 classes:
   Association:
@@ -197,7 +152,6 @@ classes:
       A data class to hold the necessary information to produce association type counts for given 
       entities with appropriate directional labels
     slots:
-      - association_type
       - subject_label
       - object_label
       - symmetric
@@ -220,7 +174,6 @@ classes:
   AssociationCount:
     is_a: FacetValue
     slots:
-      - association_type
       - category
     slot_usage:
       category:
@@ -236,8 +189,6 @@ classes:
 slots:
   aggregator_knowledge_source:
     multivalued: true
-  association_type:
-    range: AssociationTypeEnum
   category:
     multivalued: true
   count:

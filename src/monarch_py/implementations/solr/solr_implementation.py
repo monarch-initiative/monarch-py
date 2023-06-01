@@ -442,7 +442,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     association_count_dict[label] = AssociationCount(
                         label=label,
                         count=v,
-                        association_type=agm.association_type,
                         category=agm.category,
                     )
 

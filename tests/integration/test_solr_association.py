@@ -1,9 +1,6 @@
-import pytest
-
-from monarch_py.datamodels.model import AssociationTypeEnum
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
-#pytestmark = pytest.mark.skip(reason="Solr backend not yet available")
+# pytestmark = pytest.mark.skip(reason="Solr backend not yet available")
 
 
 def test_associations():
@@ -22,7 +19,9 @@ def test_association_page_limit():
 
 def test_association_category():
     si = SolrImplementation()
-    response = si.get_associations(category="biolink:CorrelatedGeneToDiseaseAssociation")
+    response = si.get_associations(
+        category="biolink:CorrelatedGeneToDiseaseAssociation"
+    )
     assert response
     assert response.total > 6000
     assert "biolink:CorrelatedGeneToDiseaseAssociation" in response.items[0].category

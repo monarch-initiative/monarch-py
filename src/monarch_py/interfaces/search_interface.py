@@ -3,7 +3,6 @@ from typing import List, Tuple
 
 from monarch_py.datamodels.model import (
     AssociationTableResults,
-    AssociationTypeEnum,
     FacetValue,
     SearchResults,
 )
@@ -68,7 +67,6 @@ class SearchInterface(ABC):
         object_closure: str = None,
         entity: str = None,
         between: Tuple[str, str] = None,
-        association_type: AssociationTypeEnum = None,
     ) -> SearchResults:
         """
         Get facet counts and facet query counts for associations
@@ -102,7 +100,7 @@ class SearchInterface(ABC):
     def get_association_table(
         self,
         entity: str,
-        association_type: AssociationTypeEnum,
+        category: str,
         query=None,
         sort=None,
         offset=0,
@@ -113,7 +111,7 @@ class SearchInterface(ABC):
 
         Args:
             entity (str): Entity to get associations for
-            association_type (AssociationTypeEnum): Association type to filter to
+            category (str): Category of associations to return
             query (str): Query string to match against
             sort (str): Sort order, defaults to None
             offset (int): Offset of the first result to return, defaults to 0

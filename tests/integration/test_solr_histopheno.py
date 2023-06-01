@@ -1,8 +1,6 @@
-import pytest
-
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
-#pytestmark = pytest.mark.skip(reason="Solr backend not yet available")
+# pytestmark = pytest.mark.skip(reason="Solr backend not yet available")
 
 
 def test_histopheno():

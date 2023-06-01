@@ -1,11 +1,11 @@
 import pkgutil
 import re
-from typing import List, Tuple
+from typing import List
 
 import yaml
 from pydantic import parse_obj_as
 
-from monarch_py.datamodels.model import AssociationTypeEnum, AssociationTypeMapping
+from monarch_py.datamodels.model import AssociationTypeMapping
 
 
 class AssociationTypeMappings:
@@ -27,11 +27,11 @@ class AssociationTypeMappings:
             AssociationTypeMappings()
         return AssociationTypeMappings.__instance.mappings
 
-    def get_mapping(self, association_type: AssociationTypeEnum):
+    def get_mapping(self, category: str):
         if AssociationTypeMappings.__instance is None:
             AssociationTypeMappings()
         for mapping in self.mappings:
-            if mapping.association_type == association_type:
+            if mapping.category == category:
                 return mapping
 
     def load_mappings(self):

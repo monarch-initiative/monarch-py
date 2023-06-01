@@ -1,29 +1,35 @@
 from __future__ import annotations
-from datetime import datetime, date
-from enum import Enum
-from typing import List, Dict, Optional, Any, Union
-from pydantic import BaseModel as BaseModel, Field
-from linkml_runtime.linkml_model import Decimal
+
 import sys
+from enum import Enum
+from typing import Dict, List, Optional
+
+from pydantic import BaseModel as BaseModel
+from pydantic import Field
+
 if sys.version_info >= (3, 8):
-    from typing import Literal
+    pass
 else:
-    from typing_extensions import Literal
+    pass
 
 
 metamodel_version = "None"
 version = "None"
 
-class WeakRefShimBaseModel(BaseModel):
-   __slots__ = '__weakref__'
 
-class ConfiguredBaseModel(WeakRefShimBaseModel,
-                validate_assignment = True,
-                validate_all = True,
-                underscore_attrs_are_private = True,
-                extra = 'forbid',
-                arbitrary_types_allowed = True,
-                use_enum_values = True):
+class WeakRefShimBaseModel(BaseModel):
+    __slots__ = "__weakref__"
+
+
+class ConfiguredBaseModel(
+    WeakRefShimBaseModel,
+    validate_assignment=True,
+    validate_all=True,
+    underscore_attrs_are_private=True,
+    extra="forbid",
+    arbitrary_types_allowed=True,
+    use_enum_values=True,
+):
     pass
 
 
@@ -31,42 +37,15 @@ class AssociationDirectionEnum(str, Enum):
     """
     The directionality of an association as it relates to a specified entity, with edges being categorized as incoming or outgoing
     """
+
     # An association for which a specified entity is the object or part of the object closure
     incoming = "incoming"
     # An association for which a specified entity is the subject or part of the subject closure
     outgoing = "outgoing"
-    
-    
 
-class AssociationTypeEnum(str, Enum):
-    """
-    A grouping label for association types, which are not necessarily 1:1 with biolink categories or predicates
-    """
-    # Any association between a disease and a phenotype
-    disease_phenotype = "disease_phenotype"
-    # Any association between a gene and a phenotype
-    gene_phenotype = "gene_phenotype"
-    # Any association between two genes
-    gene_interaction = "gene_interaction"
-    # Any association between a gene and a pathway
-    gene_pathway = "gene_pathway"
-    # Expression association between a gene and an expression site
-    gene_expression = "gene_expression"
-    # Any association between two genes based on orthology
-    gene_orthology = "gene_orthology"
-    # Any association between a chemical and a pathway
-    chemical_pathway = "chemical_pathway"
-    # Any association between a gene and molecular activity
-    gene_function = "gene_function"
-    # Association between a gene and a disease that has not been established to be causal
-    correlated_gene = "correlated_gene"
-    # Association between a gene and a disease that is known to be causal
-    causal_gene = "causal_gene"
-    
-    
 
 class Association(ConfiguredBaseModel):
-    
+
     aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)
     id: str = Field(...)
     subject: str = Field(...)
@@ -98,14 +77,17 @@ class Association(ConfiguredBaseModel):
     stage_qualifier: Optional[str] = Field(None)
     pathway: Optional[str] = Field(None)
     relation: Optional[str] = Field(None)
-    
 
 
 class DirectionalAssociation(Association):
     """
     An association that gives it's direction relative to a specified entity
     """
-    direction: AssociationDirectionEnum = Field(..., description="""The directionality of the association relative to a given entity for an association_count. If the entity is the subject or in the subject closure, the direction is forwards, if it is the object or in the object closure, the direction is backwards.""")
+
+    direction: AssociationDirectionEnum = Field(
+        ...,
+        description="""The directionality of the association relative to a given entity for an association_count. If the entity is the subject or in the subject closure, the direction is forwards, if it is the object or in the object closure, the direction is backwards.""",
+    )
     aggregator_knowledge_source: Optional[List[str]] = Field(default_factory=list)
     id: str = Field(...)
     subject: str = Field(...)
@@ -137,11 +119,10 @@ class DirectionalAssociation(Association):
     stage_qualifier: Optional[str] = Field(None)
     pathway: Optional[str] = Field(None)
     relation: Optional[str] = Field(None)
-    
 
 
 class Entity(ConfiguredBaseModel):
-    
+
     id: str = Field(...)
     category: Optional[List[str]] = Field(default_factory=list)
     name: Optional[str] = Field(None)
@@ -152,54 +133,62 @@ class Entity(ConfiguredBaseModel):
     source: Optional[str] = Field(None)
     symbol: Optional[str] = Field(None)
     synonym: Optional[List[str]] = Field(default_factory=list)
-    
 
 
 class HistoPheno(ConfiguredBaseModel):
-    
+
     id: str = Field(...)
-    items: List[HistoBin] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
-    
+    items: List[HistoBin] = Field(
+        default_factory=list,
+        description="""A collection of items, with the type to be overriden by slot_usage""",
+    )
 
 
 class Results(ConfiguredBaseModel):
-    
+
     limit: int = Field(..., description="""number of items to return in a response""")
     offset: int = Field(..., description="""offset into the total number of items""")
     total: int = Field(..., description="""total number of items matching a query""")
-    
 
 
 class AssociationResults(Results):
-    
-    items: List[Association] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+
+    items: List[Association] = Field(
+        default_factory=list,
+        description="""A collection of items, with the type to be overriden by slot_usage""",
+    )
     limit: int = Field(..., description="""number of items to return in a response""")
     offset: int = Field(..., description="""offset into the total number of items""")
     total: int = Field(..., description="""total number of items matching a query""")
-    
 
 
 class AssociationTableResults(Results):
-    
-    items: List[DirectionalAssociation] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+
+    items: List[DirectionalAssociation] = Field(
+        default_factory=list,
+        description="""A collection of items, with the type to be overriden by slot_usage""",
+    )
     limit: int = Field(..., description="""number of items to return in a response""")
     offset: int = Field(..., description="""offset into the total number of items""")
     total: int = Field(..., description="""total number of items matching a query""")
-    
 
 
 class EntityResults(Results):
-    
-    items: List[Entity] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+
+    items: List[Entity] = Field(
+        default_factory=list,
+        description="""A collection of items, with the type to be overriden by slot_usage""",
+    )
     limit: int = Field(..., description="""number of items to return in a response""")
     offset: int = Field(..., description="""offset into the total number of items""")
     total: int = Field(..., description="""total number of items matching a query""")
-    
 
 
 class SearchResult(Entity):
-    
-    highlight: Optional[str] = Field(None, description="""matching text snippet containing html tags""")
+
+    highlight: Optional[str] = Field(
+        None, description="""matching text snippet containing html tags"""
+    )
     score: Optional[float] = Field(None)
     id: str = Field(...)
     category: List[str] = Field(default_factory=list)
@@ -211,70 +200,85 @@ class SearchResult(Entity):
     source: Optional[str] = Field(None)
     symbol: Optional[str] = Field(None)
     synonym: Optional[List[str]] = Field(default_factory=list)
-    
 
 
 class SearchResults(Results):
-    
-    items: List[SearchResult] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
-    facet_fields: Optional[Dict[str, FacetField]] = Field(default_factory=dict, description="""Collection of facet field responses with the field values and counts""")
-    facet_queries: Optional[Dict[str, FacetValue]] = Field(default_factory=dict, description="""Collection of facet query responses with the query string values and counts""")
+
+    items: List[SearchResult] = Field(
+        default_factory=list,
+        description="""A collection of items, with the type to be overriden by slot_usage""",
+    )
+    facet_fields: Optional[Dict[str, FacetField]] = Field(
+        default_factory=dict,
+        description="""Collection of facet field responses with the field values and counts""",
+    )
+    facet_queries: Optional[Dict[str, FacetValue]] = Field(
+        default_factory=dict,
+        description="""Collection of facet query responses with the query string values and counts""",
+    )
     limit: int = Field(..., description="""number of items to return in a response""")
     offset: int = Field(..., description="""offset into the total number of items""")
     total: int = Field(..., description="""total number of items matching a query""")
-    
 
 
 class FacetValue(ConfiguredBaseModel):
-    
+
     label: str = Field(...)
     count: Optional[int] = Field(None, description="""count of documents""")
-    
 
 
 class HistoBin(FacetValue):
-    
+
     id: str = Field(...)
     label: str = Field(...)
     count: Optional[int] = Field(None, description="""count of documents""")
-    
 
 
 class FacetField(ConfiguredBaseModel):
-    
+
     label: str = Field(...)
     facet_values: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
-    
 
 
 class AssociationTypeMapping(ConfiguredBaseModel):
     """
     A data class to hold the necessary information to produce association type counts for given  entities with appropriate directional labels
     """
-    association_type: Optional[AssociationTypeEnum] = Field(None)
-    subject_label: Optional[str] = Field(None, description="""A label to describe the subjects of the association type as a whole for use in the UI""")
-    object_label: Optional[str] = Field(None, description="""A label to describe the objects of the association type as a whole for use in the UI""")
-    symmetric: bool = Field(False, description="""Whether the association type is symmetric, meaning that the subject and object labels should be interchangeable""")
-    category: str = Field(..., description="""The biolink category to use in queries for this association type""")
-    
+
+    subject_label: Optional[str] = Field(
+        None,
+        description="""A label to describe the subjects of the association type as a whole for use in the UI""",
+    )
+    object_label: Optional[str] = Field(
+        None,
+        description="""A label to describe the objects of the association type as a whole for use in the UI""",
+    )
+    symmetric: bool = Field(
+        False,
+        description="""Whether the association type is symmetric, meaning that the subject and object labels should be interchangeable""",
+    )
+    category: str = Field(
+        ...,
+        description="""The biolink category to use in queries for this association type""",
+    )
 
 
 class AssociationCount(FacetValue):
-    
-    association_type: Optional[AssociationTypeEnum] = Field(None)
+
     category: Optional[str] = Field(None)
     label: str = Field(...)
     count: Optional[int] = Field(None, description="""count of documents""")
-    
 
 
 class AssociationCountList(ConfiguredBaseModel):
     """
     Container class for a list of association counts
     """
-    items: List[AssociationCount] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
-    
 
+    items: List[AssociationCount] = Field(
+        default_factory=list,
+        description="""A collection of items, with the type to be overriden by slot_usage""",
+    )
 
 
 # Update forward refs
@@ -295,4 +299,3 @@ FacetField.update_forward_refs()
 AssociationTypeMapping.update_forward_refs()
 AssociationCount.update_forward_refs()
 AssociationCountList.update_forward_refs()
-
