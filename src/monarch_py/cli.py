@@ -72,7 +72,6 @@ def associations(
     entity: str = typer.Option(None, "--entity", "-e"),
     between: str = typer.Option(None, "--between"),
     direct: bool = typer.Option(False, "--direct"),
-    association_type: str = typer.Option(None, "--association-type"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
@@ -95,7 +94,6 @@ def associations(
         object: The object of the association
         entity: The subject or object of the association
         between: The subject and object of the association
-        association_type: The label of the association
         limit: The number of associations to return
         direct: Whether to exclude associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved
