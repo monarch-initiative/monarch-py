@@ -3,7 +3,7 @@ from typing import List
 import pystow
 import typer
 
-from monarch_py.datamodels.model import AssociationCountList, AssociationTypeEnum
+from monarch_py.datamodels.model import AssociationCountList
 from monarch_py.utils.solr_cli_utils import (
     check_solr_permissions,
     get_solr,
@@ -272,8 +272,8 @@ def association_counts(
 @solr_app.command("association-table")
 def association_table(
     entity: str = typer.Argument(..., help="The entity to get associations for"),
-    association_type: AssociationTypeEnum = typer.Argument(
-        ..., help="The association type to get associations for"
+    category: str = typer.Argument(
+        ..., help="The association category to get associations for, ex. biolink:GeneToPhenotypicFeatureAssociation"
     ),
     q: str = typer.Option(None, "--query", "-q"),
     limit: int = typer.Option(5, "--limit", "-l"),
@@ -290,6 +290,6 @@ def association_table(
 ):
     data = get_solr(update=False)
     response = data.get_association_table(
-        entity, association_type, q=q, limit=limit, offset=offset
+        entity=entity, category=category, q=q, limit=limit, offset=offset
     )
     format_output(fmt, response, output)

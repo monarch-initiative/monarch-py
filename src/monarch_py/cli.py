@@ -5,7 +5,6 @@ from typing import List, Optional
 import typer
 
 from monarch_py import solr_cli, sql_cli
-from monarch_py.datamodels.model import AssociationTypeEnum
 
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
@@ -220,8 +219,8 @@ def association_counts(
 @app.command("association-table")
 def association_table(
     entity: str = typer.Argument(..., help="The entity to get associations for"),
-    association_type: AssociationTypeEnum = typer.Argument(
-        ..., help="The association type to get associations for"
+    category: str = typer.Argument(
+        ..., help="The association category to get associations for, ex. biolink:GeneToPhenotypicFeatureAssociation"
     ),
     q: str = typer.Option(None, "--query", "-q"),
     limit: int = typer.Option(5, "--limit", "-l"),
