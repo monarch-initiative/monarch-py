@@ -546,3 +546,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             k: FacetValue(label=k, count=v) for k, v in solr_facet_queries.items()
         }
         return facet_values
+
+    def solr_is_available():
+        import requests
+        try:
+            response = requests.get(base_url)
+            return response.status_code == 200
+        except Exception as e:
+            return False
