@@ -60,10 +60,11 @@ enums:
       correlated_gene:
         description: >-
           Association between a gene and a disease that has not been established to be causal
+        meaning: biolink:CorrelatedGeneToDiseaseAssociation
       causal_gene:
           description: >-
               Association between a gene and a disease that is known to be causal
-          meaning: biolink:causal
+          meaning: biolink:CausalGeneToDiseaseAssociation
 
 classes:
   Association:
@@ -201,7 +202,6 @@ classes:
       - object_label
       - symmetric
       - category
-      - predicate
     slot_usage:
       subject_label:
         description: A label to describe the subjects of the association type as a whole for use in the UI
@@ -214,15 +214,17 @@ classes:
         ifabsent: false
         required: true
       category:
-        description: The biolink categories to use in queries for this association type, assuming OR semantics
-        multivalued: true
-      predicate:
-        description: The biolink predicate to use in queries for this association type, assuming OR semantics
-        multivalued: true
+        description: The biolink category to use in queries for this association type
+        required: true
+        multivalued: false
   AssociationCount:
     is_a: FacetValue
     slots:
       - association_type
+      - category
+    slot_usage:
+      category:
+        multivalued: false
   AssociationCountList:
     description: Container class for a list of association counts
     slots:

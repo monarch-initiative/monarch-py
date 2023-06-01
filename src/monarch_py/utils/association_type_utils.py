@@ -76,35 +76,11 @@ def get_association_type_mapping_by_query_string(
 
 
 def get_solr_query_fragment(agm: AssociationTypeMapping) -> str:
-
-    query_string = ""
-    if len(agm.category) == 1:
-        query_string = query_string + f'category:"{agm.category[0]}"'
-    elif len(agm.category) > 1:
-        query_string = (
-            query_string + "("
-            " OR ".join([f'category:"{cat}"' for cat in agm.category]) + ")"
-        )
-
-    if len(agm.category) > 0 and len(agm.predicate) > 0:
-        query_string = query_string + " AND "
-
-    if len(agm.predicate) == 1:
-        query_string = query_string + f'predicate:"{agm.predicate[0]}"'
-    elif len(agm.predicate) > 1:
-        query_string = (
-            query_string
-            + "("
-            + " OR ".join([f'predicate:"{pred}"' for pred in agm.predicate])
-            + ")"
-        )
-
-    return query_string
+    return f'category:"{agm.category}"'
 
 
 def get_sql_query_fragment(agm: AssociationTypeMapping) -> str:
-    # Maybe this is too brittle? but why repeat all of that logic for just that tiny difference
-    return get_solr_query_fragment(agm).replace(':"', ' = "')
+    return f'category = "{agm.category}"'
 
 
 def parse_association_type_query_string(
