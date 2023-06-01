@@ -3,7 +3,7 @@ import pytest
 from monarch_py.datamodels.model import AssociationTypeEnum
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
-pytestmark = pytest.mark.skip(reason="Solr backend not yet available")
+#pytestmark = pytest.mark.skip(reason="Solr backend not yet available")
 
 
 def test_associations():
@@ -22,10 +22,10 @@ def test_association_page_limit():
 
 def test_association_category():
     si = SolrImplementation()
-    response = si.get_associations(category="biolink:GeneToDiseaseAssociation")
+    response = si.get_associations(category="biolink:CorrelatedGeneToDiseaseAssociation")
     assert response
     assert response.total > 6000
-    assert "biolink:GeneToDiseaseAssociation" in response.items[0].category
+    assert "biolink:CorrelatedGeneToDiseaseAssociation" in response.items[0].category
 
 
 def test_association_predicate():
@@ -93,14 +93,3 @@ def test_between_reversed():
             "MONDO:0007947" in association.subject_closure
             and "HP:0000098" in association.object_closure
         )
-
-
-def test_associations_by_type():
-    si = SolrImplementation()
-    response = si.get_associations(
-        entity="MONDO:0007947", association_type=AssociationTypeEnum.disease_phenotype
-    )
-
-    assert response
-    assert response.total > 60
-    assert "MONDO:0007947" in response.items[0].subject_closure

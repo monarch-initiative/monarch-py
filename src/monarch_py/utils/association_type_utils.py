@@ -54,13 +54,12 @@ def get_association_type_mapping_by_query_string(
     Raises: ValueError if no match is found
     """
 
-    categories, predicates = parse_association_type_query_string(query_string)
+    categories = parse_query_string_for_category(query_string)
 
     matching_types = [
         a_type
         for a_type in AssociationTypeMappings.get_mappings()
         if set(a_type.category) == set(categories)
-        and set(a_type.predicate) == set(predicates)
     ]
 
     if len(matching_types) == 0:
@@ -83,21 +82,21 @@ def get_sql_query_fragment(agm: AssociationTypeMapping) -> str:
     return f'category = "{agm.category}"'
 
 
-def parse_association_type_query_string(
+def parse_query_string_for_category(
     query_string: str,
-) -> Tuple[List[str], List[str]]:
+) -> str:
     categories = []
-    predicates = []
 
-    pattern = re.compile(r'(category|predicate):\s*"?([\w:]+)"?')
+    pattern = re.compile(r'(category):\s*"?([\w:]+)"?')
     for match in re.findall(pattern, query_string):
         if match[0] == "category":
             categories.append(match[1])
-        elif match[0] == "predicate":
-            predicates.append(match[1])
 
     # Check if both categories and predicates were found
-    if not categories and not predicates:
+    if not categories:
         raise ValueError("No categories or predicates found in query string")
 
-    return categories, predicates
+    if len(categories) > 1:
+        raise ValueError(f"Multiple categories found in query string: {query_string}")
+
+    return categories[0]

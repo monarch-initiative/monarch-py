@@ -11,7 +11,6 @@ from monarch_py.datamodels.model import (
     AssociationDirectionEnum,
     AssociationResults,
     AssociationTableResults,
-    AssociationTypeEnum,
     DirectionalAssociation,
     Entity,
     FacetField,
@@ -77,7 +76,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_type: AssociationTypeEnum = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -111,7 +109,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             entity=entity,
             between=between,
             direct=direct,
-            association_type=association_type,
             offset=offset,
             limit=limit,
         )
@@ -145,7 +142,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_type: AssociationTypeEnum = None,
         q: str = None,
         offset: int = 0,
         limit: int = 20,
@@ -198,12 +194,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 query.add_filter_query(
                     f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
                 )
-        if association_type:
-            query.add_filter_query(
-                get_solr_query_fragment(
-                    AssociationTypeMappings().get_mapping(association_type)
-                )
-            )
         if q:
             # We don't yet have tokenization strategies for the association index, initially we'll limit searching to
             # the visible fields in an association table plus their ID equivalents and use a wildcard query for substring matching
@@ -464,7 +454,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     def get_association_table(
         self,
         entity: str,
-        association_type: AssociationTypeEnum,
+        category: str,
         q=None,
         sort=None,
         offset=0,
@@ -472,9 +462,10 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     ) -> AssociationTableResults:
         if sort:
             raise NotImplementedError("Sorting is not yet implemented")
+
         query = self._populate_association_query(
             entity=entity,
-            association_type=association_type,
+            category=category,
             q=q,
             offset=offset,
             limit=limit,
