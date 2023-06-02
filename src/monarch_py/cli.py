@@ -108,6 +108,8 @@ def search(
     q: str = typer.Option(None, "--query", "-q"),
     category: List[str] = typer.Option(None, "--category", "-c"),
     in_taxon: str = typer.Option(None, "--in-taxon", "-t"),
+    facet_fields: List[str] = typer.Option(None, "--facet-fields", "-ff"),
+    facet_queries: List[str] = typer.Option(None, "--facet-queries"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
