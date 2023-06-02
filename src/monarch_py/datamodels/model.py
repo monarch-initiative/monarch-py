@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 from pydantic import BaseModel as BaseModel
 from pydantic import Field
@@ -208,12 +208,12 @@ class SearchResults(Results):
         default_factory=list,
         description="""A collection of items, with the type to be overriden by slot_usage""",
     )
-    facet_fields: Optional[Dict[str, FacetField]] = Field(
-        default_factory=dict,
+    facet_fields: Optional[List[FacetField]] = Field(
+        default_factory=list,
         description="""Collection of facet field responses with the field values and counts""",
     )
-    facet_queries: Optional[Dict[str, FacetValue]] = Field(
-        default_factory=dict,
+    facet_queries: Optional[List[FacetValue]] = Field(
+        default_factory=list,
         description="""Collection of facet query responses with the query string values and counts""",
     )
     limit: int = Field(..., description="""number of items to return in a response""")
@@ -237,7 +237,10 @@ class HistoBin(FacetValue):
 class FacetField(ConfiguredBaseModel):
 
     label: str = Field(...)
-    facet_values: Optional[Dict[str, FacetValue]] = Field(default_factory=dict)
+    facet_values: Optional[List[FacetValue]] = Field(
+        default_factory=list,
+        description="""Collection of FacetValue label/value instances belonging to a FacetField""",
+    )
 
 
 class AssociationTypeMapping(ConfiguredBaseModel):

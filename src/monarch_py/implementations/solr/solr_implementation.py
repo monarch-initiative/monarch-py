@@ -504,7 +504,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             raise ValueError(f"Entity {entity} not found in association {document}")
         return direction
 
-    def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
+    def _convert_facet_fields(self, solr_facet_fields: Dict) -> List[FacetField]:
         """
         Converts a list of raw solr facet fields from the solr response to a list of
         FacetField instances
@@ -516,21 +516,21 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             List[FacetField]: A list of FacetField instances, with FacetValues populated within
         """
 
-        facet_fields: Dict[str, FacetField] = {}
+        facet_fields: List[FacetField] = []
         for field in solr_facet_fields:
             ff = FacetField(label=field)
             facet_list = solr_facet_fields[field]
             facet_dict = dict(zip(facet_list[::2], facet_list[1::2]))
-            ff.facet_values = {
-                k: FacetValue(label=k, count=v) for k, v in facet_dict.items()
-            }
-            facet_fields[field] = ff
+            ff.facet_values = [
+                FacetValue(label=k, count=v) for k, v in facet_dict.items()
+            ]
+            facet_fields.append(ff)
 
         return facet_fields
 
     def _convert_facet_queries(
         self, solr_facet_queries: Dict[str, int]
-    ) -> Dict[str, FacetValue]:
+    ) -> List[FacetValue]:
         """
         Converts a list of raw solr facet queries from the solr response to a list of
         FacetValue instances
@@ -542,15 +542,16 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             List[FacetValue]: A list of FacetValue instances
         """
 
-        facet_values = {
-            k: FacetValue(label=k, count=v) for k, v in solr_facet_queries.items()
-        }
+        facet_values = [
+            FacetValue(label=k, count=v) for k, v in solr_facet_queries.items()
+        ]
         return facet_values
 
-    def solr_is_available():
+    def solr_is_available(self):
         import requests
+
         try:
-            response = requests.get(base_url)
+            response = requests.get(self.base_url)
             return response.status_code == 200
-        except Exception as e:
+        except Exception:
             return False

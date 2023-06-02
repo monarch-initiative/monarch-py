@@ -3,9 +3,10 @@ import pytest
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
 pytestmark = pytest.mark.skipif(
-    condition = not SolrImplementation().solr_is_available(),
-    reason = "Solr is not available",
+    condition=not SolrImplementation().solr_is_available(),
+    reason="Solr is not available",
 )
+
 
 @pytest.mark.parametrize(
     "q, should_return",

@@ -3,11 +3,11 @@ import pytest
 from monarch_py.datamodels.model import AssociationDirectionEnum
 from monarch_py.implementations.solr.solr_implementation import SolrImplementation
 
-
 pytestmark = pytest.mark.skipif(
-    condition = not SolrImplementation().solr_is_available(),
-    reason = "Solr is not available",
+    condition=not SolrImplementation().solr_is_available(),
+    reason="Solr is not available",
 )
+
 
 @pytest.mark.parametrize(
     "query",
@@ -42,7 +42,8 @@ def test_facet_fields():
     assert response
     assert response.total > 0
     assert response.facet_fields
-    assert response.facet_fields["category"]
+    category = [ff for ff in response.facet_fields if ff.label == "category"][0]
+    assert category
 
 
 def test_association_facets():
@@ -50,13 +51,11 @@ def test_association_facets():
     response = si.get_association_facets(facet_fields=["category"])
     assert response
     assert response.facet_fields
-    assert response.facet_fields["category"]
-    assert (
-        response.facet_fields["category"]
-        .facet_values["biolink:DiseaseToPhenotypicFeatureAssociation"]
-        .count
-        > 100000
-    )
+    category = [ff for ff in response.facet_fields if ff.label == "category"][0]
+    assert category
+    d2p = [fv for fv in category.facet_values if fv.label == "biolink:DiseaseToPhenotypicFeatureAssociation"][0]
+    assert d2p
+    assert ( d2p.count > 100000 )
 
 
 def test_association_facet_query():
@@ -74,9 +73,14 @@ def test_association_facet_query():
     )
     assert response
     assert response.facet_queries
-    assert response.facet_queries['object_closure:"HP:0000924"'].count > 20
-    assert response.facet_queries['object_closure:"HP:0000707"'].count > 5
-    assert response.facet_queries['object_closure:"HP:0000152"'].count > 20
+    hp924 = [fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000924"'][0]
+    assert hp924.count > 20
+
+    hp707 = [fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000707"'][0]
+    assert hp707.count > 5
+
+    hp152 = [fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000152"'][0]
+    assert hp152.count > 20
 
 
 def test_association_counts_for_disease():
@@ -86,12 +90,16 @@ def test_association_counts_for_disease():
     assert len(association_counts) > 0
 
     causal_genes = [
-        ac for ac in association_counts if ac.category == "biolink:CausalGeneToDiseaseAssociation"
+        ac
+        for ac in association_counts
+        if ac.category == "biolink:CausalGeneToDiseaseAssociation"
     ][0]
     assert causal_genes.label == "Causal Genes"
 
     disease_phenotype = [
-        ac for ac in association_counts if ac.category == "biolink:DiseaseToPhenotypicFeatureAssociation"
+        ac
+        for ac in association_counts
+        if ac.category == "biolink:DiseaseToPhenotypicFeatureAssociation"
     ][0]
     assert disease_phenotype.label == "Phenotypes"
 
@@ -103,12 +111,16 @@ def test_association_counts_for_phenotype():
     assert len(association_counts) > 0
 
     disease_phenotype = [
-        ac for ac in association_counts if ac.category == "biolink:DiseaseToPhenotypicFeatureAssociation"
+        ac
+        for ac in association_counts
+        if ac.category == "biolink:DiseaseToPhenotypicFeatureAssociation"
     ][0]
     assert disease_phenotype.label == "Diseases"
 
     gene_phenotype = [
-        ac for ac in association_counts if ac.category == "biolink:GeneToPhenotypicFeatureAssociation"
+        ac
+        for ac in association_counts
+        if ac.category == "biolink:GeneToPhenotypicFeatureAssociation"
     ][0]
     assert gene_phenotype.label == "Genes"
 

@@ -218,7 +218,8 @@ def association_counts(
 def association_table(
     entity: str = typer.Argument(..., help="The entity to get associations for"),
     category: str = typer.Argument(
-        ..., help="The association category to get associations for, ex. biolink:GeneToPhenotypicFeatureAssociation"
+        ...,
+        help="The association category to get associations for, ex. biolink:GeneToPhenotypicFeatureAssociation",
     ),
     q: str = typer.Option(None, "--query", "-q"),
     limit: int = typer.Option(5, "--limit", "-l"),
