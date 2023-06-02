@@ -3,7 +3,7 @@ from typing import List
 import pystow
 import typer
 
-from monarch_py.datamodels.model import AssociationCountList, AssociationTypeEnum
+from monarch_py.datamodels.model import AssociationCountList
 from monarch_py.utils.solr_cli_utils import (
     check_solr_permissions,
     get_solr,
@@ -96,7 +96,6 @@ def associations(
     entity: str = typer.Option(None, "--entity"),
     between: str = typer.Option(None, "--between"),
     direct: bool = typer.Option(False, "--direct"),
-    association_type: str = typer.Option(None, "--label"),
     limit: int = typer.Option(20, "--limit"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
@@ -120,7 +119,6 @@ def associations(
         entity (str, optional): The subject or object of the association.
         between (str, optional): Two comma-separated entities to get bi-directional associations.
         direct (bool, optional): Exclude associations with the specified subject and objects as ancestors. Default False
-        association_type (str, optional): The association label of the association
         limit (int, optional): The number of associations to return. Default 20
         offset (int, optional): The offset of the first association to be retrieved. Default 0
         fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
@@ -140,7 +138,7 @@ def associations(
 def search(
     q: str = typer.Option(None, "--query", "-q"),
     category: List[str] = typer.Option(None, "--category", "-c"),
-    taxon: str = typer.Option(None, "--taxon", "-t"),
+    in_taxon: str = typer.Option(None, "--in-taxon", "-t"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
@@ -272,8 +270,9 @@ def association_counts(
 @solr_app.command("association-table")
 def association_table(
     entity: str = typer.Argument(..., help="The entity to get associations for"),
-    association_type: AssociationTypeEnum = typer.Argument(
-        ..., help="The association type to get associations for"
+    category: str = typer.Argument(
+        ...,
+        help="The association category to get associations for, ex. biolink:GeneToPhenotypicFeatureAssociation",
     ),
     q: str = typer.Option(None, "--query", "-q"),
     limit: int = typer.Option(5, "--limit", "-l"),
@@ -290,6 +289,6 @@ def association_table(
 ):
     data = get_solr(update=False)
     response = data.get_association_table(
-        entity, association_type, q=q, limit=limit, offset=offset
+        entity=entity, category=category, q=q, limit=limit, offset=offset
     )
     format_output(fmt, response, output)

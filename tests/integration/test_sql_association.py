@@ -1,6 +1,5 @@
 import pytest
 
-from monarch_py.datamodels.model import AssociationTypeEnum
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 
 pytestmark = pytest.mark.skip("Need to rewrite SQL tests")
@@ -91,7 +90,7 @@ def test_between_reversed():
 def test_associations_by_type():
     data = SQLImplementation()
     response = data.get_associations(
-        entity="MONDO:0007947", association_type=AssociationTypeEnum.disease_phenotype
+        entity="MONDO:0007947", category="biolink:DiseaseToPhenotypicFeatureAssociation"
     )
 
     assert response

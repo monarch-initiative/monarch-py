@@ -5,7 +5,6 @@ from typing import List, Optional
 import typer
 
 from monarch_py import solr_cli, sql_cli
-from monarch_py.datamodels.model import AssociationTypeEnum
 
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
@@ -73,7 +72,6 @@ def associations(
     entity: str = typer.Option(None, "--entity", "-e"),
     between: str = typer.Option(None, "--between"),
     direct: bool = typer.Option(False, "--direct"),
-    association_type: str = typer.Option(None, "--association-type"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
@@ -96,7 +94,6 @@ def associations(
         object: The object of the association
         entity: The subject or object of the association
         between: The subject and object of the association
-        association_type: The label of the association
         limit: The number of associations to return
         direct: Whether to exclude associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved
@@ -110,7 +107,7 @@ def associations(
 def search(
     q: str = typer.Option(None, "--query", "-q"),
     category: List[str] = typer.Option(None, "--category", "-c"),
-    taxon: str = typer.Option(None, "--taxon", "-t"),
+    in_taxon: str = typer.Option(None, "--in-taxon", "-t"),
     limit: int = typer.Option(20, "--limit", "-l"),
     offset: int = typer.Option(0, "--offset"),
     fmt: str = typer.Option(
@@ -220,8 +217,9 @@ def association_counts(
 @app.command("association-table")
 def association_table(
     entity: str = typer.Argument(..., help="The entity to get associations for"),
-    association_type: AssociationTypeEnum = typer.Argument(
-        ..., help="The association type to get associations for"
+    category: str = typer.Argument(
+        ...,
+        help="The association category to get associations for, ex. biolink:GeneToPhenotypicFeatureAssociation",
     ),
     q: str = typer.Option(None, "--query", "-q"),
     limit: int = typer.Option(5, "--limit", "-l"),

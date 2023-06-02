@@ -11,7 +11,6 @@ from monarch_py.datamodels.model import (
     AssociationDirectionEnum,
     AssociationResults,
     AssociationTableResults,
-    AssociationTypeEnum,
     DirectionalAssociation,
     Entity,
     FacetField,
@@ -77,7 +76,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_type: AssociationTypeEnum = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -111,7 +109,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             entity=entity,
             between=between,
             direct=direct,
-            association_type=association_type,
             offset=offset,
             limit=limit,
         )
@@ -145,7 +142,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: str = None,
         between: str = None,
         direct: bool = None,
-        association_type: AssociationTypeEnum = None,
         q: str = None,
         offset: int = 0,
         limit: int = 20,
@@ -198,12 +194,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 query.add_filter_query(
                     f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
                 )
-        if association_type:
-            query.add_filter_query(
-                get_solr_query_fragment(
-                    AssociationTypeMappings.get_mapping(association_type)
-                )
-            )
         if q:
             # We don't yet have tokenization strategies for the association index, initially we'll limit searching to
             # the visible fields in an association table plus their ID equivalents and use a wildcard query for substring matching
@@ -452,7 +442,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                     association_count_dict[label] = AssociationCount(
                         label=label,
                         count=v,
-                        association_type=agm.association_type,
+                        category=agm.category,
                     )
 
         association_counts: List[AssociationCount] = list(
@@ -463,7 +453,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     def get_association_table(
         self,
         entity: str,
-        association_type: AssociationTypeEnum,
+        category: str,
         q=None,
         sort=None,
         offset=0,
@@ -471,9 +461,10 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     ) -> AssociationTableResults:
         if sort:
             raise NotImplementedError("Sorting is not yet implemented")
+
         query = self._populate_association_query(
             entity=entity,
-            association_type=association_type,
+            category=category,
             q=q,
             offset=offset,
             limit=limit,
@@ -513,7 +504,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             raise ValueError(f"Entity {entity} not found in association {document}")
         return direction
 
-    def _convert_facet_fields(self, solr_facet_fields: Dict) -> Dict[str, FacetField]:
+    def _convert_facet_fields(self, solr_facet_fields: Dict) -> List[FacetField]:
         """
         Converts a list of raw solr facet fields from the solr response to a list of
         FacetField instances
@@ -525,21 +516,21 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             List[FacetField]: A list of FacetField instances, with FacetValues populated within
         """
 
-        facet_fields: Dict[str, FacetField] = {}
+        facet_fields: List[FacetField] = []
         for field in solr_facet_fields:
             ff = FacetField(label=field)
             facet_list = solr_facet_fields[field]
             facet_dict = dict(zip(facet_list[::2], facet_list[1::2]))
-            ff.facet_values = {
-                k: FacetValue(label=k, count=v) for k, v in facet_dict.items()
-            }
-            facet_fields[field] = ff
+            ff.facet_values = [
+                FacetValue(label=k, count=v) for k, v in facet_dict.items()
+            ]
+            facet_fields.append(ff)
 
         return facet_fields
 
     def _convert_facet_queries(
         self, solr_facet_queries: Dict[str, int]
-    ) -> Dict[str, FacetValue]:
+    ) -> List[FacetValue]:
         """
         Converts a list of raw solr facet queries from the solr response to a list of
         FacetValue instances
@@ -551,7 +542,16 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             List[FacetValue]: A list of FacetValue instances
         """
 
-        facet_values = {
-            k: FacetValue(label=k, count=v) for k, v in solr_facet_queries.items()
-        }
+        facet_values = [
+            FacetValue(label=k, count=v) for k, v in solr_facet_queries.items()
+        ]
         return facet_values
+
+    def solr_is_available(self):
+        import requests
+
+        try:
+            response = requests.get(self.base_url)
+            return response.status_code == 200
+        except Exception:
+            return False
