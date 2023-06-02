@@ -1521,7 +1521,6 @@
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">association_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -1682,7 +1681,7 @@
 </h4>
 <div class="highlight"><pre><span></span><code><span class="n">get_association_table</span><span class="p">(</span>
     <span class="n">entity</span><span class="p">,</span>
-    <span class="n">association_type</span><span class="p">,</span>
+    <span class="n">category</span><span class="p">,</span>
     <span class="n">query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">sort</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1716,11 +1715,11 @@
           </td>
         </tr>
         <tr>
-          <td><code>association_type</code></td>
+          <td><code>category</code></td>
           <td>
-                <code><span title="monarch_py.datamodels.model.AssociationTypeEnum">AssociationTypeEnum</span></code>
+                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
           </td>
-          <td><p>Association type to filter to</p></td>
+          <td><p>Category of associations to return</p></td>
           <td>
               <em>required</em>
           </td>
@@ -2058,7 +2057,6 @@
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">direct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">association_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="p">)</span>
