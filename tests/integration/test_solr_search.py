@@ -53,9 +53,13 @@ def test_association_facets():
     assert response.facet_fields
     category = [ff for ff in response.facet_fields if ff.label == "category"][0]
     assert category
-    d2p = [fv for fv in category.facet_values if fv.label == "biolink:DiseaseToPhenotypicFeatureAssociation"][0]
+    d2p = [
+        fv
+        for fv in category.facet_values
+        if fv.label == "biolink:DiseaseToPhenotypicFeatureAssociation"
+    ][0]
     assert d2p
-    assert ( d2p.count > 100000 )
+    assert d2p.count > 100000
 
 
 def test_association_facet_query():
@@ -73,13 +77,19 @@ def test_association_facet_query():
     )
     assert response
     assert response.facet_queries
-    hp924 = [fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000924"'][0]
+    hp924 = [
+        fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000924"'
+    ][0]
     assert hp924.count > 20
 
-    hp707 = [fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000707"'][0]
+    hp707 = [
+        fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000707"'
+    ][0]
     assert hp707.count > 5
 
-    hp152 = [fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000152"'][0]
+    hp152 = [
+        fq for fq in response.facet_queries if fq.label == 'object_closure:"HP:0000152"'
+    ][0]
     assert hp152.count > 20
 
 
