@@ -15,7 +15,6 @@ class SolrService(BaseModel):
 
     def get(self, id):
         url = f"{self.base_url}/{self.core.value}/get?id={id}"
-        console.log(f"Solr request: {url}")
         response = requests.get(url)
         response.raise_for_status()
         entity = response.json()["doc"]
@@ -24,7 +23,6 @@ class SolrService(BaseModel):
 
     def query(self, q: SolrQuery) -> SolrQueryResult:
         url = f"{self.base_url}/{self.core.value}/select?{q.query_string()}"
-        logger.debug(f"Solr request: {url}")
         response = requests.get(url)
 
         data = json.loads(response.text)
