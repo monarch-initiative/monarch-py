@@ -21,13 +21,11 @@ class AssociationTypeMappings:
             self.mappings = None
             self.load_mappings()
 
-
     @staticmethod
     def get_mappings():
         if AssociationTypeMappings.__instance is None:
             AssociationTypeMappings()
         return AssociationTypeMappings.__instance.mappings
-
 
     def get_mapping(self, category: str):
         if AssociationTypeMappings.__instance is None:

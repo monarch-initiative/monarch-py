@@ -190,7 +190,7 @@ slots:
   aggregator_knowledge_source:
     multivalued: true
   category:
-    multivalued: true
+    multivalued: false
   count:
     description: count of documents
     range: integer
