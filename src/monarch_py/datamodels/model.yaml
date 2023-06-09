@@ -258,7 +258,7 @@ slots:
     range: string
     required: true
   object_category:
-    multivalued: true
+    is_a: category
   object_closure:
     multivalued: true
   object_closure_label:
@@ -305,7 +305,7 @@ slots:
     range: string
     required: true
   subject_category:
-    multivalued: true
+    is_a: category
   subject_closure:
     multivalued: true
   subject_closure_label:
