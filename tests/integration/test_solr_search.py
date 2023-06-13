@@ -45,6 +45,21 @@ def test_facet_fields():
     category = [ff for ff in response.facet_fields if ff.label == "category"][0]
     assert category
 
+def test_single_filter_queries():
+    si = SolrImplementation()
+    response = si.search("syndrome", category=["biolink:Disease"])
+    assert response
+    assert response.total > 0
+    assert response.items[0].category == "biolink:Disease"
+
+def test_multiple_filter_queries():
+    si = SolrImplementation()
+    response = si.search("eye", category=["biolink:Disease", "biolink:PhenotypicFeature"])
+    assert response
+    assert response.total > 0
+    for (i, item) in enumerate(response.items):
+        assert item.category in ["biolink:Disease", "biolink:PhenotypicFeature"]
+
 
 def test_association_facets():
     si = SolrImplementation()
