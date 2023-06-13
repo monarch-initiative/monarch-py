@@ -51,7 +51,6 @@ classes:
     - has_evidence
     - onset_qualifier
     - sex_qualifier
-    - source
     - stage_qualifier
     - pathway
     - relation
@@ -84,7 +83,6 @@ classes:
     - xref
     - provided_by
     - in_taxon
-    - source
     - symbol
     - synonym
   EntityResults:
@@ -296,8 +294,6 @@ slots:
   score:
     range: float
   sex_qualifier:
-    range: string
-  source:
     range: string
   stage_qualifier:
     range: string

@@ -73,7 +73,6 @@ class Association(ConfiguredBaseModel):
     has_evidence: Optional[str] = Field(None)
     onset_qualifier: Optional[str] = Field(None)
     sex_qualifier: Optional[str] = Field(None)
-    source: Optional[str] = Field(None)
     stage_qualifier: Optional[str] = Field(None)
     pathway: Optional[str] = Field(None)
     relation: Optional[str] = Field(None)
@@ -115,7 +114,6 @@ class DirectionalAssociation(Association):
     has_evidence: Optional[str] = Field(None)
     onset_qualifier: Optional[str] = Field(None)
     sex_qualifier: Optional[str] = Field(None)
-    source: Optional[str] = Field(None)
     stage_qualifier: Optional[str] = Field(None)
     pathway: Optional[str] = Field(None)
     relation: Optional[str] = Field(None)
@@ -130,7 +128,6 @@ class Entity(ConfiguredBaseModel):
     xref: Optional[List[str]] = Field(default_factory=list)
     provided_by: Optional[str] = Field(None)
     in_taxon: Optional[str] = Field(None)
-    source: Optional[str] = Field(None)
     symbol: Optional[str] = Field(None)
     synonym: Optional[List[str]] = Field(default_factory=list)
 
@@ -197,7 +194,6 @@ class SearchResult(Entity):
     xref: Optional[List[str]] = Field(default_factory=list)
     provided_by: Optional[str] = Field(None)
     in_taxon: Optional[str] = Field(None)
-    source: Optional[str] = Field(None)
     symbol: Optional[str] = Field(None)
     synonym: Optional[List[str]] = Field(default_factory=list)
 
