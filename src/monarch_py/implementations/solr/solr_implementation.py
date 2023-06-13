@@ -240,6 +240,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         if filter_queries:
             query.filter_queries.extend(filter_queries)
 
+        # Search can't deal with entities that don't have names because we've made it a required field,
+        # we may or may not want them in the graph and in Solr, but we can safely leave them out of
+        # search
+        query.add_filter_query("name:*")
+
         query_result = solr.query(query)
         total = query_result.response.num_found
 
