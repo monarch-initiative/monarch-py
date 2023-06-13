@@ -47,10 +47,17 @@ def dict_factory(cursor, row):
     return {key: value for key, value in zip(fields, row)}
 
 
+def set_log_level(log_level: str):
+    """Sets the log level for the application."""
+    import loguru
+
+    loguru.logger.remove()
+    loguru.logger.add(sys.stderr, level=log_level)
+
+
 ### Output conversion methods ###
 
 FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, AssociationCountList, or Results objects."
-
 
 def get_headers_from_obj(obj: ConfiguredBaseModel) -> list:
     """Return a list of headers from a pydantic model."""

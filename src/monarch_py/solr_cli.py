@@ -1,4 +1,5 @@
 from typing import List
+from typing_extensions import Annotated
 
 import pystow
 import typer
@@ -11,10 +12,22 @@ from monarch_py.utils.solr_cli_utils import (
     start_solr,
     stop_solr,
 )
-from monarch_py.utils.utils import console, format_output
+from monarch_py.utils.utils import console, format_output, set_log_level
 
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
+
+@solr_app.callback(invoke_without_command=True)
+def callback(
+    ctx: typer.Context,
+    quiet: Annotated[bool, typer.Option("--quiet", "-q", help="Set log level to warning")] = False,
+    debug: Annotated[bool, typer.Option("--debug", "-d", help="Set log level to debug")] = False,
+    ):
+    if ctx.invoked_subcommand is None:
+        typer.secho(f"\n\tNo command specified\n\tTry `monarch solr --help` for more information.\n", fg=typer.colors.YELLOW)
+        raise typer.Exit()
+    log_level = "DEBUG" if debug else "WARNING" if quiet else "INFO"
+    set_log_level(log_level)
 
 ############################
 ### SOLR DOCKER COMMANDS ###
