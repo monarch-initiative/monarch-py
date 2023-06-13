@@ -230,9 +230,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.boost = self._entity_boost()
 
         if category:
-            query.add_filter_query(" OR ".join(f"category:{cat}" for cat in category))
+            query.add_filter_query(" OR ".join(f'category:"{cat}"' for cat in category))
         if in_taxon:
-            query.add_filter_query(" OR ".join([f"in_taxon:{t}" for t in taxon]))
+            query.add_filter_query(" OR ".join([f'in_taxon:"{t}"' for t in taxon]))
         if facet_fields:
             query.facet_fields = facet_fields
         if facet_queries:
