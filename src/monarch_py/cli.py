@@ -1,10 +1,12 @@
 import importlib
 from pathlib import Path
 from typing import List, Optional
+from typing_extensions import Annotated
 
 import typer
 
 from monarch_py import solr_cli, sql_cli
+from monarch_py.utils.utils import set_log_level
 
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
@@ -12,12 +14,28 @@ app.add_typer(sql_cli.sql_app, name="sql")
 
 
 @app.callback(invoke_without_command=True)
-def callback(version: Optional[bool] = typer.Option(None, "--version", is_eager=True)):
-    if version:
+def callback(
+    ctx: typer.Context,
+    version: Annotated[Optional[bool], typer.Option("--version", "-v", is_eager=True)] = None,
+    # verbose: Annotated[int, typer.Option("--verbose", "-v", count=True)] = 0,
+    quiet: Annotated[bool, typer.Option("--quiet", "-q", help="Set log level to warning")] = False,
+    debug: Annotated[bool, typer.Option("--debug", "-d", help="Set log level to debug")] = False,
+    ):
+    if version and ctx.invoked_subcommand is None:
         from monarch_py import __version__
-
         typer.echo(f"monarch_py version: {__version__}")
         raise typer.Exit()
+    if ctx.invoked_subcommand is None:
+        typer.secho(f"\n\tNo command specified\n\tTry `monarch --help` for more information.\n", fg=typer.colors.YELLOW)
+        raise typer.Exit()
+    log_level = "DEBUG" if debug else "WARNING" if quiet else "INFO"
+    set_log_level(log_level)
+
+
+@app.command("test")
+def test():
+    """Test the CLI"""
+    typer.secho("\n\tTesting monarch_py CLI\n", fg=typer.colors.GREEN)
 
 
 @app.command("schema")
@@ -36,7 +54,6 @@ def schema():
 
 
 ### "Aliases" for Solr CLI ###
-
 
 @app.command("entity")
 def entity(
