@@ -563,6 +563,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#monarch-test" class="md-nav__link">
+    monarch test
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -835,6 +842,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#monarch-test" class="md-nav__link">
+    monarch test
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -861,7 +875,9 @@
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>--version</code></li>
+<li><code>--version / --no-version</code></li>
+<li><code>--quiet / --no-quiet</code>: [default: no-quiet]</li>
+<li><code>--debug / --no-debug</code>: [default: no-debug]</li>
 <li><code>--install-completion</code>: Install completion for the current shell.</li>
 <li><code>--show-completion</code>: Show completion for the current shell, to copy it or customize the installation.</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -878,6 +894,7 @@
 <li><code>search</code>: Search for entities</li>
 <li><code>solr</code></li>
 <li><code>sql</code></li>
+<li><code>test</code>: Test the CLI</li>
 </ul>
 <h2 id="monarch-association-counts"><code>monarch association-counts</code></h2>
 <p>Retrieve association counts for an entity by ID</p>
@@ -1049,6 +1066,8 @@
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
+<li><code>--quiet / --no-quiet</code>: [default: no-quiet]</li>
+<li><code>--debug / --no-debug</code>: [default: no-debug]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <p><strong>Commands</strong>:</p>
@@ -1267,6 +1286,8 @@
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
+<li><code>--quiet / --no-quiet</code>: [default: no-quiet]</li>
+<li><code>--debug / --no-debug</code>: [default: no-debug]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <p><strong>Commands</strong>:</p>
@@ -1327,6 +1348,15 @@
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="monarch-test"><code>monarch test</code></h2>
+<p>Test the CLI</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<p><strong>Options</strong>:</p>
+<ul>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 
