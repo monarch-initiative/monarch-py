@@ -113,6 +113,12 @@ def test_association_counts_for_disease():
     ][0]
     assert disease_phenotype.label == "Phenotypes"
 
+def test_association_counts_for_eds():
+    si = SolrImplementation()
+    association_counts = si.get_association_counts(entity="MONDO:0020066")
+    assert association_counts
+    assert len(association_counts) > 0
+
 
 def test_association_counts_for_phenotype():
     si = SolrImplementation()

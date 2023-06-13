@@ -188,11 +188,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         if entity:
             if direct:
                 query.add_filter_query(
-                    f'subject:"{escape(entity)}" OR subject_closure:"{escape(entity)}" OR object:"{escape(entity)}" OR object_closure:"{escape(entity)}"'
+                    f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
                 )
             else:
                 query.add_filter_query(
-                    f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+                    f'subject:"{escape(entity)}" OR subject_closure:"{escape(entity)}" OR object:"{escape(entity)}" OR object_closure:"{escape(entity)}"'
                 )
         if q:
             # We don't yet have tokenization strategies for the association index, initially we'll limit searching to
