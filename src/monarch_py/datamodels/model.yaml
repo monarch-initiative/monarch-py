@@ -103,9 +103,6 @@ classes:
     is_a: FacetValue
     slots:
       - id
-    slot_usage:
-      label:
-        identifier: false
   Results:
     abstract: true
     slots:
@@ -135,16 +132,10 @@ classes:
     slots:
       - label
       - count
-    slot_usage:
-        label:
-            identifier: true
   FacetField:
     slots:
       - label
       - facet_values
-    slot_usage:
-      label:
-        identifier: true
   AssociationTypeMapping:
     description: >-
       A data class to hold the necessary information to produce association type counts for given 
