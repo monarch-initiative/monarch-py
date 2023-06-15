@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple
+from typing import List, Tuple
 
 from monarch_py.datamodels.model import AssociationResults
 
@@ -10,15 +10,14 @@ class AssociationInterface(ABC):
     @abstractmethod
     def get_associations(
         self,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
+        category: List[str] = None,
+        subject: List[str] = None,
+        predicate: List[str] = None,
         subject_closure: str = None,
-        object: str = None,
+        object: List[str] = None,
         object_closure: str = None,
-        entity: str = None,
+        entity: List[str] = None,
         between: Tuple[str, str] = None,
-        association_type: str = None,
         offset: int = 0,
         limit: int = 20,
     ) -> AssociationResults:
@@ -33,7 +32,6 @@ class AssociationInterface(ABC):
             object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
             between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
-            association_type (str, optional): Filter to only associations matching the specified association label. Defaults to None.
             offset (int, optional): Result offset, for pagination. Defaults to 0.
             limit (int, optional): Limit results to specified number. Defaults to 20.
 

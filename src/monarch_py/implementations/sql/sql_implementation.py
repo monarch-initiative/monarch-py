@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum
 from typing import List
 
 import pystow
@@ -109,19 +108,21 @@ class SQLImplementation(EntityInterface, AssociationInterface):
 
         clauses = []
         if category:
-            clauses.append(f"category = '{category}'")
-        if predicate:
-            clauses.append(f"predicate = '{predicate}'")
+            clauses.append(" OR ".join([f"category = '{c}'" for c in category]))
         if subject:
-            clauses.append(f"subject = '{subject}'")
+            clauses.append(" OR ".join([f"subject = '{s}'" for s in subject]))
+        if predicate:
+            clauses.append(" OR ".join([f"predicate = '{p}'" for p in predicate]))
         if object:
-            clauses.append(f"object = '{object}'")
+            clauses.append(" OR ".join([f"object = '{o}'" for o in object]))
         if subject_closure:
             clauses.append(f"subject_closure like '%{subject_closure}%'")
         if object_closure:
             clauses.append(f"object_closure like '%{object_closure}%'")
         if entity:
-            clauses.append(f"subject = '{entity}' OR object = '{entity}'")
+            clauses.append(
+                " OR ".join([f"subject = '{e}' OR object = '{e}'" for e in entity])
+            )
         if between:
             # todo: handle error reporting / parsing, think about another way to pass this?
             b = between.split(",")
@@ -130,8 +131,6 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             clauses.append(
                 f"subject = '{e1}' AND object = '{e2}' OR subject = '{e2}' AND object = '{e1}'"
             )
-        if association_type:
-            clauses.append(AssociationLabelQuery[association_type].value)
 
         query = f"SELECT * FROM denormalized_edges "
         if clauses:
@@ -144,7 +143,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             count_query += "WHERE " + " AND ".join(clauses)
 
         with monarchstow.ensure_open_sqlite_gz(
-            "sql", url=SQL_DATA_URL, force=update
+            "sql", url=SQL_DATA_URL
         ) as db:
             db.row_factory = dict_factory
             cur = db.cursor()
@@ -154,15 +153,13 @@ class SQLImplementation(EntityInterface, AssociationInterface):
 
         associations = []
         for row in results:
-            params = {
+            result = {
                 "id": row["id"],
                 "original_subject": row["original_subject"],
                 "predicate": row["predicate"],
                 "original_object": row["original_object"],
-                "category": row["category"].split("|"),
-                "aggregator_knowledge_source": row["aggregator_knowledge_source"].split(
-                    "|"
-                ),
+                "category": row["category"],
+                "aggregator_knowledge_source": row["aggregator_knowledge_source"].split("|"),
                 "primary_knowledge_source": row["primary_knowledge_source"].split("|"),
                 "publications": row["publications"].split("|"),
                 "qualifiers": row["qualifiers"].split("|"),
@@ -178,10 +175,10 @@ class SQLImplementation(EntityInterface, AssociationInterface):
                 "object": row["object"],
             }
             # Convert empty strings to null value
-            for p in params:
-                params[p] = None if not params[p] else params[p]
+            for key in result:
+                result[key] = None if not result[key] else result[key]
             try:
-                associations.append(Association(**params))
+                associations.append(Association(**result))
             except ValidationError:
                 logger.error(f"Validation error for {row}")
                 raise
