@@ -110,12 +110,12 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         clauses = []
         if category:
             clauses.append(" OR ".join([f"category = '{c}'" for c in category]))
-        if predicate:
-            clauses.append(" OR ".join([f"predicate = '{p}'" for p in predicate]))
         if subject:
             clauses.append(" OR ".join([f"subject = '{s}'" for s in subject]))
+        if predicate:
+            clauses.append(" OR ".join([f"predicate = '{p}'" for p in predicate]))
         if object:
-            clauses.append(f"object = '{object}'")
+            clauses.append(" OR ".join([f"object = '{o}'" for o in object]))
         if subject_closure:
             clauses.append(f"subject_closure like '%{subject_closure}%'")
         if object_closure:

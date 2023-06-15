@@ -102,15 +102,15 @@ def entity(
 
 @solr_app.command("associations")
 def associations(
-    category: Annotated[List[str], typer.Option("--category", "-c", help="Comma-separated list of categories")] = None,
-    subject: Annotated[List[str], typer.Option("--subject", "-s", help="Comma-separated list of subjects")] = None,
-    predicate: Annotated[List[str], typer.Option("--predicate", "-p", help="Comma-separated list of predicates")] = None,
-    object: Annotated[List[str], typer.Option("--object", "-o", help="Comma-separated list of objects")] = None,
-    entity: Annotated[List[str], typer.Option("--entity", "-e", help="Comma-separated list of entities")] = None,
-    between: str = typer.Option(None, "--between"),
-    direct: bool = typer.Option(False, "--direct"),
-    limit: int = typer.Option(20, "--limit"),
-    offset: int = typer.Option(0, "--offset"),
+    category: List[str] = typer.Option(None, "--category", "-c", help="Comma-separated list of categories"),
+    subject: List[str] = typer.Option(None, "--subject", "-s", help="Comma-separated list of subjects"),
+    predicate: List[str] = typer.Option(None, "--predicate", "-p", help="Comma-separated list of predicates"),
+    object: List[str] = typer.Option(None, "--object", "-o", help="Comma-separated list of objects"),
+    entity: List[str] = typer.Option(None, "--entity", "-e", help="Comma-separated list of entities"),
+    between: str = typer.Option(None, "--between", "-b", help="The subject and object of the association"),
+    limit: int = typer.Option(20, "--limit", "-l", help="The number of associations to return"),
+    direct: bool = typer.Option(False, "--direct", "-d", help="Whether to exclude associations with subject/object as ancestors"),
+    offset: int = typer.Option(0, "--offset", help="The offset of the first association to be retrieved"),
     fmt: str = typer.Option(
         "json",
         "--format",
