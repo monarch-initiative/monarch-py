@@ -244,7 +244,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         if category:
             query.add_filter_query(" OR ".join(f'category:"{cat}"' for cat in category))
         if in_taxon:
-            query.add_filter_query(" OR ".join([f'in_taxon:"{t}"' for t in taxon]))
+            query.add_filter_query(" OR ".join([f'in_taxon:"{t}"' for t in in_taxon]))
         if facet_fields:
             query.facet_fields = facet_fields
         if facet_queries:

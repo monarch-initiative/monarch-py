@@ -109,11 +109,11 @@ class SQLImplementation(EntityInterface, AssociationInterface):
 
         clauses = []
         if category:
-            clauses.append(f"category = '{category}'")
+            clauses.append(" OR ".join([f"category = '{c}'" for c in category]))
         if predicate:
-            clauses.append(f"predicate = '{predicate}'")
+            clauses.append(" OR ".join([f"predicate = '{p}'" for p in predicate]))
         if subject:
-            clauses.append(f"subject = '{subject}'")
+            clauses.append(" OR ".join([f"subject = '{s}'" for s in subject]))
         if object:
             clauses.append(f"object = '{object}'")
         if subject_closure:
@@ -121,7 +121,9 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         if object_closure:
             clauses.append(f"object_closure like '%{object_closure}%'")
         if entity:
-            clauses.append(f"subject = '{entity}' OR object = '{entity}'")
+            clauses.append(
+                " OR ".join([f"subject = '{e}' OR object = '{e}'" for e in entity])
+            )
         if between:
             # todo: handle error reporting / parsing, think about another way to pass this?
             b = between.split(",")
@@ -130,8 +132,6 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             clauses.append(
                 f"subject = '{e1}' AND object = '{e2}' OR subject = '{e2}' AND object = '{e1}'"
             )
-        if association_type:
-            clauses.append(AssociationLabelQuery[association_type].value)
 
         query = f"SELECT * FROM denormalized_edges "
         if clauses:
@@ -144,7 +144,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             count_query += "WHERE " + " AND ".join(clauses)
 
         with monarchstow.ensure_open_sqlite_gz(
-            "sql", url=SQL_DATA_URL, force=update
+            "sql", url=SQL_DATA_URL
         ) as db:
             db.row_factory = dict_factory
             cur = db.cursor()
