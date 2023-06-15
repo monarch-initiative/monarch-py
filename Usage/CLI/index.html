@@ -1148,15 +1148,15 @@
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>--category TEXT</code></li>
-<li><code>--subject TEXT</code></li>
-<li><code>--predicate TEXT</code></li>
-<li><code>--object TEXT</code></li>
-<li><code>--entity TEXT</code></li>
-<li><code>--between TEXT</code></li>
-<li><code>--direct</code></li>
-<li><code>--limit INTEGER</code>: [default: 20]</li>
-<li><code>--offset INTEGER</code>: [default: 0]</li>
+<li><code>-c, --category TEXT</code>: Comma-separated list of categories</li>
+<li><code>-s, --subject TEXT</code>: Comma-separated list of subjects</li>
+<li><code>-p, --predicate TEXT</code>: Comma-separated list of predicates</li>
+<li><code>-o, --object TEXT</code>: Comma-separated list of objects</li>
+<li><code>-e, --entity TEXT</code>: Comma-separated list of entities</li>
+<li><code>-b, --between TEXT</code>: The subject and object of the association</li>
+<li><code>-l, --limit INTEGER</code>: The number of associations to return  [default: 20]</li>
+<li><code>-d, --direct</code>: Whether to exclude associations with subject/object as ancestors</li>
+<li><code>--offset INTEGER</code>: The offset of the first association to be retrieved  [default: 0]</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1304,33 +1304,29 @@
 <h3 id="monarch-sql-associations"><code>monarch sql associations</code></h3>
 <p>Paginate through associations</p>
 <p>Args:
-    category (str, optional): The category of the association.
-    subject (str, optional): The subject of the association.
-    predicate (str, optional): The predicate of the association.
-    object (str, optional): The object of the association.
-    entity (str, optional): The subject or object of the association.
-    between (str, optional): Two comma-separated entities to get bi-directional associations.
-    association_type (str, optional): The label of the association.
-    limit (int, optional): The number of associations to return. Default 20
-    offset (int, optional): The offset of the first association to be retrieved. Default 0
-    update (bool, optional): Whether to re-download the Monarch KG. Default False
-    fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
-    output (str): The path to the output file. Default stdout</p>
+    category: A comma-separated list of categories
+    subject: A comma-separated list of subjects
+    predicate: A comma-separated list of predicates
+    object: A comma-separated list of objects
+    entity: A comma-separated list of entities
+    between: The subject and object of the association
+    limit: The number of associations to return
+    offset: The offset of the first association to be retrieved
+    fmt: The format of the output (json, yaml, tsv, table)
+    output: The path to the output file (stdout if not specified)</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>monarch<span class="w"> </span>sql<span class="w"> </span>associations<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>--category TEXT</code></li>
-<li><code>--subject TEXT</code></li>
-<li><code>--predicate TEXT</code></li>
-<li><code>--object TEXT</code></li>
-<li><code>--entity TEXT</code></li>
-<li><code>--between TEXT</code></li>
-<li><code>--label TEXT</code></li>
-<li><code>--limit INTEGER</code>: [default: 20]</li>
-<li><code>--offset INTEGER</code>: [default: 0]</li>
-<li><code>--update</code></li>
+<li><code>-c, --category TEXT</code>: Comma-separated list of categories</li>
+<li><code>-s, --subject TEXT</code>: Comma-separated list of subjects</li>
+<li><code>-p, --predicate TEXT</code>: Comma-separated list of predicates</li>
+<li><code>-o, --object TEXT</code>: Comma-separated list of objects</li>
+<li><code>-e, --entity TEXT</code>: Comma-separated list of entities</li>
+<li><code>-b, --between TEXT</code>: The subject and object of the association</li>
+<li><code>-l, --limit INTEGER</code>: The number of associations to return  [default: 20]</li>
+<li><code>--offset INTEGER</code>: The offset of the first association to be retrieved  [default: 0]</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>

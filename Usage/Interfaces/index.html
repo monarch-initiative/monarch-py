@@ -952,14 +952,13 @@ Developers can code to the interface, mostly ignoring whether the implementation
 </h4>
 <div class="highlight"><pre><span></span><code><span class="n">get_associations</span><span class="p">(</span>
     <span class="n">category</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">predicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">association_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1086,20 +1085,6 @@ Developers can code to the interface, mostly ignoring whether the implementation
           <td>
             <div class="doc-md-description">
               <p>Filter to bi-directional associations between two entities.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>association_type</code></td>
-          <td>
-                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Filter to only associations matching the specified association label. Defaults to None.</p>
             </div>
           </td>
           <td>
