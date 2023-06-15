@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum
 from typing import List
 
 import pystow
@@ -154,15 +153,13 @@ class SQLImplementation(EntityInterface, AssociationInterface):
 
         associations = []
         for row in results:
-            params = {
+            result = {
                 "id": row["id"],
                 "original_subject": row["original_subject"],
                 "predicate": row["predicate"],
                 "original_object": row["original_object"],
-                "category": row["category"].split("|"),
-                "aggregator_knowledge_source": row["aggregator_knowledge_source"].split(
-                    "|"
-                ),
+                "category": row["category"],
+                "aggregator_knowledge_source": row["aggregator_knowledge_source"].split("|"),
                 "primary_knowledge_source": row["primary_knowledge_source"].split("|"),
                 "publications": row["publications"].split("|"),
                 "qualifiers": row["qualifiers"].split("|"),
@@ -178,10 +175,10 @@ class SQLImplementation(EntityInterface, AssociationInterface):
                 "object": row["object"],
             }
             # Convert empty strings to null value
-            for p in params:
-                params[p] = None if not params[p] else params[p]
+            for key in result:
+                result[key] = None if not result[key] else result[key]
             try:
-                associations.append(Association(**params))
+                associations.append(Association(**result))
             except ValidationError:
                 logger.error(f"Validation error for {row}")
                 raise

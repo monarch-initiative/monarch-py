@@ -82,16 +82,16 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         """Retrieve paginated association records, with filter options
 
         Args:
-            category (str, optional): Filter to only associations matching the specified category. Defaults to None.
-            predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
-            subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
-            object (str, optional): Filter to only associations matching the specified object. Defaults to None.
-            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
-            object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
-            entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
-            between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
-            offset (int, optional): Result offset, for pagination. Defaults to 0.
-            limit (int, optional): Limit results to specified number. Defaults to 20.
+            category: Filter to only associations matching the specified categories. Defaults to None.
+            predicate: Filter to only associations matching the specified predicates. Defaults to None.
+            subject: Filter to only associations matching the specified subjects. Defaults to None.
+            object: Filter to only associations matching the specified objects. Defaults to None.
+            subject_closure: Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
+            object_closure: Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
+            entity: Filter to only associations where the specified entities are the subject or the object. Defaults to None.
+            between: Filter to bi-directional associations between two entities.
+            offset: Result offset, for pagination. Defaults to 0.
+            limit: Limit results to specified number. Defaults to 20.
 
         Returns:
             AssociationResults: Dataclass representing results of an association search.
