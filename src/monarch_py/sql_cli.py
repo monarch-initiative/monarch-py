@@ -1,3 +1,4 @@
+from typing import List
 from typing_extensions import Annotated
 
 import typer
@@ -61,16 +62,14 @@ def entity(
 
 @sql_app.command()
 def associations(
-    category: str = typer.Option(None, "--category"),
-    subject: str = typer.Option(None, "--subject"),
-    predicate: str = typer.Option(None, "--predicate"),
-    object: str = typer.Option(None, "--object"),
-    entity: str = typer.Option(None, "--entity"),
-    between: str = typer.Option(None, "--between"),
-    association_type: str = typer.Option(None, "--label"),
-    limit: int = typer.Option(20, "--limit"),
-    offset: int = typer.Option(0, "--offset"),
-    update: bool = typer.Option(False, "--update"),
+    category: List[str] = typer.Option(None, "--category", "-c", help="Comma-separated list of categories"),
+    subject: List[str] = typer.Option(None, "--subject", "-s", help="Comma-separated list of subjects"),
+    predicate: List[str] = typer.Option(None, "--predicate", "-p", help="Comma-separated list of predicates"),
+    object: List[str] = typer.Option(None, "--object", "-o", help="Comma-separated list of objects"),
+    entity: List[str] = typer.Option(None, "--entity", "-e", help="Comma-separated list of entities"),
+    between: str = typer.Option(None, "--between", "-b", help="The subject and object of the association"),
+    limit: int = typer.Option(20, "--limit", "-l", help="The number of associations to return"),
+    offset: int = typer.Option(0, "--offset", help="The offset of the first association to be retrieved"),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -84,18 +83,16 @@ def associations(
     """Paginate through associations
 
     Args:
-        category (str, optional): The category of the association.
-        subject (str, optional): The subject of the association.
-        predicate (str, optional): The predicate of the association.
-        object (str, optional): The object of the association.
-        entity (str, optional): The subject or object of the association.
-        between (str, optional): Two comma-separated entities to get bi-directional associations.
-        association_type (str, optional): The label of the association.
-        limit (int, optional): The number of associations to return. Default 20
-        offset (int, optional): The offset of the first association to be retrieved. Default 0
-        update (bool, optional): Whether to re-download the Monarch KG. Default False
-        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
-        output (str): The path to the output file. Default stdout
+        category: A comma-separated list of categories
+        subject: A comma-separated list of subjects
+        predicate: A comma-separated list of predicates
+        object: A comma-separated list of objects
+        entity: A comma-separated list of entities
+        between: The subject and object of the association
+        limit: The number of associations to return
+        offset: The offset of the first association to be retrieved
+        fmt: The format of the output (json, yaml, tsv, table)
+        output: The path to the output file (stdout if not specified)
     """
     args = locals()
     args.pop("fmt", None)
