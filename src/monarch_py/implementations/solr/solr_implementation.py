@@ -67,13 +67,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def get_associations(
         self,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        object: str = None,
+        category: List[str] = None,
+        subject: List[str] = None,
+        predicate: List[str] = None,
+        object: List[str] = None,
         subject_closure: str = None,
         object_closure: str = None,
-        entity: str = None,
+        entity: List[str] = None,
         between: str = None,
         direct: bool = None,
         offset: int = 0,
@@ -133,13 +133,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def _populate_association_query(
         self,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        object: str = None,
+        category: List[str] = None,
+        predicate: List[str] = None,
+        subject: List[str] = None,
+        object: List[str] = None,
         subject_closure: str = None,
         object_closure: str = None,
-        entity: str = None,
+        entity: List[str] = None,
         between: str = None,
         direct: bool = None,
         q: str = None,
@@ -151,24 +151,30 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query = SolrQuery(start=offset, rows=limit)
 
         if category:
-            query.add_field_filter_query("category", category)
+            query.add_field_filter_query("category", " OR ".join(category))
         if predicate:
-            query.add_field_filter_query("predicate", predicate)
+            query.add_field_filter_query("predicate", " OR ".join(predicate))
         if subject:
             if direct:
-                query.add_field_filter_query("subject", subject)
+                query.add_field_filter_query("subject", " OR ".join(subject))
             else:
                 query.add_filter_query(
-                    f'subject:"{subject}" OR subject_closure:"{subject}"'
+                    " OR ".join([
+                        f'subject:"{s}" OR subject_closure:"{s}"'
+                        for s in subject
+                    ])
                 )
         if subject_closure:
             query.add_field_filter_query("subject_closure", subject_closure)
         if object:
             if direct:
-                query.add_field_filter_query("object", object)
+                query.add_field_filter_query("object", " OR ".join(object))
             else:
                 query.add_filter_query(
-                    f'object:"{object}" OR object_closure:"{object}"'
+                    " OR ".join([
+                        f'object:"{o}" OR object_closure:"{o}"'
+                        for o in object
+                    ])
                 )
         if object_closure:
             query.add_field_filter_query("object_closure", object_closure)
@@ -188,11 +194,17 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         if entity:
             if direct:
                 query.add_filter_query(
-                    f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+                    " OR ".join([
+                        f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+                        for e in entity
+                    ])
                 )
             else:
                 query.add_filter_query(
-                    f'subject:"{escape(entity)}" OR subject_closure:"{escape(entity)}" OR object:"{escape(entity)}" OR object_closure:"{escape(entity)}"'
+                    " OR ".join([
+                        f'subject:"{escape(e)}" OR subject_closure:"{escape(e)}" OR object:"{escape(e)}" OR object_closure:"{escape(e)}"'
+                        for e in entity
+                    ])
                 )
         if q:
             # We don't yet have tokenization strategies for the association index, initially we'll limit searching to

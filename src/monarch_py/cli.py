@@ -82,15 +82,15 @@ def entity(
 
 @app.command("associations")
 def associations(
-    category: str = typer.Option(None, "--category", "-c"),
-    subject: str = typer.Option(None, "--subject", "-s"),
-    predicate: str = typer.Option(None, "--predicate", "-p"),
-    object: str = typer.Option(None, "--object", "-o"),
-    entity: str = typer.Option(None, "--entity", "-e"),
-    between: str = typer.Option(None, "--between"),
-    direct: bool = typer.Option(False, "--direct"),
-    limit: int = typer.Option(20, "--limit", "-l"),
-    offset: int = typer.Option(0, "--offset"),
+    category: List[str] = typer.Option(None, "--category", "-c", help="Comma-separated list of categories"),
+    subject: List[str] = typer.Option(None, "--subject", "-s", help="Comma-separated list of subjects"),
+    predicate: List[str] = typer.Option(None, "--predicate", "-p", help="Comma-separated list of predicates"),
+    object: List[str] = typer.Option(None, "--object", "-o", help="Comma-separated list of objects"),
+    entity: List[str] = typer.Option(None, "--entity", "-e", help="Comma-separated list of entities"),
+    between: str = typer.Option(None, "--between", "-b", help="The subject and object of the association"),
+    limit: int = typer.Option(20, "--limit", "-l", help="The number of associations to return"),
+    direct: bool = typer.Option(False, "--direct", "-d", help="Whether to exclude associations with subject/object as ancestors"),
+    offset: int = typer.Option(0, "--offset", help="The offset of the first association to be retrieved"),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -105,11 +105,11 @@ def associations(
     Paginate through associations
 
     Args:
-        category: The category of the association
-        predicate: The predicate of the association
-        subject: The subject of the association
-        object: The object of the association
-        entity: The subject or object of the association
+        category: A comma-separated list of categories
+        subject: A comma-separated list of subjects
+        predicate: A comma-separated list of predicates
+        object: A comma-separated list of objects
+        entity: A comma-separated list of entities
         between: The subject and object of the association
         limit: The number of associations to return
         direct: Whether to exclude associations with subject/object as ancestors

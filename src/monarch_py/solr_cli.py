@@ -102,11 +102,11 @@ def entity(
 
 @solr_app.command("associations")
 def associations(
-    category: str = typer.Option(None, "--category"),
-    subject: str = typer.Option(None, "--subject"),
-    predicate: str = typer.Option(None, "--predicate"),
-    object: str = typer.Option(None, "--object"),
-    entity: str = typer.Option(None, "--entity"),
+    category: Annotated[List[str], typer.Option("--category", "-c", help="Comma-separated list of categories")] = None,
+    subject: Annotated[List[str], typer.Option("--subject", "-s", help="Comma-separated list of subjects")] = None,
+    predicate: Annotated[List[str], typer.Option("--predicate", "-p", help="Comma-separated list of predicates")] = None,
+    object: Annotated[List[str], typer.Option("--object", "-o", help="Comma-separated list of objects")] = None,
+    entity: Annotated[List[str], typer.Option("--entity", "-e", help="Comma-separated list of entities")] = None,
     between: str = typer.Option(None, "--between"),
     direct: bool = typer.Option(False, "--direct"),
     limit: int = typer.Option(20, "--limit"),
@@ -125,17 +125,17 @@ def associations(
     Paginate through associations
 
     Args:
-        category (str, optional): The category of the association.
-        subject (str, optional): The subject of the association.
-        predicate (str, optional): The predicate of the association.
-        object (str, optional): The object of the association.
-        entity (str, optional): The subject or object of the association.
-        between (str, optional): Two comma-separated entities to get bi-directional associations.
-        direct (bool, optional): Exclude associations with the specified subject and objects as ancestors. Default False
-        limit (int, optional): The number of associations to return. Default 20
-        offset (int, optional): The offset of the first association to be retrieved. Default 0
-        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
-        output (str): The path to the output file. Default stdout
+        category: A comma-separated list of categories
+        subject: A comma-separated list of subjects
+        predicate: A comma-separated list of predicates
+        object: A comma-separated list of objects
+        entity: A comma-separated list of entities
+        between: The subject and object of the association
+        limit: The number of associations to return
+        direct: Whether to exclude associations with subject/object as ancestors
+        offset: The offset of the first association to be retrieved
+        fmt: The format of the output (json, yaml, tsv, table)
+        output: The path to the output file (stdout if not specified)
     """
     args = locals()
     args.pop("update", None)

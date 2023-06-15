@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import List
 
 import pystow
 from loguru import logger
@@ -11,21 +12,6 @@ from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.utils.utils import SQL_DATA_URL, dict_factory
 
 monarchstow = pystow.module("monarch")
-
-
-class AssociationLabelQuery(Enum):
-    disease_phenotype = 'category = "biolink:DiseaseToPhenotypicFeatureAssociation"'
-    gene_phenotype = 'category = "biolink:GeneToPhenotypicFeatureAssociation"'
-    gene_interaction = 'category = "biolink:PairwiseGeneToGeneInteraction"'
-    gene_pathway = 'category = "biolink:GeneToPathwayAssociation"'
-    gene_expression = 'category = "biolink:GeneToExpressionSiteAssociation"'
-    gene_orthology = 'category = "biolink:GeneToGeneHomologyAssociation"'
-    chemical_pathway = 'category = "biolink:ChemicalToPathwayAssociation"'
-    gene_function = (
-        'category = "biolink:MacromolecularMachineToMolecularActivityAssociation"'
-    )
-    gene_associated_with_disease = 'category = "biolink:GeneToDiseaseAssociation" AND predicate = "biolink:gene_associated_with_condition"'
-    gene_affects_risk_for_disease = 'category = "biolink:GeneToDiseaseAssociation" AND predicate = "biolink:affects_risk_for"'
 
 
 @dataclass
@@ -90,18 +76,17 @@ class SQLImplementation(EntityInterface, AssociationInterface):
 
     def get_associations(
         self,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        object: str = None,
+        category: List[str] = None,
+        subject: List[str] = None,
+        predicate: List[str] = None,
+        object: List[str] = None,
         subject_closure: str = None,
         object_closure: str = None,
-        entity: str = None,
+        entity: List[str] = None,
         between: str = None,
-        association_type: str = None,
+        direct: bool = None,
         offset: int = 0,
         limit: int = 20,
-        update: bool = False,
     ) -> AssociationResults:
         """Retrieve paginated association records, with filter options
 
