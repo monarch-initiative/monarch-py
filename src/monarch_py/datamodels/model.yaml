@@ -1,12 +1,13 @@
 id: https://w3id.org/monarch/monarch-py
 name: monarch-py
-description: Data datamodels for the Monarch Initiative data access library
+description: Data models for the Monarch Initiative data access library
 prefixes:
   linkml: https://w3id.org/linkml/
   biolink: https://w3id.org/biolink/
 imports:
   - linkml:types
 default_range: string
+
 
 enums:
   AssociationDirectionEnum:
@@ -114,6 +115,7 @@ classes:
     slots:
       - direction
   Entity:
+    # Represents an Entity in the Monarch KG data model
     slots:
     - id
     - category
@@ -131,6 +133,14 @@ classes:
     slot_usage:
       items:
         range: Entity
+  FacetValue:
+    slots:
+      - label
+      - count
+  FacetField:
+    slots:
+      - label
+      - facet_values
   HistoPheno:
     slots:
       - id
@@ -142,6 +152,20 @@ classes:
     is_a: FacetValue
     slots:
       - id
+  Node:
+    # UI representation of an entity in the graph
+    is_a: Entity
+    slots:      
+      - in_taxon
+      - in_taxon_label
+      - inheritance
+      - association_counts
+      - node_hierarchy
+  NodeHierarchy:
+    slots:
+      - super_classes
+      - equivalent_classes
+      - sub_classes
   Results:
     abstract: true
     slots:
@@ -167,27 +191,6 @@ classes:
     slot_usage:
         items:
           range: SearchResult
-  FacetValue:
-    slots:
-      - label
-      - count
-  FacetField:
-    slots:
-      - label
-      - facet_values
-  Node:
-    is_a: Entity
-    slots:      
-      - in_taxon
-      - in_taxon_label
-      - inheritance
-      - association_counts
-      - node_hierarchy
-  NodeHierarchy:
-    slots:
-      - super_classes
-      - equivalent_classes
-      - sub_classes
 
 
 slots:

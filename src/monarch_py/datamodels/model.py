@@ -131,7 +131,9 @@ class DirectionalAssociation(Association):
 
 
 class Entity(ConfiguredBaseModel):
-    
+    """
+    An entity in the Monarch data model
+    """
     id: str = Field(...)
     category: Optional[str] = Field(None)
     name: Optional[str] = Field(None)
@@ -144,10 +146,66 @@ class Entity(ConfiguredBaseModel):
     
 
 
+class FacetValue(ConfiguredBaseModel):
+    
+    label: str = Field(...)
+    count: Optional[int] = Field(None, description="""count of documents""")
+    
+
+
+class AssociationCount(FacetValue):
+    
+    category: Optional[str] = Field(None)
+    label: str = Field(...)
+    count: Optional[int] = Field(None, description="""count of documents""")
+    
+
+
+class FacetField(ConfiguredBaseModel):
+    
+    label: str = Field(...)
+    facet_values: Optional[List[FacetValue]] = Field(default_factory=list, description="""Collection of FacetValue label/value instances belonging to a FacetField""")
+    
+
+
 class HistoPheno(ConfiguredBaseModel):
     
     id: str = Field(...)
     items: List[HistoBin] = Field(default_factory=list, description="""A collection of items, with the type to be overriden by slot_usage""")
+    
+
+
+class HistoBin(FacetValue):
+    
+    id: str = Field(...)
+    label: str = Field(...)
+    count: Optional[int] = Field(None, description="""count of documents""")
+    
+
+
+class Node(Entity):
+    
+    in_taxon: Optional[str] = Field(None, description="""The biolink taxon that the entity is in the closure of.""")
+    in_taxon_label: Optional[str] = Field(None, description="""The label of the biolink taxon that the entity is in the closure of.""")
+    inheritance: Optional[Entity] = Field(None)
+    association_counts: List[AssociationCount] = Field(default_factory=list)
+    node_hierarchy: Optional[NodeHierarchy] = Field(None)
+    id: str = Field(...)
+    category: Optional[str] = Field(None)
+    name: Optional[str] = Field(None)
+    description: Optional[str] = Field(None)
+    xref: Optional[List[str]] = Field(default_factory=list)
+    provided_by: Optional[str] = Field(None)
+    symbol: Optional[str] = Field(None)
+    synonym: Optional[List[str]] = Field(default_factory=list)
+    
+
+
+class NodeHierarchy(ConfiguredBaseModel):
+    
+    super_classes: List[Entity] = Field(default_factory=list)
+    equivalent_classes: List[Entity] = Field(default_factory=list)
+    sub_classes: List[Entity] = Field(default_factory=list)
     
 
 
@@ -213,62 +271,6 @@ class SearchResults(Results):
     
 
 
-class FacetValue(ConfiguredBaseModel):
-    
-    label: str = Field(...)
-    count: Optional[int] = Field(None, description="""count of documents""")
-    
-
-
-class AssociationCount(FacetValue):
-    
-    category: Optional[str] = Field(None)
-    label: str = Field(...)
-    count: Optional[int] = Field(None, description="""count of documents""")
-    
-
-
-class HistoBin(FacetValue):
-    
-    id: str = Field(...)
-    label: str = Field(...)
-    count: Optional[int] = Field(None, description="""count of documents""")
-    
-
-
-class FacetField(ConfiguredBaseModel):
-    
-    label: str = Field(...)
-    facet_values: Optional[List[FacetValue]] = Field(default_factory=list, description="""Collection of FacetValue label/value instances belonging to a FacetField""")
-    
-
-
-class Node(Entity):
-    
-    in_taxon: Optional[str] = Field(None, description="""The biolink taxon that the entity is in the closure of.""")
-    in_taxon_label: Optional[str] = Field(None, description="""The label of the biolink taxon that the entity is in the closure of.""")
-    inheritance: Optional[Entity] = Field(None)
-    association_counts: List[AssociationCount] = Field(default_factory=list)
-    node_hierarchy: Optional[NodeHierarchy] = Field(None)
-    id: str = Field(...)
-    category: Optional[str] = Field(None)
-    name: Optional[str] = Field(None)
-    description: Optional[str] = Field(None)
-    xref: Optional[List[str]] = Field(default_factory=list)
-    provided_by: Optional[str] = Field(None)
-    symbol: Optional[str] = Field(None)
-    synonym: Optional[List[str]] = Field(default_factory=list)
-    
-
-
-class NodeHierarchy(ConfiguredBaseModel):
-    
-    super_classes: List[Entity] = Field(default_factory=list)
-    equivalent_classes: List[Entity] = Field(default_factory=list)
-    sub_classes: List[Entity] = Field(default_factory=list)
-    
-
-
 
 # Update forward refs
 # see https://pydantic-docs.helpmanual.io/usage/postponed_annotations/
@@ -277,17 +279,17 @@ AssociationCountList.update_forward_refs()
 AssociationTypeMapping.update_forward_refs()
 DirectionalAssociation.update_forward_refs()
 Entity.update_forward_refs()
+FacetValue.update_forward_refs()
+AssociationCount.update_forward_refs()
+FacetField.update_forward_refs()
 HistoPheno.update_forward_refs()
+HistoBin.update_forward_refs()
+Node.update_forward_refs()
+NodeHierarchy.update_forward_refs()
 Results.update_forward_refs()
 AssociationResults.update_forward_refs()
 AssociationTableResults.update_forward_refs()
 EntityResults.update_forward_refs()
 SearchResult.update_forward_refs()
 SearchResults.update_forward_refs()
-FacetValue.update_forward_refs()
-AssociationCount.update_forward_refs()
-HistoBin.update_forward_refs()
-FacetField.update_forward_refs()
-Node.update_forward_refs()
-NodeHierarchy.update_forward_refs()
 
