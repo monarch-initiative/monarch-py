@@ -153,7 +153,7 @@ classes:
     slots:
       - id
   Node:
-    # UI representation of an entity in the graph
+    # Wrapper class for entity with additional information
     is_a: Entity
     slots:      
       - in_taxon

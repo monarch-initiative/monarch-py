@@ -17,6 +17,8 @@ from monarch_py.datamodels.model import (
     FacetValue,
     HistoBin,
     HistoPheno,
+    Node,
+    NodeHierarchy,
     SearchResult,
     SearchResults,
 )
@@ -43,13 +45,12 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     # Implements: EntityInterface #
     ###############################
 
-    def get_entity(self, id: str) -> Entity:
+    def get_entity(self, id: str, extra: bool) -> Node:
         """Retrieve a specific entity by exact ID match, with optional extras
 
         Args:
             id (str): id of the entity to search for.
-            get_association_counts (bool, optional): Whether to get association counts. Defaults to False.
-            get_hierarchy (bool, optional): Whether to get the entity hierarchy. Defaults to False.
+            extra (bool): Whether to include association counts and hierarchy in the response.
 
         Returns:
             Entity: Dataclass representing results of an entity search.
@@ -58,8 +59,122 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
         entity = Entity(**solr_document)
+        node = Node(**entity.__dict__)
+
+        if not extra:
+            return node
+
+        if "biolink:Disease" in node.category:
+            mode_of_inheritance_associations = self.get_associations(
+            subject=id, predicate="biolink:has_mode_of_inheritance", offset=0
+        )
+        if (
+            mode_of_inheritance_associations is not None
+            and len(mode_of_inheritance_associations.items) == 1
+        ):
+            node.inheritance = self._get_associated_entity(
+                mode_of_inheritance_associations.items[0], node
+            )
+
+        node.node_hierarchy = self._get_node_hierarchy(node)
+        node.association_counts = self.get_association_counts(id)
+        return node
+
+    def _get_associated_entity(self, association: Association, this_entity: Entity) -> Entity:
+        """
+        Convert an Association to an Entity by extracting the subject or object
+        (whichever is not this_entity) and setting the id, name and category on
+        the returned Entity.
+
+        If ever we need to add more fields, we'll need to add additional expansions
+        in the closurizer repo that produces the denormalized kgx file that we use
+        to populate the solr index.
+
+        Args:
+            association (Association): A single association, expected to contain `this_entity`
+            this_entity (Entity): The Entity that you don't want returned
+
+        Returns:
+            Entity: A limited representation of the entity associated with `this_entity`
+        """
+        if this_entity.id in association.subject_closure:
+            entity = Entity(
+                id=association.object,
+                name=association.object_label,
+                category=association.object_category[0]
+                if len(association.object_category) == 1
+                else [],
+            )
+        elif this_entity.id in association.object_closure:
+            entity = Entity(
+                id=association.subject,
+                name=association.subject_label,
+                category=association.subject_category[0]
+                if len(association.subject_category) == 1
+                else [],
+            )
+        else:
+            raise ValueError(f"Association does not contain this_entity: {this_entity.id}")
 
         return entity
+
+    def _get_associated_entities(self,
+        this_entity: Entity,
+        entity: str = None,
+        subject: str = None,
+        predicate: str = None,
+        object: str = None,
+    ) -> List[Entity]:
+        """
+        Get a list of entities directly associated with this_entity fetched from associations
+        in the Solr index
+
+        Args:
+            this_entity (Entity): The entity to get associations for
+            entity (str, optional): an entity ID occurring in either the subject or predicate. Defaults to None.
+            subject (str, optional): an entity ID occurring in the subject. Defaults to None.
+            predicate (str, optional): a predicate value. Defaults to None.
+            object (str, optional): an entity ID occurring in the object. Defaults to None.
+        """
+        return [
+            self._get_associated_entity(association, this_entity)
+            for association in self.get_associations(
+                entity=entity,
+                subject=subject,
+                predicate=predicate,
+                object=object,
+                direct=True,
+                offset=0,
+            ).items
+        ]
+
+    def _get_node_hierarchy(self, entity: Entity) -> NodeHierarchy:
+        """
+        Get a NodeHierarchy for the given entity
+
+        Args:
+            entity (Entity): The entity to get the hierarchy for
+            si (SolrInterface): A SolrInterface instance
+
+        Returns:
+            NodeHierarchy: A NodeHierarchy object
+        """
+
+        super_classes = self._get_associated_entities(
+            entity, subject=entity.id, predicate="biolink:subclass_of"
+        )
+        equivalent_classes = self._get_associated_entities(
+            entity, entity=entity.id, predicate="biolink:same_as"
+        )
+        sub_classes = self._get_associated_entities(
+            entity, object=entity.id, predicate="biolink:subclass_of"
+        )
+
+        return NodeHierarchy(
+            super_classes=super_classes,
+            equivalent_classes=equivalent_classes,
+            sub_classes=sub_classes,
+        )
 
     ####################################
     # Implements: AssociationInterface #

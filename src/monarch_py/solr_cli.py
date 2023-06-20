@@ -76,6 +76,12 @@ def entity(
         "-f",
         help="The format of the output (json, yaml, tsv, table)",
     ),
+    extra: bool = typer.Option(
+        False,
+        "--extra",
+        "-e",
+        help="Include extra fields in the output (association_counts and node_hierarchy)",
+    ),
     output: str = typer.Option(
         None, "--output", "-o", help="The path to the output file"
     ),
@@ -94,9 +100,8 @@ def entity(
     if not id:
         console.print("\n[bold red]Entity ID required.[/]\n")
         raise typer.Exit(1)
-
     data = get_solr(update=False)
-    response = data.get_entity(id)
+    response = data.get_entity(id, extra)
     format_output(fmt, response, output)
 
 
