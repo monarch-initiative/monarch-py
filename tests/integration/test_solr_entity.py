@@ -10,6 +10,6 @@ pytestmark = pytest.mark.skipif(
 
 def test_entity():
     si = SolrImplementation()
-    entity = si.get_entity("MONDO:0007947")
+    entity = si.get_entity("MONDO:0007947", extra=False)
     assert entity
     assert entity.name == "Marfan syndrome"

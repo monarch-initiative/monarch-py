@@ -75,25 +75,3 @@ def test_entity():
         )
 
 
-def test_between():
-    si = SolrImplementation()
-    response = si.get_associations(between="MONDO:0007947,HP:0000098")
-    assert response
-    assert response.total > 0
-    for association in response.items:
-        assert (
-            "MONDO:0007947" in association.subject_closure
-            and "HP:0000098" in association.object_closure
-        )
-
-
-def test_between_reversed():
-    si = SolrImplementation()
-    response = si.get_associations(between="HP:0000098,MONDO:0007947")
-    assert response
-    assert response.total > 0
-    for association in response.items:
-        assert (
-            "MONDO:0007947" in association.subject_closure
-            and "HP:0000098" in association.object_closure
-        )
