@@ -459,7 +459,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             ),
         )
 
-
     def get_histopheno(self, subject_closure: str = None) -> HistoPheno:
 
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
@@ -497,7 +496,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         Returns:
 
         """
-        query = self._populate_association_query(entity=entity)
+        query = self._populate_association_query(entity=[entity])
         facet_queries = []
         subject_query = f'AND (subject:"{entity}" OR subject_closure:"{entity}")'
         object_query = f'AND (object:"{entity}" OR object_closure:"{entity}")'
@@ -505,6 +504,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         # to know which kind of label will be needed in the UI to refer to the opposite side of the association
         for field_query in [subject_query, object_query]:
             for agm in AssociationTypeMappings.get_mappings():
+                 
                 association_type_query = get_solr_query_fragment(agm)
                 facet_queries.append(f"({association_type_query}) {field_query}")
         query.facet_queries = facet_queries
@@ -560,8 +560,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             raise NotImplementedError("Sorting is not yet implemented")
 
         query = self._populate_association_query(
-            entity=entity,
-            category=category,
+            entity=[entity],
+            category=[category],
             q=q,
             offset=offset,
             limit=limit,
