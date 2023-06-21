@@ -115,7 +115,7 @@ classes:
     slots:
       - direction
   Entity:
-    # Represents an Entity in the Monarch KG data model
+    description: Represents an Entity in the Monarch KG data model
     slots:
     - id
     - category
@@ -153,7 +153,7 @@ classes:
     slots:
       - id
   Node:
-    # Wrapper class for entity with additional information
+    description: UI conatiner class extending Entity with additional information
     is_a: Entity
     slots:      
       - in_taxon

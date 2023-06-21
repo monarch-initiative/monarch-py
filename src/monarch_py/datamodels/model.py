@@ -132,7 +132,7 @@ class DirectionalAssociation(Association):
 
 class Entity(ConfiguredBaseModel):
     """
-    An entity in the Monarch data model
+    Represents an Entity in the Monarch KG data model
     """
     id: str = Field(...)
     category: Optional[str] = Field(None)
@@ -184,7 +184,9 @@ class HistoBin(FacetValue):
 
 
 class Node(Entity):
-    
+    """
+    UI conatiner class extending Entity with additional information
+    """
     in_taxon: Optional[str] = Field(None, description="""The biolink taxon that the entity is in the closure of.""")
     in_taxon_label: Optional[str] = Field(None, description="""The label of the biolink taxon that the entity is in the closure of.""")
     inheritance: Optional[Entity] = Field(None)
