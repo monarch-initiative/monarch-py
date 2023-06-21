@@ -551,9 +551,11 @@
 
 
 <h1 id="class-entity">Class: Entity</h1>
+<p><em>Represents an Entity in the Monarch KG data model</em></p>
 <p>URI: <a href="https://w3id.org/monarch/monarch-py/:Entity">https://w3id.org/monarch/monarch-py/:Entity</a></p>
 <div class="highlight"><pre><span></span><code> classDiagram
     class Entity
+      Entity &lt;|-- Node
       Entity &lt;|-- SearchResult
 
       Entity : category
@@ -577,6 +579,7 @@
 <h2 id="inheritance">Inheritance</h2>
 <ul>
 <li><strong>Entity</strong><ul>
+<li><a href="../Node/">Node</a></li>
 <li><a href="../SearchResult/">SearchResult</a></li>
 </ul>
 </li>
@@ -631,7 +634,7 @@
 <tr>
 <td><a href="../in_taxon/">in_taxon</a></td>
 <td>0..1 <br/> <a href="../String/">String</a></td>
-<td></td>
+<td>The biolink taxon that the entity is in the closure of</td>
 <td>direct</td>
 </tr>
 <tr>
@@ -662,6 +665,30 @@
 <tr>
 <td><a href="../EntityResults/">EntityResults</a></td>
 <td><a href="../items/">items</a></td>
+<td>range</td>
+<td><a href="./">Entity</a></td>
+</tr>
+<tr>
+<td><a href="../Node/">Node</a></td>
+<td><a href="../inheritance/">inheritance</a></td>
+<td>range</td>
+<td><a href="./">Entity</a></td>
+</tr>
+<tr>
+<td><a href="../NodeHierarchy/">NodeHierarchy</a></td>
+<td><a href="../super_classes/">super_classes</a></td>
+<td>range</td>
+<td><a href="./">Entity</a></td>
+</tr>
+<tr>
+<td><a href="../NodeHierarchy/">NodeHierarchy</a></td>
+<td><a href="../equivalent_classes/">equivalent_classes</a></td>
+<td>range</td>
+<td><a href="./">Entity</a></td>
+</tr>
+<tr>
+<td><a href="../NodeHierarchy/">NodeHierarchy</a></td>
+<td><a href="../sub_classes/">sub_classes</a></td>
 <td>range</td>
 <td><a href="./">Entity</a></td>
 </tr>
@@ -697,6 +724,7 @@
 <h3 id="direct">Direct</h3>
 <details>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Represents an Entity in the Monarch KG data model</span>
 <span class="nt">from_schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://w3id.org/monarch/monarch-py</span>
 <span class="nt">slots</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
@@ -714,6 +742,7 @@
 <h3 id="induced">Induced</h3>
 <details>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Represents an Entity in the Monarch KG data model</span>
 <span class="nt">from_schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://w3id.org/monarch/monarch-py</span>
 <span class="nt">attributes</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">id</span><span class="p">:</span>
@@ -739,9 +768,9 @@
 <span class="w">    </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
 <span class="w">    </span><span class="nt">domain_of</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Association</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AssociationTypeMapping</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AssociationCount</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AssociationTypeMapping</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
 <span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name</span>
@@ -783,12 +812,14 @@
 <span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
 <span class="w">  </span><span class="nt">in_taxon</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">in_taxon</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The biolink taxon that the entity is in the closure of.</span>
 <span class="w">    </span><span class="nt">from_schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://w3id.org/monarch/monarch-py</span>
 <span class="w">    </span><span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
 <span class="w">    </span><span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">in_taxon</span>
 <span class="w">    </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
 <span class="w">    </span><span class="nt">domain_of</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span>
 <span class="w">    </span><span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
 <span class="w">  </span><span class="nt">symbol</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">symbol</span>

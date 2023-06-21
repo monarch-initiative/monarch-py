@@ -517,6 +517,7 @@
 
 
 <h1 id="slot-in_taxon">Slot: in_taxon</h1>
+<p><em>The biolink taxon that the entity is in the closure of.</em></p>
 <p>URI: <a href="https://w3id.org/monarch/monarch-py/:in_taxon">https://w3id.org/monarch/monarch-py/:in_taxon</a></p>
 <!-- no inheritance hierarchy -->
 
@@ -532,7 +533,12 @@
 <tbody>
 <tr>
 <td><a href="../Entity/">Entity</a></td>
-<td></td>
+<td>Represents an Entity in the Monarch KG data model</td>
+<td>no</td>
+</tr>
+<tr>
+<td><a href="../Node/">Node</a></td>
+<td>UI conatiner class extending Entity with additional information</td>
 <td>no</td>
 </tr>
 <tr>
@@ -554,11 +560,13 @@
 <h2 id="linkml-source">LinkML Source</h2>
 <details>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">in_taxon</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The biolink taxon that the entity is in the closure of.</span>
 <span class="nt">from_schema</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://w3id.org/monarch/monarch-py</span>
 <span class="nt">rank</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
 <span class="nt">alias</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">in_taxon</span>
 <span class="nt">domain_of</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Entity</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span>
 <span class="nt">range</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
 </code></pre></div>
 </details>

@@ -1147,7 +1147,6 @@
     <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1260,20 +1259,6 @@
           <td>
             <div class="doc-md-description">
               <p>Filter to only associations where the specified entity is the subject or the object. Defaults to None.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>between</code></td>
-          <td>
-                <code><a class="autorefs autorefs-external" title="typing.Tuple" href="https://docs.python.org/3/library/typing.html#typing.Tuple">Tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Filter to bi-directional associations between two entities.</p>
             </div>
           </td>
           <td>
@@ -1605,7 +1590,6 @@
     <span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 
@@ -1744,20 +1728,6 @@
           <td>
             <div class="doc-md-description">
               <p>Filter to only associations where the specified entity is the subject or the object</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>between</code></td>
-          <td>
-                <code><a class="autorefs autorefs-external" title="typing.Tuple" href="https://docs.python.org/3/library/typing.html#typing.Tuple">Tuple</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Filter to bi-directional associations between two entities</p>
             </div>
           </td>
           <td>
@@ -2248,7 +2218,6 @@
     <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">direct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -2369,20 +2338,6 @@
           </td>
         </tr>
         <tr>
-          <td><code>between</code></td>
-          <td>
-                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Filter to bi-directional associations between two entities.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
           <td><code>offset</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>
@@ -2448,7 +2403,7 @@
 
 
 </h4>
-<div class="highlight"><pre><span></span><code><span class="n">get_entity</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">get_entity</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">extra</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -2481,27 +2436,13 @@
           </td>
         </tr>
         <tr>
-          <td><code>get_association_counts</code></td>
+          <td><code>extra</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>Whether to get association counts. Defaults to False.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>get_hierarchy</code></td>
-          <td>
-                <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Whether to get the entity hierarchy. Defaults to False.</p>
+              <p>Whether to include association counts and hierarchy in the response.</p>
             </div>
           </td>
           <td>
@@ -2522,7 +2463,7 @@
     <tbody>
         <tr>
 <td><code>Entity</code></td>          <td>
-                <code><span title="monarch_py.datamodels.model.Entity">Entity</span></code>
+                <code><span title="monarch_py.datamodels.model.Node">Node</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2654,7 +2595,6 @@
     <span class="n">subject_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">object_closure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">between</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">direct</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -2775,20 +2715,6 @@
           </td>
         </tr>
         <tr>
-          <td><code>between</code></td>
-          <td>
-                <code>Tuple[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>, <a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Filter to bi-directional associations between two entities.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
           <td><code>association_type</code></td>
           <td>
                 <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>
@@ -2868,7 +2794,7 @@
 
 
 </h4>
-<div class="highlight"><pre><span></span><code><span class="n">get_entity</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">get_entity</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">

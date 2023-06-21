@@ -949,7 +949,6 @@
     predicate: A comma-separated list of predicates
     object: A comma-separated list of objects
     entity: A comma-separated list of entities
-    between: The subject and object of the association
     limit: The number of associations to return
     direct: Whether to exclude associations with subject/object as ancestors
     offset: The offset of the first association to be retrieved
@@ -965,7 +964,6 @@
 <li><code>-p, --predicate TEXT</code>: Comma-separated list of predicates</li>
 <li><code>-o, --object TEXT</code>: Comma-separated list of objects</li>
 <li><code>-e, --entity TEXT</code>: Comma-separated list of entities</li>
-<li><code>-b, --between TEXT</code>: The subject and object of the association</li>
 <li><code>-d, --direct</code>: Whether to exclude associations with subject/object as ancestors</li>
 <li><code>-l, --limit INTEGER</code>: The number of associations to return  [default: 20]</li>
 <li><code>--offset INTEGER</code>: The offset of the first association to be retrieved  [default: 0]</li>
@@ -1007,6 +1005,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
+<li><code>-e, --extra</code>: Include extra fields in the output (association_counts and node_hierarchy)</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1137,7 +1136,6 @@
     predicate: A comma-separated list of predicates
     object: A comma-separated list of objects
     entity: A comma-separated list of entities
-    between: The subject and object of the association
     limit: The number of associations to return
     direct: Whether to exclude associations with subject/object as ancestors
     offset: The offset of the first association to be retrieved
@@ -1153,7 +1151,6 @@
 <li><code>-p, --predicate TEXT</code>: Comma-separated list of predicates</li>
 <li><code>-o, --object TEXT</code>: Comma-separated list of objects</li>
 <li><code>-e, --entity TEXT</code>: Comma-separated list of entities</li>
-<li><code>-b, --between TEXT</code>: The subject and object of the association</li>
 <li><code>-d, --direct</code>: Whether to exclude associations with subject/object as ancestors</li>
 <li><code>-l, --limit INTEGER</code>: The number of associations to return  [default: 20]</li>
 <li><code>--offset INTEGER</code>: The offset of the first association to be retrieved  [default: 0]</li>
@@ -1205,6 +1202,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
+<li><code>-e, --extra</code>: Include extra fields in the output (association_counts and node_hierarchy)</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1309,7 +1307,6 @@
     predicate: A comma-separated list of predicates
     object: A comma-separated list of objects
     entity: A comma-separated list of entities
-    between: The subject and object of the association
     limit: The number of associations to return
     offset: The offset of the first association to be retrieved
     fmt: The format of the output (json, yaml, tsv, table)
@@ -1324,7 +1321,7 @@
 <li><code>-p, --predicate TEXT</code>: Comma-separated list of predicates</li>
 <li><code>-o, --object TEXT</code>: Comma-separated list of objects</li>
 <li><code>-e, --entity TEXT</code>: Comma-separated list of entities</li>
-<li><code>-b, --between TEXT</code>: The subject and object of the association</li>
+<li><code>-d, --direct</code>: Whether to exclude associations with subject/object as ancestors</li>
 <li><code>-l, --limit INTEGER</code>: The number of associations to return  [default: 20]</li>
 <li><code>--offset INTEGER</code>: The offset of the first association to be retrieved  [default: 0]</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
@@ -1347,6 +1344,7 @@
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
+<li><code>-e, --extra</code>: Include extra fields in the output (association_counts and node_hierarchy)</li>
 <li><code>-u, --update</code>: Whether to re-download the Monarch KG</li>
 <li><code>-f, --format TEXT</code>: The format of the output (json, yaml, tsv, table)  [default: json]</li>
 <li><code>-o, --output TEXT</code>: The path to the output file</li>
