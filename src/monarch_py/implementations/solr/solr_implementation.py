@@ -58,12 +58,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
-        # entity = Entity(**solr_document)
-        # node = Node(**entity.__dict__)
-        node = Node(**solr_document)
 
         if not extra:
-            return node
+            return Entity(**solr_document)
+        
+        node = Node(**solr_document)
 
         if "biolink:Disease" in node.category:
             mode_of_inheritance_associations = self.get_associations(
@@ -77,7 +76,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 mode_of_inheritance_associations.items[0], node
             )
         node_hierarchies = self._get_node_hierarchy(node)
-        print(node_hierarchies)
         node.node_hierarchy = self._get_node_hierarchy(node)
         node.association_counts = self.get_association_counts(id)
         return node
@@ -228,7 +226,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         )
 
         query_result = solr.query(query)
-        print(query_result)
         total = query_result.response.num_found
 
         associations = []
