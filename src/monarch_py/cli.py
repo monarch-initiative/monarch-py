@@ -87,7 +87,6 @@ def associations(
     predicate: List[str] = typer.Option(None, "--predicate", "-p", help="Comma-separated list of predicates"),
     object: List[str] = typer.Option(None, "--object", "-o", help="Comma-separated list of objects"),
     entity: List[str] = typer.Option(None, "--entity", "-e", help="Comma-separated list of entities"),
-    between: str = typer.Option(None, "--between", "-b", help="The subject and object of the association"),
     direct: bool = typer.Option(False, "--direct", "-d", help="Whether to exclude associations with subject/object as ancestors"),
     limit: int = typer.Option(20, "--limit", "-l", help="The number of associations to return"),
     offset: int = typer.Option(0, "--offset", help="The offset of the first association to be retrieved"),
@@ -110,7 +109,6 @@ def associations(
         predicate: A comma-separated list of predicates
         object: A comma-separated list of objects
         entity: A comma-separated list of entities
-        between: The subject and object of the association
         limit: The number of associations to return
         direct: Whether to exclude associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved

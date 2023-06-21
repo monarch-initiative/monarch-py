@@ -82,7 +82,6 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         subject_closure: str = None,
         object_closure: str = None,
         entity: List[str] = None,
-        between: str = None,
         direct: bool = None,
         offset: int = 0,
         limit: int = 20,
@@ -97,7 +96,6 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None.
             object_closure (str, optional): Filter to only associations the specified term ID as an ancestor of the object. Defaults to None.
             entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
-            between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
             association_type (str, optional): Filter to only associations matching the specified association label. Defaults to None.
             offset (int, optional): Result offset, for pagination. Defaults to 0.
             limit (int, optional): Limit results to specified number. Defaults to 20.
@@ -123,15 +121,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             clauses.append(
                 " OR ".join([f"subject = '{e}' OR object = '{e}'" for e in entity])
             )
-        if between:
-            # todo: handle error reporting / parsing, think about another way to pass this?
-            b = between.split(",")
-            e1 = b[0]
-            e2 = b[1]
-            clauses.append(
-                f"subject = '{e1}' AND object = '{e2}' OR subject = '{e2}' AND object = '{e1}'"
-            )
-
+        
         query = f"SELECT * FROM denormalized_edges "
         if clauses:
             query += "WHERE " + " AND ".join(clauses)
