@@ -58,6 +58,12 @@ def schema():
 @app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
+    extra: bool = typer.Option( 
+        False,
+        "--extra",
+        "-e",
+        help="Include extra fields in the output (association_counts and node_hierarchy)",
+    ),
     fmt: str = typer.Option(
         "json",
         "--format",

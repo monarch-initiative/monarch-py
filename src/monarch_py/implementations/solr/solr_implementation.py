@@ -75,28 +75,12 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             node.inheritance = self._get_associated_entity(
                 mode_of_inheritance_associations.items[0], node
             )
-        node_hierarchies = self._get_node_hierarchy(node)
         node.node_hierarchy = self._get_node_hierarchy(node)
         node.association_counts = self.get_association_counts(id)
         return node
 
     def _get_associated_entity(self, association: Association, this_entity: Entity) -> Entity:
-        """
-        Convert an Association to an Entity by extracting the subject or object
-        (whichever is not this_entity) and setting the id, name and category on
-        the returned Entity.
-
-        If ever we need to add more fields, we'll need to add additional expansions
-        in the closurizer repo that produces the denormalized kgx file that we use
-        to populate the solr index.
-
-        Args:
-            association (Association): A single association, expected to contain `this_entity`
-            this_entity (Entity): The Entity that you don't want returned
-
-        Returns:
-            Entity: A limited representation of the entity associated with `this_entity`
-        """
+        """Returns the id, name, and category of the other Entity in an Association given this_entity"""
         if this_entity.id in association.subject_closure:
             entity = Entity(
                 id=association.object,
@@ -131,7 +115,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         Args:
             this_entity (Entity): The entity to get associations for
-            entity (str, optional): an entity ID occurring in either the subject or predicate. Defaults to None.
+            entity (str, optional): an entity ID occurring in either the subject or object. Defaults to None.
             subject (str, optional): an entity ID occurring in the subject. Defaults to None.
             predicate (str, optional): a predicate value. Defaults to None.
             object (str, optional): an entity ID occurring in the object. Defaults to None.

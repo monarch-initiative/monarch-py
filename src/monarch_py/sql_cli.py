@@ -26,6 +26,12 @@ def callback(
 @sql_app.command()
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
+    extra: bool = typer.Option(
+        False,
+        "--extra",
+        "-e",
+        help="Include extra fields in the output (association_counts and node_hierarchy)",
+    ),
     update: bool = typer.Option(
         False, "--update", "-u", help="Whether to re-download the Monarch KG"
     ),
@@ -52,7 +58,7 @@ def entity(
         raise typer.Exit(1)
 
     data = SQLImplementation()
-    response = data.get_entity(id, update)
+    response = data.get_entity(id, update, extra)
 
     if not response:
         console.print(f"\nEntity '{id}' not found.\n")
@@ -67,6 +73,7 @@ def associations(
     predicate: List[str] = typer.Option(None, "--predicate", "-p", help="Comma-separated list of predicates"),
     object: List[str] = typer.Option(None, "--object", "-o", help="Comma-separated list of objects"),
     entity: List[str] = typer.Option(None, "--entity", "-e", help="Comma-separated list of entities"),
+    direct: bool = typer.Option(False, "--direct", "-d", help="Whether to exclude associations with subject/object as ancestors"),
     limit: int = typer.Option(20, "--limit", "-l", help="The number of associations to return"),
     offset: int = typer.Option(0, "--offset", help="The offset of the first association to be retrieved"),
     fmt: str = typer.Option(
