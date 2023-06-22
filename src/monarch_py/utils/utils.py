@@ -182,4 +182,3 @@ def format_output(fmt: str, response: ConfiguredBaseModel, output: str):
     else:
         console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
         raise typer.Exit(1)
-    raise typer.Exit()

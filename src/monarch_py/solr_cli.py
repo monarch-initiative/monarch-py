@@ -223,15 +223,8 @@ def autocomplete(
 @solr_app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
-    fmt: str = typer.Option(
-        "json",
-        "--format",
-        "-f",
-        help="The format of the output (json, yaml, tsv, table)",
-    ),
-    output: str = typer.Option(
-        None, "--output", "-o", help="The path to the output file"
-    ),
+    fmt: str = typer.Option("JSON", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"),
+    output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
 ):
     """
     Retrieve the histopheno associations for a given subject
