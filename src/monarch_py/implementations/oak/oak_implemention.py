@@ -1,7 +1,7 @@
-from oaklib.interfaces.semsim_interface import SemanticSimilarityInterface
+from oaklib.interfaces.semsim_interface import SemanticSimilarityInterface # change to semsimian when this is implemented
 
 @dataclass
-class OakImplementation():
+class OakImplementation(SemanticSimilarityInterface):
     """Implementation of Monarch Interfaces for OAK"""
 
     def __int__(self):
