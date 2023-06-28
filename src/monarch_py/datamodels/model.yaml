@@ -3,7 +3,7 @@ name: monarch-py
 description: Data datamodels for the Monarch Initiative data access library
 prefixes:
   linkml: https://w3id.org/linkml/
-  biolink: https://w3id.org/biolink/
+  biolink: https://w3id.org/biolink/vocab/
 imports:
   - linkml:types
 default_range: string
