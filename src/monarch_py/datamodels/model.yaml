@@ -343,6 +343,7 @@ slots:
     is_a: name
     description: The name of the subject entity
   subject_namespace:
+    range: string
     description: The namespace/prefix of the subject entity
   subject_category:
     is_a: category
@@ -357,6 +358,7 @@ slots:
     is_a: name
     description: The name of the object entity
   object_namespace:
+    range: string
     description: The namespace/prefix of the object entity
   object_category:
     is_a: category
@@ -371,6 +373,7 @@ slots:
     is_a: name
     description: The name of the frequency_qualifier entity
   frequency_qualifier_namespace:
+    range: string
     description: The namespace/prefix of the frequency_qualifier entity
   frequency_qualifier_category:
     is_a: category
@@ -385,6 +388,7 @@ slots:
     is_a: name
     description: The name of the onset_qualifier entity
   onset_qualifier_namespace:
+    range: string
     description: The namespace/prefix of the onset_qualifier entity
   onset_qualifier_category:
     is_a: category
@@ -399,6 +403,7 @@ slots:
     is_a: name
     description: The name of the sex_qualifier entity
   sex_qualifier_namespace:
+    range: string
     description: The namespace/prefix of the sex_qualifier entity
   sex_qualifier_category:
     is_a: category
@@ -413,6 +418,7 @@ slots:
     is_a: name
     description: The name of the stage_qualifier entity
   stage_qualifier_namespace:
+    range: string
     description: The namespace/prefix of the stage_qualifier entity
   stage_qualifier_category:
     is_a: category
