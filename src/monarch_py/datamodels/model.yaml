@@ -191,7 +191,14 @@ classes:
     slot_usage:
         items:
           range: SearchResult
-
+  SemanticSimilarity:
+    slots:
+      - average_score
+      - best_score
+      - subject_termset
+      - object_termset
+      - subject_best_matches
+      - object_best_matches
 
 slots:
   aggregator_knowledge_source:
@@ -367,3 +374,21 @@ slots:
   xref:
     multivalued: true
     range: string
+  average_score:
+    - description: The average score of matches between the subject and object termsets (for semantic similarity).
+      range: float
+  best_score:
+    - description: The best score of matches between the subject and object termsets (for semantic similarity).
+      range: float
+  subject_termset:
+    - description: The set of subjects used to compute the semantic similarity score.
+      range: string
+      multivalued: true
+  object_termset:
+    - description: The set of objects used to compute the semantic similarity score.
+      range: string
+      multivalued: true
+  subject_best_matches:
+    - 
+  object_best_matches:
+    - 
