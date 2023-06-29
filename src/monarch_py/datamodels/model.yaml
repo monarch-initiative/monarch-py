@@ -114,6 +114,7 @@ classes:
     - xref
     - provided_by
     - in_taxon
+    - in_taxon_label
     - source
     - symbol
     - synonym
@@ -263,6 +264,8 @@ slots:
     range: string
     required: true
   in_taxon:
+    range: string
+  in_taxon_label:
     range: string
   items:
     description: A collection of items, with the type to be overriden by slot_usage
