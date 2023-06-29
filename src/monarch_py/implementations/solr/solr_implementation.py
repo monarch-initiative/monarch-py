@@ -87,17 +87,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             entity = Entity(
                 id=association.object,
                 name=association.object_label,
-                category=association.object_category[0]
-                if len(association.object_category) == 1
-                else [],
+                category=association.object_category
             )
         elif this_entity.id in association.object_closure:
             entity = Entity(
                 id=association.subject,
                 name=association.subject_label,
-                category=association.subject_category[0]
-                if len(association.subject_category) == 1
-                else [],
+                category=association.subject_category
             )
         else:
             raise ValueError(
