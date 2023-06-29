@@ -47,6 +47,14 @@ def dict_factory(cursor, row):
     return {key: value for key, value in zip(fields, row)}
 
 
+def set_log_level(log_level: str):
+    """Sets the log level for the application."""
+    import loguru
+
+    loguru.logger.remove()
+    loguru.logger.add(sys.stderr, level=log_level)
+
+
 ### Output conversion methods ###
 
 FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, AssociationCountList, or Results objects."
@@ -175,4 +183,3 @@ def format_output(fmt: str, response: ConfiguredBaseModel, output: str):
     else:
         console.print(f"\n[bold red]Format '{fmt}' not supported.[/]\n")
         raise typer.Exit(1)
-    raise typer.Exit()

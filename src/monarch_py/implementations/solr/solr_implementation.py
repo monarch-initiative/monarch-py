@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from loguru import logger
 from pydantic import ValidationError
@@ -17,6 +17,8 @@ from monarch_py.datamodels.model import (
     FacetValue,
     HistoBin,
     HistoPheno,
+    Node,
+    NodeHierarchy,
     SearchResult,
     SearchResults,
 )
@@ -43,13 +45,12 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
     # Implements: EntityInterface #
     ###############################
 
-    def get_entity(self, id: str) -> Entity:
+    def get_entity(self, id: str, extra: bool) -> Node:
         """Retrieve a specific entity by exact ID match, with optional extras
 
         Args:
             id (str): id of the entity to search for.
-            get_association_counts (bool, optional): Whether to get association counts. Defaults to False.
-            get_hierarchy (bool, optional): Whether to get the entity hierarchy. Defaults to False.
+            extra (bool): Whether to include association counts and hierarchy in the response.
 
         Returns:
             Entity: Dataclass representing results of an entity search.
@@ -57,9 +58,112 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         solr = SolrService(base_url=self.base_url, core=core.ENTITY)
         solr_document = solr.get(id)
-        entity = Entity(**solr_document)
+
+        if not extra:
+            return Entity(**solr_document)
+
+        node = Node(**solr_document)
+
+        if "biolink:Disease" in node.category:
+            mode_of_inheritance_associations = self.get_associations(
+                subject=id, predicate="biolink:has_mode_of_inheritance", offset=0
+            )
+        if (
+            mode_of_inheritance_associations is not None
+            and len(mode_of_inheritance_associations.items) == 1
+        ):
+            node.inheritance = self._get_associated_entity(
+                mode_of_inheritance_associations.items[0], node
+            )
+        node.node_hierarchy = self._get_node_hierarchy(node)
+        node.association_counts = self.get_association_counts(id)
+        return node
+
+    def _get_associated_entity(
+        self, association: Association, this_entity: Entity
+    ) -> Entity:
+        """Returns the id, name, and category of the other Entity in an Association given this_entity"""
+        if this_entity.id in association.subject_closure:
+            entity = Entity(
+                id=association.object,
+                name=association.object_label,
+                category=association.object_category[0]
+                if len(association.object_category) == 1
+                else [],
+            )
+        elif this_entity.id in association.object_closure:
+            entity = Entity(
+                id=association.subject,
+                name=association.subject_label,
+                category=association.subject_category[0]
+                if len(association.subject_category) == 1
+                else [],
+            )
+        else:
+            raise ValueError(
+                f"Association does not contain this_entity: {this_entity.id}"
+            )
 
         return entity
+
+    def _get_associated_entities(
+        self,
+        this_entity: Entity,
+        entity: str = None,
+        subject: str = None,
+        predicate: str = None,
+        object: str = None,
+    ) -> List[Entity]:
+        """
+        Get a list of entities directly associated with this_entity fetched from associations
+        in the Solr index
+
+        Args:
+            this_entity (Entity): The entity to get associations for
+            entity (str, optional): an entity ID occurring in either the subject or object. Defaults to None.
+            subject (str, optional): an entity ID occurring in the subject. Defaults to None.
+            predicate (str, optional): a predicate value. Defaults to None.
+            object (str, optional): an entity ID occurring in the object. Defaults to None.
+        """
+        return [
+            self._get_associated_entity(association, this_entity)
+            for association in self.get_associations(
+                entity=entity,
+                subject=subject,
+                predicate=predicate,
+                object=object,
+                direct=True,
+                offset=0,
+            ).items
+        ]
+
+    def _get_node_hierarchy(self, entity: Entity) -> NodeHierarchy:
+        """
+        Get a NodeHierarchy for the given entity
+
+        Args:
+            entity (Entity): The entity to get the hierarchy for
+            si (SolrInterface): A SolrInterface instance
+
+        Returns:
+            NodeHierarchy: A NodeHierarchy object
+        """
+
+        super_classes = self._get_associated_entities(
+            entity, subject=entity.id, predicate="biolink:subclass_of"
+        )
+        equivalent_classes = self._get_associated_entities(
+            entity, entity=entity.id, predicate="biolink:same_as"
+        )
+        sub_classes = self._get_associated_entities(
+            entity, object=entity.id, predicate="biolink:subclass_of"
+        )
+
+        return NodeHierarchy(
+            super_classes=super_classes,
+            equivalent_classes=equivalent_classes,
+            sub_classes=sub_classes,
+        )
 
     ####################################
     # Implements: AssociationInterface #
@@ -67,14 +171,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def get_associations(
         self,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        object: str = None,
+        category: List[str] = None,
+        subject: List[str] = None,
+        predicate: List[str] = None,
+        object: List[str] = None,
         subject_closure: str = None,
         object_closure: str = None,
-        entity: str = None,
-        between: str = None,
+        entity: List[str] = None,
         direct: bool = None,
         offset: int = 0,
         limit: int = 20,
@@ -82,16 +185,15 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         """Retrieve paginated association records, with filter options
 
         Args:
-            category (str, optional): Filter to only associations matching the specified category. Defaults to None.
-            predicate (str, optional): Filter to only associations matching the specified predicate. Defaults to None.
-            subject (str, optional): Filter to only associations matching the specified subject. Defaults to None.
-            object (str, optional): Filter to only associations matching the specified object. Defaults to None.
-            subject_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
-            object_closure (str, optional): Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
-            entity (str, optional): Filter to only associations where the specified entity is the subject or the object. Defaults to None.
-            between (Tuple[str, str], optional): Filter to bi-directional associations between two entities.
-            offset (int, optional): Result offset, for pagination. Defaults to 0.
-            limit (int, optional): Limit results to specified number. Defaults to 20.
+            category: Filter to only associations matching the specified categories. Defaults to None.
+            predicate: Filter to only associations matching the specified predicates. Defaults to None.
+            subject: Filter to only associations matching the specified subjects. Defaults to None.
+            object: Filter to only associations matching the specified objects. Defaults to None.
+            subject_closure: Filter to only associations with the specified term ID as an ancestor of the subject. Defaults to None
+            object_closure: Filter to only associations with the specified term ID as an ancestor of the object. Defaults to None
+            entity: Filter to only associations where the specified entities are the subject or the object. Defaults to None.
+            offset: Result offset, for pagination. Defaults to 0.
+            limit: Limit results to specified number. Defaults to 20.
 
         Returns:
             AssociationResults: Dataclass representing results of an association search.
@@ -100,14 +202,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
 
         query = self._populate_association_query(
-            category=category,
-            predicate=predicate,
-            subject=subject,
-            object=object,
+            category=[category] if isinstance(category, str) else category,
+            predicate=[predicate] if isinstance(predicate, str) else predicate,
+            subject=[subject] if isinstance(subject, str) else subject,
+            object=[object] if isinstance(object, str) else object,
+            entity=[entity] if isinstance(entity, str) else entity,
             subject_closure=subject_closure,
             object_closure=object_closure,
-            entity=entity,
-            between=between,
             direct=direct,
             offset=offset,
             limit=limit,
@@ -133,14 +234,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def _populate_association_query(
         self,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        object: str = None,
+        category: List[str] = None,
+        predicate: List[str] = None,
+        subject: List[str] = None,
+        object: List[str] = None,
         subject_closure: str = None,
         object_closure: str = None,
-        entity: str = None,
-        between: str = None,
+        entity: List[str] = None,
         direct: bool = None,
         q: str = None,
         offset: int = 0,
@@ -151,48 +251,49 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query = SolrQuery(start=offset, rows=limit)
 
         if category:
-            query.add_field_filter_query("category", category)
+            query.add_field_filter_query("category", " OR ".join(category))
         if predicate:
-            query.add_field_filter_query("predicate", predicate)
+            query.add_field_filter_query("predicate", " OR ".join(predicate))
         if subject:
             if direct:
-                query.add_field_filter_query("subject", subject)
+                query.add_field_filter_query("subject", " OR ".join(subject))
             else:
                 query.add_filter_query(
-                    f'subject:"{subject}" OR subject_closure:"{subject}"'
+                    " OR ".join(
+                        [f'subject:"{s}" OR subject_closure:"{s}"' for s in subject]
+                    )
                 )
         if subject_closure:
             query.add_field_filter_query("subject_closure", subject_closure)
         if object:
             if direct:
-                query.add_field_filter_query("object", object)
+                query.add_field_filter_query("object", " OR ".join(object))
             else:
                 query.add_filter_query(
-                    f'object:"{object}" OR object_closure:"{object}"'
+                    " OR ".join(
+                        [f'object:"{o}" OR object_closure:"{o}"' for o in object]
+                    )
                 )
         if object_closure:
             query.add_field_filter_query("object_closure", object_closure)
-        if between:
-            # todo: handle error reporting / parsing, think about another way to pass this?
-            b = between.split(",")
-            e1 = escape(b[0])
-            e2 = escape(b[1])
-            if direct:
-                query.add_filter_query(
-                    f'(subject:"{e1}" AND object:"{e2}") OR (subject:"{e2}" AND object:"{e1}")'
-                )
-            else:
-                query.add_filter_query(
-                    f'((subject:"{e1}" OR subject_closure:"{e1}") AND (object:"{e2}" OR object_closure:"{e2}")) OR ((subject:"{e2}" OR subject_closure:"{e2}") AND (object:"{e1}" OR object_closure:"{e1}"))'
-                )
         if entity:
             if direct:
                 query.add_filter_query(
-                    f'subject:"{escape(entity)}" OR subject_closure:"{escape(entity)}" OR object:"{escape(entity)}" OR object_closure:"{escape(entity)}"'
+                    " OR ".join(
+                        [
+                            f'subject:"{escape(e)}" OR object:"{escape(e)}"'
+                            for e in entity
+                        ]
+                    )
                 )
             else:
                 query.add_filter_query(
-                    f'subject:"{escape(entity)}" OR object:"{escape(entity)}"'
+                    " OR ".join(
+                        [
+                            f'subject:"{escape(e)}" OR subject_closure:"{escape(e)}" OR object:"{escape(e)}" OR object_closure:"{escape(e)}"'
+                            for e in entity
+                        ]
+                    )
                 )
         if q:
             # We don't yet have tokenization strategies for the association index, initially we'll limit searching to
@@ -230,15 +331,20 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query.boost = self._entity_boost()
 
         if category:
-            query.add_filter_query(" OR ".join(f"category:{cat}" for cat in category))
+            query.add_filter_query(" OR ".join(f'category:"{cat}"' for cat in category))
         if in_taxon:
-            query.add_filter_query(" OR ".join([f"in_taxon:{t}" for t in taxon]))
+            query.add_filter_query(" OR ".join([f'in_taxon:"{t}"' for t in in_taxon]))
         if facet_fields:
             query.facet_fields = facet_fields
         if facet_queries:
             query.facet_queries = facet_queries
         if filter_queries:
             query.filter_queries.extend(filter_queries)
+
+        # Search can't deal with entities that don't have names because we've made it a required field,
+        # we may or may not want them in the graph and in Solr, but we can safely leave them out of
+        # search
+        query.add_filter_query("name:*")
 
         query_result = solr.query(query)
         total = query_result.response.num_found
@@ -314,32 +420,30 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
     def get_association_facets(
         self,
+        category: List[str] = None,
+        subject: List[str] = None,
+        predicate: List[str] = None,
+        object: List[str] = None,
+        subject_closure: str = None,
+        object_closure: str = None,
+        entity: List[str] = None,
         facet_fields: List[str] = None,
         facet_queries: List[str] = None,
-        category: str = None,
-        predicate: str = None,
-        subject: str = None,
-        subject_closure: str = None,
-        object: str = None,
-        object_closure: str = None,
-        entity: str = None,
-        between: Tuple[str, str] = None,
     ) -> SearchResults:
 
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         limit = 0
         offset = 0
         query = self._populate_association_query(
-            category=category,
-            predicate=predicate,
-            subject=subject,
+            category=[category] if isinstance(category, str) else category,
+            predicate=[predicate] if isinstance(predicate, str) else predicate,
+            subject=[subject] if isinstance(subject, str) else subject,
+            object=[object] if isinstance(object, str) else object,
+            entity=[entity] if isinstance(entity, str) else entity,
             subject_closure=subject_closure,
-            object=object,
             object_closure=object_closure,
-            entity=entity,
-            between=between,
-            offset=limit,
-            limit=offset,
+            offset=offset,
+            limit=limit,
         )
 
         query.facet_fields = facet_fields
@@ -348,7 +452,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         query_result = solr.query(query)
         total = query_result.response.num_found
 
-        results = SearchResults(
+        return SearchResults(
             limit=limit,
             offset=offset,
             total=total,
@@ -360,8 +464,6 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 query_result.facet_counts.facet_queries
             ),
         )
-
-        return results
 
     def get_histopheno(self, subject_closure: str = None) -> HistoPheno:
 
@@ -400,7 +502,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         Returns:
 
         """
-        query = self._populate_association_query(entity=entity)
+        query = self._populate_association_query(entity=[entity])
         facet_queries = []
         subject_query = f'AND (subject:"{entity}" OR subject_closure:"{entity}")'
         object_query = f'AND (object:"{entity}" OR object_closure:"{entity}")'
@@ -408,6 +510,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         # to know which kind of label will be needed in the UI to refer to the opposite side of the association
         for field_query in [subject_query, object_query]:
             for agm in AssociationTypeMappings.get_mappings():
+
                 association_type_query = get_solr_query_fragment(agm)
                 facet_queries.append(f"({association_type_query}) {field_query}")
         query.facet_queries = facet_queries
@@ -463,8 +566,8 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             raise NotImplementedError("Sorting is not yet implemented")
 
         query = self._populate_association_query(
-            entity=entity,
-            category=category,
+            entity=[entity],
+            category=[category],
             q=q,
             offset=offset,
             limit=limit,

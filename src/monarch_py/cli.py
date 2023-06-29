@@ -3,8 +3,10 @@ from pathlib import Path
 from typing import List, Optional
 
 import typer
+from typing_extensions import Annotated
 
 from monarch_py import solr_cli, sql_cli
+from monarch_py.utils.utils import set_log_level
 
 app = typer.Typer()
 app.add_typer(solr_cli.solr_app, name="solr")
@@ -12,12 +14,38 @@ app.add_typer(sql_cli.sql_app, name="sql")
 
 
 @app.callback(invoke_without_command=True)
-def callback(version: Optional[bool] = typer.Option(None, "--version", is_eager=True)):
-    if version:
+def callback(
+    ctx: typer.Context,
+    version: Annotated[
+        Optional[bool], typer.Option("--version", "-v", is_eager=True)
+    ] = None,
+    # verbose: Annotated[int, typer.Option("--verbose", "-v", count=True)] = 0,
+    quiet: Annotated[
+        bool, typer.Option("--quiet", "-q", help="Set log level to warning")
+    ] = False,
+    debug: Annotated[
+        bool, typer.Option("--debug", "-d", help="Set log level to debug")
+    ] = False,
+):
+    if version and ctx.invoked_subcommand is None:
         from monarch_py import __version__
 
         typer.echo(f"monarch_py version: {__version__}")
         raise typer.Exit()
+    if ctx.invoked_subcommand is None:
+        typer.secho(
+            f"\n\tNo command specified\n\tTry `monarch --help` for more information.\n",
+            fg=typer.colors.YELLOW,
+        )
+        raise typer.Exit()
+    log_level = "DEBUG" if debug else "WARNING" if quiet else "INFO"
+    set_log_level(log_level)
+
+
+@app.command("test")
+def test():
+    """Test the CLI"""
+    typer.secho("\n\tTesting monarch_py CLI\n", fg=typer.colors.GREEN)
 
 
 @app.command("schema")
@@ -41,6 +69,12 @@ def schema():
 @app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
+    extra: bool = typer.Option(
+        False,
+        "--extra",
+        "-e",
+        help="Include extra fields in the output (association_counts and node_hierarchy)",
+    ),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -65,15 +99,33 @@ def entity(
 
 @app.command("associations")
 def associations(
-    category: str = typer.Option(None, "--category", "-c"),
-    subject: str = typer.Option(None, "--subject", "-s"),
-    predicate: str = typer.Option(None, "--predicate", "-p"),
-    object: str = typer.Option(None, "--object", "-o"),
-    entity: str = typer.Option(None, "--entity", "-e"),
-    between: str = typer.Option(None, "--between"),
-    direct: bool = typer.Option(False, "--direct"),
-    limit: int = typer.Option(20, "--limit", "-l"),
-    offset: int = typer.Option(0, "--offset"),
+    category: List[str] = typer.Option(
+        None, "--category", "-c", help="Comma-separated list of categories"
+    ),
+    subject: List[str] = typer.Option(
+        None, "--subject", "-s", help="Comma-separated list of subjects"
+    ),
+    predicate: List[str] = typer.Option(
+        None, "--predicate", "-p", help="Comma-separated list of predicates"
+    ),
+    object: List[str] = typer.Option(
+        None, "--object", "-o", help="Comma-separated list of objects"
+    ),
+    entity: List[str] = typer.Option(
+        None, "--entity", "-e", help="Comma-separated list of entities"
+    ),
+    direct: bool = typer.Option(
+        False,
+        "--direct",
+        "-d",
+        help="Whether to exclude associations with subject/object as ancestors",
+    ),
+    limit: int = typer.Option(
+        20, "--limit", "-l", help="The number of associations to return"
+    ),
+    offset: int = typer.Option(
+        0, "--offset", help="The offset of the first association to be retrieved"
+    ),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -88,12 +140,11 @@ def associations(
     Paginate through associations
 
     Args:
-        category: The category of the association
-        predicate: The predicate of the association
-        subject: The subject of the association
-        object: The object of the association
-        entity: The subject or object of the association
-        between: The subject and object of the association
+        category: A comma-separated list of categories
+        subject: A comma-separated list of subjects
+        predicate: A comma-separated list of predicates
+        object: A comma-separated list of objects
+        entity: A comma-separated list of entities
         limit: The number of associations to return
         direct: Whether to exclude associations with subject/object as ancestors
         offset: The offset of the first association to be retrieved

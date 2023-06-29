@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List
 
 from monarch_py.datamodels.model import (
     AssociationTableResults,
@@ -66,7 +66,6 @@ class SearchInterface(ABC):
         object: str = None,
         object_closure: str = None,
         entity: str = None,
-        between: Tuple[str, str] = None,
     ) -> SearchResults:
         """
         Get facet counts and facet query counts for associations
@@ -80,7 +79,6 @@ class SearchInterface(ABC):
             object (str): Filter to only associations matching the specified object
             object_closure (str): Filter to only associations with the specified term ID as an ancestor of the object
             entity (str): Filter to only associations where the specified entity is the subject or the object
-            between (Tuple[str, str]): Filter to bi-directional associations between two entities
         Returns:
             SearchResults: Dataclass representing results of a search, with zero rows returned but total count
             and faceting information populated

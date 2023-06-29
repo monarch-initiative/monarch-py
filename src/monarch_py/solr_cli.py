@@ -2,6 +2,7 @@ from typing import List
 
 import pystow
 import typer
+from typing_extensions import Annotated
 
 from monarch_py.datamodels.model import AssociationCountList
 from monarch_py.utils.solr_cli_utils import (
@@ -11,10 +12,31 @@ from monarch_py.utils.solr_cli_utils import (
     start_solr,
     stop_solr,
 )
-from monarch_py.utils.utils import console, format_output
+from monarch_py.utils.utils import console, format_output, set_log_level
 
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
+
+
+@solr_app.callback(invoke_without_command=True)
+def callback(
+    ctx: typer.Context,
+    quiet: Annotated[
+        bool, typer.Option("--quiet", "-q", help="Set log level to warning")
+    ] = False,
+    debug: Annotated[
+        bool, typer.Option("--debug", "-d", help="Set log level to debug")
+    ] = False,
+):
+    if ctx.invoked_subcommand is None:
+        typer.secho(
+            f"\n\tNo command specified\n\tTry `monarch solr --help` for more information.\n",
+            fg=typer.colors.YELLOW,
+        )
+        raise typer.Exit()
+    log_level = "DEBUG" if debug else "WARNING" if quiet else "INFO"
+    set_log_level(log_level)
+
 
 ############################
 ### SOLR DOCKER COMMANDS ###
@@ -57,6 +79,12 @@ def download():
 @solr_app.command("entity")
 def entity(
     id: str = typer.Argument(None, help="The identifier of the entity to be retrieved"),
+    extra: bool = typer.Option(
+        False,
+        "--extra",
+        "-e",
+        help="Include extra fields in the output (association_counts and node_hierarchy)",
+    ),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -81,23 +109,40 @@ def entity(
     if not id:
         console.print("\n[bold red]Entity ID required.[/]\n")
         raise typer.Exit(1)
-
     data = get_solr(update=False)
-    response = data.get_entity(id)
+    response = data.get_entity(id, extra)
     format_output(fmt, response, output)
 
 
 @solr_app.command("associations")
 def associations(
-    category: str = typer.Option(None, "--category"),
-    subject: str = typer.Option(None, "--subject"),
-    predicate: str = typer.Option(None, "--predicate"),
-    object: str = typer.Option(None, "--object"),
-    entity: str = typer.Option(None, "--entity"),
-    between: str = typer.Option(None, "--between"),
-    direct: bool = typer.Option(False, "--direct"),
-    limit: int = typer.Option(20, "--limit"),
-    offset: int = typer.Option(0, "--offset"),
+    category: List[str] = typer.Option(
+        None, "--category", "-c", help="Comma-separated list of categories"
+    ),
+    subject: List[str] = typer.Option(
+        None, "--subject", "-s", help="Comma-separated list of subjects"
+    ),
+    predicate: List[str] = typer.Option(
+        None, "--predicate", "-p", help="Comma-separated list of predicates"
+    ),
+    object: List[str] = typer.Option(
+        None, "--object", "-o", help="Comma-separated list of objects"
+    ),
+    entity: List[str] = typer.Option(
+        None, "--entity", "-e", help="Comma-separated list of entities"
+    ),
+    direct: bool = typer.Option(
+        False,
+        "--direct",
+        "-d",
+        help="Whether to exclude associations with subject/object as ancestors",
+    ),
+    limit: int = typer.Option(
+        20, "--limit", "-l", help="The number of associations to return"
+    ),
+    offset: int = typer.Option(
+        0, "--offset", help="The offset of the first association to be retrieved"
+    ),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -112,17 +157,16 @@ def associations(
     Paginate through associations
 
     Args:
-        category (str, optional): The category of the association.
-        subject (str, optional): The subject of the association.
-        predicate (str, optional): The predicate of the association.
-        object (str, optional): The object of the association.
-        entity (str, optional): The subject or object of the association.
-        between (str, optional): Two comma-separated entities to get bi-directional associations.
-        direct (bool, optional): Exclude associations with the specified subject and objects as ancestors. Default False
-        limit (int, optional): The number of associations to return. Default 20
-        offset (int, optional): The offset of the first association to be retrieved. Default 0
-        fmt (str): The format of the output (json, yaml, tsv, table). Default JSON
-        output (str): The path to the output file. Default stdout
+        category: A comma-separated list of categories
+        subject: A comma-separated list of subjects
+        predicate: A comma-separated list of predicates
+        object: A comma-separated list of objects
+        entity: A comma-separated list of entities
+        limit: The number of associations to return
+        direct: Whether to exclude associations with subject/object as ancestors
+        offset: The offset of the first association to be retrieved
+        fmt: The format of the output (json, yaml, tsv, table)
+        output: The path to the output file (stdout if not specified)
     """
     args = locals()
     args.pop("update", None)
@@ -208,7 +252,7 @@ def autocomplete(
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
     fmt: str = typer.Option(
-        "json",
+        "JSON",
         "--format",
         "-f",
         help="The format of the output (json, yaml, tsv, table)",

@@ -46,6 +46,25 @@ def test_facet_fields():
     assert category
 
 
+def test_single_filter_queries():
+    si = SolrImplementation()
+    response = si.search("syndrome", category=["biolink:Disease"])
+    assert response
+    assert response.total > 0
+    assert response.items[0].category == "biolink:Disease"
+
+
+def test_multiple_filter_queries():
+    si = SolrImplementation()
+    response = si.search(
+        "eye", category=["biolink:Disease", "biolink:PhenotypicFeature"]
+    )
+    assert response
+    assert response.total > 0
+    for (i, item) in enumerate(response.items):
+        assert item.category in ["biolink:Disease", "biolink:PhenotypicFeature"]
+
+
 def test_association_facets():
     si = SolrImplementation()
     response = si.get_association_facets(facet_fields=["category"])
@@ -112,6 +131,13 @@ def test_association_counts_for_disease():
         if ac.category == "biolink:DiseaseToPhenotypicFeatureAssociation"
     ][0]
     assert disease_phenotype.label == "Phenotypes"
+
+
+def test_association_counts_for_eds():
+    si = SolrImplementation()
+    association_counts = si.get_association_counts(entity="MONDO:0020066")
+    assert association_counts
+    assert len(association_counts) > 0
 
 
 def test_association_counts_for_phenotype():
