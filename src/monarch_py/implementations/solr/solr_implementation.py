@@ -68,13 +68,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             mode_of_inheritance_associations = self.get_associations(
                 subject=id, predicate="biolink:has_mode_of_inheritance", offset=0
             )
-        if (
-            mode_of_inheritance_associations is not None
-            and len(mode_of_inheritance_associations.items) == 1
-        ):
-            node.inheritance = self._get_associated_entity(
-                mode_of_inheritance_associations.items[0], node
-            )
+            if (
+                mode_of_inheritance_associations is not None
+                and len(mode_of_inheritance_associations.items) == 1
+            ):
+                node.inheritance = self._get_associated_entity(
+                    mode_of_inheritance_associations.items[0], node
+                )
         node.node_hierarchy = self._get_node_hierarchy(node)
         node.association_counts = self.get_association_counts(id)
         return node
@@ -87,13 +87,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
             entity = Entity(
                 id=association.object,
                 name=association.object_label,
-                category=association.object_category
+                category=association.object_category,
             )
         elif this_entity.id in association.object_closure:
             entity = Entity(
                 id=association.subject,
                 name=association.subject_label,
-                category=association.subject_category
+                category=association.subject_category,
             )
         else:
             raise ValueError(

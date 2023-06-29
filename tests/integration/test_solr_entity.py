@@ -15,10 +15,19 @@ def test_entity():
     assert entity
     assert entity.name == "Marfan syndrome"
 
-def test_entity_with_extra():
+
+def test_disease_entity_with_extra():
     si = SolrImplementation()
     node: Node = si.get_entity("MONDO:0007947", extra=True)
     assert node
     assert node.association_counts
     assert node.node_hierarchy
     assert len(node.node_hierarchy.super_classes) > 0
+
+
+def test_gene_entity_with_extra():
+    si = SolrImplementation()
+    node: Node = si.get_entity("HGNC:5", extra=True)
+    assert node
+    assert node.association_counts
+    assert node.inheritance is None
