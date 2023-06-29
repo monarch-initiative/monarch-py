@@ -1,8 +1,8 @@
 from typing import List
-from typing_extensions import Annotated
 
 import pystow
 import typer
+from typing_extensions import Annotated
 
 from monarch_py.datamodels.model import AssociationCountList
 from monarch_py.utils.solr_cli_utils import (
@@ -17,17 +17,26 @@ from monarch_py.utils.utils import console, format_output, set_log_level
 solr_app = typer.Typer()
 monarchstow = pystow.module("monarch")
 
+
 @solr_app.callback(invoke_without_command=True)
 def callback(
     ctx: typer.Context,
-    quiet: Annotated[bool, typer.Option("--quiet", "-q", help="Set log level to warning")] = False,
-    debug: Annotated[bool, typer.Option("--debug", "-d", help="Set log level to debug")] = False,
-    ):
+    quiet: Annotated[
+        bool, typer.Option("--quiet", "-q", help="Set log level to warning")
+    ] = False,
+    debug: Annotated[
+        bool, typer.Option("--debug", "-d", help="Set log level to debug")
+    ] = False,
+):
     if ctx.invoked_subcommand is None:
-        typer.secho(f"\n\tNo command specified\n\tTry `monarch solr --help` for more information.\n", fg=typer.colors.YELLOW)
+        typer.secho(
+            f"\n\tNo command specified\n\tTry `monarch solr --help` for more information.\n",
+            fg=typer.colors.YELLOW,
+        )
         raise typer.Exit()
     log_level = "DEBUG" if debug else "WARNING" if quiet else "INFO"
     set_log_level(log_level)
+
 
 ############################
 ### SOLR DOCKER COMMANDS ###
@@ -107,14 +116,33 @@ def entity(
 
 @solr_app.command("associations")
 def associations(
-    category: List[str] = typer.Option(None, "--category", "-c", help="Comma-separated list of categories"),
-    subject: List[str] = typer.Option(None, "--subject", "-s", help="Comma-separated list of subjects"),
-    predicate: List[str] = typer.Option(None, "--predicate", "-p", help="Comma-separated list of predicates"),
-    object: List[str] = typer.Option(None, "--object", "-o", help="Comma-separated list of objects"),
-    entity: List[str] = typer.Option(None, "--entity", "-e", help="Comma-separated list of entities"),
-    direct: bool = typer.Option(False, "--direct", "-d", help="Whether to exclude associations with subject/object as ancestors"),
-    limit: int = typer.Option(20, "--limit", "-l", help="The number of associations to return"),
-    offset: int = typer.Option(0, "--offset", help="The offset of the first association to be retrieved"),
+    category: List[str] = typer.Option(
+        None, "--category", "-c", help="Comma-separated list of categories"
+    ),
+    subject: List[str] = typer.Option(
+        None, "--subject", "-s", help="Comma-separated list of subjects"
+    ),
+    predicate: List[str] = typer.Option(
+        None, "--predicate", "-p", help="Comma-separated list of predicates"
+    ),
+    object: List[str] = typer.Option(
+        None, "--object", "-o", help="Comma-separated list of objects"
+    ),
+    entity: List[str] = typer.Option(
+        None, "--entity", "-e", help="Comma-separated list of entities"
+    ),
+    direct: bool = typer.Option(
+        False,
+        "--direct",
+        "-d",
+        help="Whether to exclude associations with subject/object as ancestors",
+    ),
+    limit: int = typer.Option(
+        20, "--limit", "-l", help="The number of associations to return"
+    ),
+    offset: int = typer.Option(
+        0, "--offset", help="The offset of the first association to be retrieved"
+    ),
     fmt: str = typer.Option(
         "json",
         "--format",
@@ -223,8 +251,15 @@ def autocomplete(
 @solr_app.command("histopheno")
 def histopheno(
     subject: str = typer.Argument(None, help="The subject of the association"),
-    fmt: str = typer.Option("JSON", "--format", "-f", help="The format of the output (json, yaml, tsv, table)"),
-    output: str = typer.Option(None, "--output", "-o", help="The path to the output file")
+    fmt: str = typer.Option(
+        "JSON",
+        "--format",
+        "-f",
+        help="The format of the output (json, yaml, tsv, table)",
+    ),
+    output: str = typer.Option(
+        None, "--output", "-o", help="The path to the output file"
+    ),
 ):
     """
     Retrieve the histopheno associations for a given subject

@@ -5,7 +5,13 @@ import pystow
 from loguru import logger
 from pydantic import ValidationError
 
-from monarch_py.datamodels.model import Association, AssociationResults, Entity, Node, NodeHierarchy
+from monarch_py.datamodels.model import (
+    Association,
+    AssociationResults,
+    Entity,
+    Node,
+    NodeHierarchy,
+)
 from monarch_py.interfaces.association_interface import AssociationInterface
 from monarch_py.interfaces.entity_interface import EntityInterface
 from monarch_py.utils.utils import SQL_DATA_URL, dict_factory
@@ -44,7 +50,9 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             return None
         results = {
             "id": sql_data["id"],
-            "category": sql_data["category"],#.split("|"), # This will become a list in the future
+            "category": sql_data[
+                "category"
+            ],  # .split("|"), # This will become a list in the future
             "name": sql_data["name"],
             "description": sql_data["description"],
             "xref": sql_data["xref"].split("|"),
@@ -67,13 +75,13 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             except ValidationError:
                 logger.error(f"Validation error for {sql_data}")
                 raise
-        
+
         node = Node(**results)
 
         if "biolink:Disease" in node.category:
             mode_of_inheritance_associations = self.get_associations(
-            subject=id, predicate="biolink:has_mode_of_inheritance", offset=0
-        )
+                subject=id, predicate="biolink:has_mode_of_inheritance", offset=0
+            )
         if (
             mode_of_inheritance_associations is not None
             and len(mode_of_inheritance_associations.items) == 1
@@ -85,7 +93,9 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         ### SQL does not support association counts
         return node
 
-    def _get_associated_entity(self, association: Association, this_entity: Entity) -> Entity:
+    def _get_associated_entity(
+        self, association: Association, this_entity: Entity
+    ) -> Entity:
         """Returns the other Entity in an Association given this_entity"""
         if this_entity.id in association.subject_closure:
             entity = Entity(
@@ -104,11 +114,14 @@ class SQLImplementation(EntityInterface, AssociationInterface):
                 else [],
             )
         else:
-            raise ValueError(f"Association does not contain this_entity: {this_entity.id}")
+            raise ValueError(
+                f"Association does not contain this_entity: {this_entity.id}"
+            )
 
         return entity
 
-    def _get_associated_entities(self,
+    def _get_associated_entities(
+        self,
         this_entity: Entity,
         entity: str = None,
         subject: str = None,
@@ -166,7 +179,6 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             sub_classes=sub_classes,
         )
 
-
     ####################################
     # Implements: AssociationInterface #
     ####################################
@@ -209,14 +221,28 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             if direct:
                 clauses.append(" OR ".join([f"subject = '{s}'" for s in subject]))
             else:
-                clauses.append(" OR ".join([f"subject = '{s}' OR subject_closure like '%{s}%'" for s in subject]))
+                clauses.append(
+                    " OR ".join(
+                        [
+                            f"subject = '{s}' OR subject_closure like '%{s}%'"
+                            for s in subject
+                        ]
+                    )
+                )
         if predicate:
             clauses.append(" OR ".join([f"predicate = '{p}'" for p in predicate]))
         if object:
-            if direct: 
+            if direct:
                 clauses.append(" OR ".join([f"object = '{o}'" for o in object]))
             else:
-                clauses.append(" OR ".join([f"object = '{o}' OR object_closure like '%{o}%'" for o in object]))
+                clauses.append(
+                    " OR ".join(
+                        [
+                            f"object = '{o}' OR object_closure like '%{o}%'"
+                            for o in object
+                        ]
+                    )
+                )
         if subject_closure:
             clauses.append(f"subject_closure like '%{subject_closure}%'")
         if object_closure:
@@ -228,12 +254,14 @@ class SQLImplementation(EntityInterface, AssociationInterface):
                 )
             else:
                 clauses.append(
-                    " OR ".join([
-                        f"subject = '{e}' OR object = '{e}' OR subject_closure like '%{e}%' OR object_closure like '%{e}%'" 
-                        for e in entity
-                    ])
+                    " OR ".join(
+                        [
+                            f"subject = '{e}' OR object = '{e}' OR subject_closure like '%{e}%' OR object_closure like '%{e}%'"
+                            for e in entity
+                        ]
+                    )
                 )
-        
+
         query = f"SELECT * FROM denormalized_edges "
         if clauses:
             query += "WHERE " + " AND ".join(clauses)
@@ -244,9 +272,7 @@ class SQLImplementation(EntityInterface, AssociationInterface):
         if clauses:
             count_query += "WHERE " + " AND ".join(clauses)
 
-        with monarchstow.ensure_open_sqlite_gz(
-            "sql", url=SQL_DATA_URL
-        ) as db:
+        with monarchstow.ensure_open_sqlite_gz("sql", url=SQL_DATA_URL) as db:
             db.row_factory = dict_factory
             cur = db.cursor()
             results = cur.execute(query).fetchall()
@@ -261,7 +287,9 @@ class SQLImplementation(EntityInterface, AssociationInterface):
                 "predicate": row["predicate"],
                 "original_object": row["original_object"],
                 "category": row["category"],
-                "aggregator_knowledge_source": row["aggregator_knowledge_source"].split("|"),
+                "aggregator_knowledge_source": row["aggregator_knowledge_source"].split(
+                    "|"
+                ),
                 "primary_knowledge_source": row["primary_knowledge_source"].split("|"),
                 "publications": row["publications"].split("|"),
                 "qualifiers": row["qualifiers"].split("|"),
@@ -289,4 +317,3 @@ class SQLImplementation(EntityInterface, AssociationInterface):
             items=associations, limit=limit, offset=offset, total=total
         )
         return results
-

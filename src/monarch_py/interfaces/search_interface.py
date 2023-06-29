@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List
 
 from monarch_py.datamodels.model import (
     AssociationTableResults,

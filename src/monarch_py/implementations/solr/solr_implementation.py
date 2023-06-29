@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 from loguru import logger
 from pydantic import ValidationError
@@ -61,13 +61,13 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
 
         if not extra:
             return Entity(**solr_document)
-        
+
         node = Node(**solr_document)
 
         if "biolink:Disease" in node.category:
             mode_of_inheritance_associations = self.get_associations(
-            subject=id, predicate="biolink:has_mode_of_inheritance", offset=0
-        )
+                subject=id, predicate="biolink:has_mode_of_inheritance", offset=0
+            )
         if (
             mode_of_inheritance_associations is not None
             and len(mode_of_inheritance_associations.items) == 1
@@ -79,7 +79,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         node.association_counts = self.get_association_counts(id)
         return node
 
-    def _get_associated_entity(self, association: Association, this_entity: Entity) -> Entity:
+    def _get_associated_entity(
+        self, association: Association, this_entity: Entity
+    ) -> Entity:
         """Returns the id, name, and category of the other Entity in an Association given this_entity"""
         if this_entity.id in association.subject_closure:
             entity = Entity(
@@ -98,11 +100,14 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 else [],
             )
         else:
-            raise ValueError(f"Association does not contain this_entity: {this_entity.id}")
+            raise ValueError(
+                f"Association does not contain this_entity: {this_entity.id}"
+            )
 
         return entity
 
-    def _get_associated_entities(self,
+    def _get_associated_entities(
+        self,
         this_entity: Entity,
         entity: str = None,
         subject: str = None,
@@ -197,11 +202,11 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
 
         query = self._populate_association_query(
-            category= [category] if isinstance(category, str) else category,
-            predicate = [predicate] if isinstance(predicate, str) else predicate,
-            subject = [subject] if isinstance(subject, str) else subject,
-            object = [object] if isinstance(object, str) else object,
-            entity = [entity] if isinstance(entity, str) else entity,
+            category=[category] if isinstance(category, str) else category,
+            predicate=[predicate] if isinstance(predicate, str) else predicate,
+            subject=[subject] if isinstance(subject, str) else subject,
+            object=[object] if isinstance(object, str) else object,
+            entity=[entity] if isinstance(entity, str) else entity,
             subject_closure=subject_closure,
             object_closure=object_closure,
             direct=direct,
@@ -254,10 +259,9 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 query.add_field_filter_query("subject", " OR ".join(subject))
             else:
                 query.add_filter_query(
-                    " OR ".join([
-                        f'subject:"{s}" OR subject_closure:"{s}"'
-                        for s in subject
-                    ])
+                    " OR ".join(
+                        [f'subject:"{s}" OR subject_closure:"{s}"' for s in subject]
+                    )
                 )
         if subject_closure:
             query.add_field_filter_query("subject_closure", subject_closure)
@@ -266,27 +270,30 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
                 query.add_field_filter_query("object", " OR ".join(object))
             else:
                 query.add_filter_query(
-                    " OR ".join([
-                        f'object:"{o}" OR object_closure:"{o}"'
-                        for o in object
-                    ])
+                    " OR ".join(
+                        [f'object:"{o}" OR object_closure:"{o}"' for o in object]
+                    )
                 )
         if object_closure:
             query.add_field_filter_query("object_closure", object_closure)
         if entity:
             if direct:
                 query.add_filter_query(
-                    " OR ".join([
-                        f'subject:"{escape(e)}" OR object:"{escape(e)}"'
-                        for e in entity
-                    ])
+                    " OR ".join(
+                        [
+                            f'subject:"{escape(e)}" OR object:"{escape(e)}"'
+                            for e in entity
+                        ]
+                    )
                 )
             else:
                 query.add_filter_query(
-                    " OR ".join([
-                        f'subject:"{escape(e)}" OR subject_closure:"{escape(e)}" OR object:"{escape(e)}" OR object_closure:"{escape(e)}"'
-                        for e in entity
-                    ])
+                    " OR ".join(
+                        [
+                            f'subject:"{escape(e)}" OR subject_closure:"{escape(e)}" OR object:"{escape(e)}" OR object_closure:"{escape(e)}"'
+                            for e in entity
+                        ]
+                    )
                 )
         if q:
             # We don't yet have tokenization strategies for the association index, initially we'll limit searching to
@@ -422,22 +429,21 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         entity: List[str] = None,
         facet_fields: List[str] = None,
         facet_queries: List[str] = None,
-        
     ) -> SearchResults:
 
         solr = SolrService(base_url=self.base_url, core=core.ASSOCIATION)
         limit = 0
         offset = 0
         query = self._populate_association_query(
-            category = [category] if isinstance(category, str) else category,
-            predicate = [predicate] if isinstance(predicate, str) else predicate,
-            subject = [subject] if isinstance(subject, str) else subject,
-            object = [object] if isinstance(object, str) else object,
-            entity = [entity] if isinstance(entity, str) else entity,
-            subject_closure = subject_closure,
-            object_closure = object_closure,
-            offset = offset,
-            limit = limit,
+            category=[category] if isinstance(category, str) else category,
+            predicate=[predicate] if isinstance(predicate, str) else predicate,
+            subject=[subject] if isinstance(subject, str) else subject,
+            object=[object] if isinstance(object, str) else object,
+            entity=[entity] if isinstance(entity, str) else entity,
+            subject_closure=subject_closure,
+            object_closure=object_closure,
+            offset=offset,
+            limit=limit,
         )
 
         query.facet_fields = facet_fields
@@ -504,7 +510,7 @@ class SolrImplementation(EntityInterface, AssociationInterface, SearchInterface)
         # to know which kind of label will be needed in the UI to refer to the opposite side of the association
         for field_query in [subject_query, object_query]:
             for agm in AssociationTypeMappings.get_mappings():
-                 
+
                 association_type_query = get_solr_query_fragment(agm)
                 facet_queries.append(f"({association_type_query}) {field_query}")
         query.facet_queries = facet_queries

@@ -59,6 +59,7 @@ def set_log_level(log_level: str):
 
 FMT_INPUT_ERROR_MSG = "Text conversion method only accepts Entity, HistoPheno, AssociationCountList, or Results objects."
 
+
 def get_headers_from_obj(obj: ConfiguredBaseModel) -> list:
     """Return a list of headers from a pydantic model."""
     schema = type(obj).schema()

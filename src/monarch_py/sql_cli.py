@@ -1,7 +1,7 @@
 from typing import List
-from typing_extensions import Annotated
 
 import typer
+from typing_extensions import Annotated
 
 from monarch_py.implementations.sql.sql_implementation import SQLImplementation
 from monarch_py.utils.utils import console, format_output, set_log_level
@@ -13,11 +13,18 @@ app_state = {"log_level": "WARNING"}
 @sql_app.callback(invoke_without_command=True)
 def callback(
     ctx: typer.Context,
-    quiet: Annotated[bool, typer.Option("--quiet", "-q", help="Set log level to warning")] = False,
-    debug: Annotated[bool, typer.Option("--debug", "-d", help="Set log level to debug")] = False,
-    ):
+    quiet: Annotated[
+        bool, typer.Option("--quiet", "-q", help="Set log level to warning")
+    ] = False,
+    debug: Annotated[
+        bool, typer.Option("--debug", "-d", help="Set log level to debug")
+    ] = False,
+):
     if ctx.invoked_subcommand is None:
-        typer.secho(f"\n\tNo command specified\n\tTry `monarch sql --help` for more information.\n", fg=typer.colors.YELLOW)
+        typer.secho(
+            f"\n\tNo command specified\n\tTry `monarch sql --help` for more information.\n",
+            fg=typer.colors.YELLOW,
+        )
         raise typer.Exit()
     log_level = "DEBUG" if debug else "WARNING" if quiet else "INFO"
     set_log_level(log_level)
@@ -68,14 +75,33 @@ def entity(
 
 @sql_app.command()
 def associations(
-    category: List[str] = typer.Option(None, "--category", "-c", help="Comma-separated list of categories"),
-    subject: List[str] = typer.Option(None, "--subject", "-s", help="Comma-separated list of subjects"),
-    predicate: List[str] = typer.Option(None, "--predicate", "-p", help="Comma-separated list of predicates"),
-    object: List[str] = typer.Option(None, "--object", "-o", help="Comma-separated list of objects"),
-    entity: List[str] = typer.Option(None, "--entity", "-e", help="Comma-separated list of entities"),
-    direct: bool = typer.Option(False, "--direct", "-d", help="Whether to exclude associations with subject/object as ancestors"),
-    limit: int = typer.Option(20, "--limit", "-l", help="The number of associations to return"),
-    offset: int = typer.Option(0, "--offset", help="The offset of the first association to be retrieved"),
+    category: List[str] = typer.Option(
+        None, "--category", "-c", help="Comma-separated list of categories"
+    ),
+    subject: List[str] = typer.Option(
+        None, "--subject", "-s", help="Comma-separated list of subjects"
+    ),
+    predicate: List[str] = typer.Option(
+        None, "--predicate", "-p", help="Comma-separated list of predicates"
+    ),
+    object: List[str] = typer.Option(
+        None, "--object", "-o", help="Comma-separated list of objects"
+    ),
+    entity: List[str] = typer.Option(
+        None, "--entity", "-e", help="Comma-separated list of entities"
+    ),
+    direct: bool = typer.Option(
+        False,
+        "--direct",
+        "-d",
+        help="Whether to exclude associations with subject/object as ancestors",
+    ),
+    limit: int = typer.Option(
+        20, "--limit", "-l", help="The number of associations to return"
+    ),
+    offset: int = typer.Option(
+        0, "--offset", help="The offset of the first association to be retrieved"
+    ),
     fmt: str = typer.Option(
         "json",
         "--format",

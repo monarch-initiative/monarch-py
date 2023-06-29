@@ -73,5 +73,3 @@ def test_entity():
             "MONDO:0007947" in association.subject_closure
             or "MONDO:0007947" in association.object_closure
         )
-
-
