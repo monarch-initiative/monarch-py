@@ -1,6 +1,4 @@
-# monarch-py
+# monarch-py has moved
 
-Python library for interfacing with the Monarch Initiative knowledge graph. 
-
-[Documentation](https://monarch-initiative.github.io/monarch-py/)
+## Please see [monarch-app/backend](https://github.com/monarch-initiative/monarch-app/tree/main/backend) for the current version of monarch-py.
 
